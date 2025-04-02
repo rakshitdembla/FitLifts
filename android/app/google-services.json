@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "333504318757",
+    "project_id": "fitlifts-b077d",
+    "storage_bucket": "fitlifts-b077d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:333504318757:android:9886bc305462a51b7bdecc",
+        "android_client_info": {
+          "package_name": "com.example.fitlifts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "333504318757-bq236cnkdh4oti1oo4ph2k1v0s3vi31s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fitlifts",
+            "certificate_hash": "85d69050ed266843bf5ca6571413014286f551b9"
+          }
+        },
+        {
+          "client_id": "333504318757-b2tcqdo2sf1n6tbhu6f9rl6q7trdqdkk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4TF3ZZe74onjp8VwDR7Wwpqtqc4b6H1U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "333504318757-b2tcqdo2sf1n6tbhu6f9rl6q7trdqdkk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "333504318757-gq9n0vulemo98hiu6tesag622marh60h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fitlifts"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

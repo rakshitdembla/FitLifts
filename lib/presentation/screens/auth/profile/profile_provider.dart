@@ -1,0 +1,109 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:fitlifts/core/constants/my_strings.dart';
+import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/routes/auto_router.gr.dart';
+import 'package:flutter/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class ProfileProvider with ChangeNotifier {
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  String? selectedValue;
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<void> createUserProfile(
+    BuildContext context,
+    String email,
+    String? name,
+    String? age,
+    String? height,
+    String? bodyWeight,
+    String? gender,
+  ) async {
+    _isLoading = true;
+    notifyListeners();
+
+    if ([
+      name,
+      age,
+      height,
+      bodyWeight,
+      gender,
+    ].any((field) => field == null || field.toString().isEmpty)) {
+      _isLoading = false;
+      notifyListeners();
+      Utils.showCustomToast("Please fill in all required fields");
+      return;
+    }
+
+    int? parsedAge = int.tryParse(age ?? " ");
+    int? parsedHeight = int.tryParse(height ?? " ");
+    double? parsedBodyWeight = double.tryParse(bodyWeight ?? " ");
+
+    //every field type validation
+    if (name!.length < 3) {
+      _isLoading = false;
+      notifyListeners();
+      Utils.showCustomToast("Name should be at least 3 characters");
+      return;
+    }
+
+    if (parsedAge is! int || parsedAge <= 0) {
+      _isLoading = false;
+      notifyListeners();
+      Utils.showCustomToast("Please enter a valid age");
+      return;
+    }
+
+    if (parsedHeight is! int || parsedHeight <= 0) {
+      _isLoading = false;
+      notifyListeners();
+      Utils.showCustomToast("Please enter a valid height");
+      return;
+    }
+
+    if (parsedBodyWeight is! double || parsedBodyWeight <= 0) {
+      _isLoading = false;
+      notifyListeners();
+      Utils.showCustomToast("Please enter a valid weight");
+      return;
+    }
+
+    //try uploading data on firestore
+    try {
+      final userToken = await Utils.getToken();
+      Map<String, dynamic> userMap = {
+        MyStrings.userToken: userToken,
+        MyStrings.email: email,
+        MyStrings.gender: gender,
+        MyStrings.name: name,
+        MyStrings.age: parsedAge,
+        MyStrings.height: parsedHeight,
+        MyStrings.bodyWeight: parsedBodyWeight,
+      };
+
+      debugPrint(userMap.toString());
+      await _firestore
+          .collection(MyStrings.firebaseCollection)
+          .doc(userToken.toString())
+          .set(userMap);
+
+      await Utils.saveLocalBodyWeight(parsedBodyWeight);
+
+      Utils.showCustomToast("Profile created successfully!");
+      _isLoading = false;
+      notifyListeners();
+
+      if (context.mounted) {
+        context.router.push(GeneralRoute());
+      }
+    } catch (e) {
+      Utils.showCustomToast("Failed to create profile. Please check your connection");
+      debugPrint(e.toString());
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+}
