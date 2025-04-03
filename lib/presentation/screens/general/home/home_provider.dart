@@ -177,6 +177,8 @@ class HomeProvider with ChangeNotifier {
     if (_gotInitialData) {
       getInitialData();
     }
+
         await Future.delayed(const Duration(seconds: 1));
+        Utils.showCustomToast("Data refreshed successfully.");
   }
 }

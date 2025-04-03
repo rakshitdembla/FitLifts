@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fitlifts/core/constants/my_colors.dart';
 import 'package:fitlifts/data/models/exercise.dart';
-import 'package:fitlifts/presentation/screens/add_workout/providers/search_provider.dart';
+import 'package:fitlifts/presentation/screens/general/workouts/add_workout/workouts_list/search/search_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';

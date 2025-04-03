@@ -7,12 +7,14 @@ class NumField extends StatefulWidget {
   final String labelTitle;
   final String hintText;
   final int maxLength;
+  final Widget? suffix;
   const NumField({
     super.key,
     required this.controller,
     required this.hintText,
     required this.labelTitle,
     required this.maxLength,
+    this.suffix
   });
 
   @override
@@ -53,6 +55,8 @@ class _NumFieldState extends State<NumField> {
               counter: SizedBox.shrink(),
               hintText: widget.hintText,
               hintStyle: TextStyle(fontSize: 16.5.sp),
+              suffix: widget.suffix ?? Text(" "),
+              
             ),
           ),
         ),

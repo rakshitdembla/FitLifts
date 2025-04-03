@@ -1,3 +1,4 @@
+import 'package:fitlifts/core/utils/utils.dart';
 import 'package:fitlifts/presentation/screens/general/workouts/isolates/fetch_workouts.dart';
 import 'package:fitlifts/presentation/screens/general/workouts/isolates/workouts_group.dart';
 import 'package:flutter/widgets.dart';
@@ -18,9 +19,8 @@ class FetchWorkoutsProvider with ChangeNotifier {
   List<MapEntry<String, List<WorkoutModel>>> _groupedList = [];
   List<MapEntry<String, List<WorkoutModel>>> get groupedList => _groupedList;
 
-  FetchWorkoutsProvider() {
-    getWorkouts();
-  }
+  bool _gotInitialData = false;
+
 
   Future<void> getWorkouts() async {
     _isLoading = true;
@@ -33,23 +33,32 @@ class FetchWorkoutsProvider with ChangeNotifier {
     if (getAllWorkout == null) {
       _isLoading = false;
       _isError = true;
-      notifyListeners();
+       _gotInitialData = true;
+      notifyListeners();    
       return;
     } else if (getAllWorkout.isEmpty) {
       _isLoading = false;
       _noDataAvailable = true;
+        _gotInitialData = true;
       notifyListeners();
       return;
     } else {
       _workouts = getAllWorkout;
-      debugPrint(_workouts.toString());
     }
 
     _groupedWorkouts = await GroupWorkoutsIsolate.groupWorkouts(_workouts);
-    debugPrint(_groupedWorkouts.toString());
     _groupedList = _groupedWorkouts.entries.toList();
 
     _isLoading = false;
+    _gotInitialData = true;
     notifyListeners();
+  }
+
+  Future<void> refreshWorkouts() async{
+    if (_gotInitialData) {
+      getWorkouts();
+    }
+     await Future.delayed(const Duration(seconds: 1));
+     Utils.showCustomToast("Workouts refreshed successfully.");
   }
 }

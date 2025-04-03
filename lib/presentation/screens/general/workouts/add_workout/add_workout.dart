@@ -31,7 +31,7 @@ class _AddWorkoutState extends State<AddWorkout> {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(10, 10, 10, 25),
+        padding: EdgeInsets.fromLTRB(10.w, 10.h, 10, 25),
         child: Column(
           children: [
             Card(
@@ -93,9 +93,10 @@ class _AddWorkoutState extends State<AddWorkout> {
                       controller: weightController,
                       hintText: "Lifted weight",
                       labelTitle: "Weight",
+                      suffix: Text("Kg"),
                     ),
                     SizedBox(height: 20.h),
-                    DateTimeWidget(showDate: true),
+                    DateTimeWidget(showDate: false),
                   ],
                 ),
               ),
@@ -113,21 +114,10 @@ class _AddWorkoutState extends State<AddWorkout> {
                       title: "Save",
                       onPressed: () {
                         addWorkoutProvider.insertWorkout(
-                          WorkoutModel(
-                            date: DateTime.now(),
-                            exerciseName: exerciseName.toString(),
-                            reps: int.tryParse(repsController.text) ?? 0,
-                            weight:
-                                double.tryParse(weightController.text) ?? 0.0,
-                            volume:
-                                (int.tryParse(repsController.text) ?? 0) *
-                                (double.tryParse(weightController.text) ?? 0.0),
-                            caloriesBurned: Utils.calculateWorkoutCalories(
-                              77,
-                              int.tryParse(repsController.text) ?? 0,
-                              double.tryParse(weightController.text) ?? 0.0,
-                            ),
-                          ),
+                          exerciseName,
+                          repsController.text.toString(),
+                          weightController.text.toString(),
+
                           context,
                         );
                       },

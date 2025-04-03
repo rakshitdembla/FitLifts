@@ -1,12 +1,13 @@
 class GalleryModel {
-  final int id;
+  final int? id;
   final String imagePath;
   final DateTime date;
   final double? bodyWeight;
   final int? ratePump;
 
   GalleryModel({
-    required this.id,
+    
+     this.id,
     required this.imagePath,
     required this.date,
     this.bodyWeight,

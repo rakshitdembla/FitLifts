@@ -10,6 +10,7 @@ import 'package:fitlifts/data/data_source/local/exercises%20database/legs_exerci
 import 'package:fitlifts/data/data_source/local/exercises%20database/shoulder_exercises.dart';
 import 'package:fitlifts/data/models/workout_model.dart';
 import 'package:fitlifts/presentation/common_widgets/explore_card.dart';
+import 'package:fitlifts/presentation/common_widgets/refreshbar.dart';
 import 'package:fitlifts/presentation/routes/auto_router.gr.dart';
 import 'package:fitlifts/presentation/screens/general/workouts/workout_provider.dart';
 import 'package:flutter/material.dart';

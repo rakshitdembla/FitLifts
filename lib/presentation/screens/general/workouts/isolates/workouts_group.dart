@@ -41,7 +41,11 @@ class GroupWorkoutsIsolate {
         groupedWorkouts[date] = [workout];
       }
     }
-      data.answerPort.send(groupedWorkouts);
+
+    for (var entry in groupedWorkouts.entries) {
+      entry.value.sort((a, b) => b.date.compareTo(a.date));
+    }
+    data.answerPort.send(groupedWorkouts);
   }
 }
 

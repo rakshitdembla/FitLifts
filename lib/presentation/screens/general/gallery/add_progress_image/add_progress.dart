@@ -3,12 +3,11 @@ import 'package:fitlifts/data/models/gallery_model.dart';
 import 'package:fitlifts/presentation/common_widgets/datetime_widget.dart';
 import 'package:fitlifts/presentation/common_widgets/elevated_cta.dart';
 import 'package:fitlifts/presentation/common_widgets/num_field.dart';
-import 'package:fitlifts/presentation/screens/gallery_view/add_progress_image/add_progress_provider.dart';
+import 'package:fitlifts/presentation/screens/general/gallery/add_progress_image/add_progress_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/constants/my_colors.dart';
+import '../../../../../core/constants/my_colors.dart';
 
 @RoutePage()
 class AddProgress extends StatefulWidget {
@@ -38,6 +37,14 @@ class _AddProgressState extends State<AddProgress> {
     }
     super.initState();
   }
+
+  @override
+  void dispose() {
+    bodyWeightController.dispose();
+    pumpController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,6 +71,7 @@ class _AddProgressState extends State<AddProgress> {
               hintText: "Current Body Weight",
               labelTitle: "Body Weight",
               maxLength: 5,
+              suffix: Text("Kg"),
             ),
             SizedBox(height: 25.h),
             NumField(
@@ -71,6 +79,7 @@ class _AddProgressState extends State<AddProgress> {
               hintText: "Rate Body Pump",
               labelTitle: "Body Pump",
               maxLength: 2,
+              suffix: Text("/10"),
             ),
             SizedBox(height: 25.h),
             DateTimeWidget(showDate: false),
@@ -80,9 +89,8 @@ class _AddProgressState extends State<AddProgress> {
               builder: (context, addProgressProvider, child) {
                 return addProgressProvider.isLoading
                     ? Center(
-                      child: LoadingAnimationWidget.waveDots(
+                      child: CircularProgressIndicator(
                         color: MyColors.whiteText,
-                        size: 40.r,
                       ),
                     )
                     : ElevatedCTA(
@@ -90,29 +98,22 @@ class _AddProgressState extends State<AddProgress> {
                       onPressed: () {
                         widget.isUpdate
                             ? addProgressProvider.updateProgress(
-                              GalleryModel(
-                                id : widget.galleryModel!.id,
-                                imagePath: widget.galleryModel!.imagePath,
-                                date: widget.galleryModel!.date,
-                                bodyWeight: double.tryParse(
-                                  bodyWeightController.text,
-                                ),
-                                ratePump: int.tryParse(pumpController.text),
-                              ),
+                              widget.galleryModel!.id!,
+                              widget.galleryModel!.imagePath,
+                              widget.galleryModel!.date,
+
+                              bodyWeightController.text.toString(),
+
+                              pumpController.text,
+                              widget.galleryModel?.ratePump,
+                              widget.galleryModel?.bodyWeight,
+
                               context,
                             )
                             : addProgressProvider.createProgress(
-                              GalleryModel(
-                                id : widget.galleryModel!.id,
-                                imagePath: widget.imagePath!,
-                                date: DateTime.now(),
-                                bodyWeight: double.tryParse(
-                                  bodyWeightController.text.trim(),
-                                ),
-                                ratePump: int.tryParse(
-                                  pumpController.text.trim(),
-                                ),
-                              ),
+                              widget.imagePath!,
+                              pumpController.text.toString(),
+                              bodyWeightController.text.toString(),
                               context,
                             );
                       },

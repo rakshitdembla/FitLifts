@@ -12,11 +12,11 @@
 import 'package:auto_route/auto_route.dart' as _i15;
 import 'package:fitlifts/data/models/exercise.dart' as _i18;
 import 'package:fitlifts/data/models/gallery_model.dart' as _i17;
-import 'package:fitlifts/presentation/screens/add_workout/add_workout_imports.dart'
+import 'package:fitlifts/presentation/screens/general/workouts/add_workout/add_workout_imports.dart'
     as _i2;
-import 'package:fitlifts/presentation/screens/add_workout/workouts_list/search/search_exercise.dart'
+import 'package:fitlifts/presentation/screens/general/workouts/add_workout/workouts_list/search/search_exercise.dart'
     as _i10;
-import 'package:fitlifts/presentation/screens/add_workout/workouts_list/workouts_list.dart'
+import 'package:fitlifts/presentation/screens/general/workouts/add_workout/workouts_list/workouts_list.dart'
     as _i14;
 import 'package:fitlifts/presentation/screens/auth/login/forgot%20password/forgot_password.dart'
     as _i4;
@@ -26,11 +26,11 @@ import 'package:fitlifts/presentation/screens/auth/profile/profile.dart'
     as _i13;
 import 'package:fitlifts/presentation/screens/auth/register/register_imports.dart'
     as _i9;
-import 'package:fitlifts/presentation/screens/exercises_view/exercises_view.dart'
+import 'package:fitlifts/presentation/screens/general/workouts/exercises_view/exercises_view.dart'
     as _i3;
-import 'package:fitlifts/presentation/screens/gallery_view/add_progress_image/add_progress.dart'
+import 'package:fitlifts/presentation/screens/general/gallery/add_progress_image/add_progress.dart'
     as _i1;
-import 'package:fitlifts/presentation/screens/gallery_view/gallery_view_imports.dart'
+import 'package:fitlifts/presentation/screens/general/gallery/gallery_view/gallery_view_imports.dart'
     as _i5;
 import 'package:fitlifts/presentation/screens/general/general.dart' as _i6;
 import 'package:fitlifts/presentation/screens/loading.dart' as _i7;

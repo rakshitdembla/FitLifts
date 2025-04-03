@@ -2,7 +2,6 @@ import 'package:fitlifts/core/constants/my_colors.dart';
 import 'package:fitlifts/presentation/screens/general/history/providers/graph_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../../../data/models/graph_model.dart';
@@ -33,10 +32,7 @@ class _StepBarChartState extends State<StepBarChart> {
           
               graphProvider.isLoading
                     ? Center(
-                      child: LoadingAnimationWidget.waveDots(
-                        color: MyColors.whiteText,
-                        size: 40.r,
-                      ),
+                      child: CircularProgressIndicator(color: MyColors.whiteText,)
                     )
                     :
               SfCartesianChart(

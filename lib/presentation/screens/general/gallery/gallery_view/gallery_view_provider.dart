@@ -4,7 +4,7 @@ import 'package:fitlifts/data/models/gallery_model.dart';
 import 'package:fitlifts/core/utils/utils.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../routes/auto_router.gr.dart';
+import '../../../../routes/auto_router.gr.dart';
 
 class GalleryViewProvider with ChangeNotifier {
   bool _isUpdateLoading = false;

@@ -25,7 +25,7 @@ class _GalleryViewState extends State<GalleryView> {
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 10),
+            padding: EdgeInsets.only(right: 10.w),
             child: Icon(
               Icons.info_outline,
               color: MyColors.whiteText,
@@ -39,7 +39,10 @@ class _GalleryViewState extends State<GalleryView> {
         iconTheme: IconThemeData(color: MyColors.whiteText),
       ),
       body: Center(
-        child: Image.asset(Assets.assetsRawWeights, fit: BoxFit.contain),
+        child: Image.file(
+          File(widget.galleryModel.imagePath),
+          fit: BoxFit.contain,
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         color: MyColors.primaryCharcoal,
@@ -68,7 +71,7 @@ class _GalleryViewState extends State<GalleryView> {
                     : IconButton(
                       onPressed: () {
                         galleryProvider.deleteProgress(
-                          widget.galleryModel.id,
+                          widget.galleryModel.id!,
                           context,
                         );
                       },

@@ -1,15 +1,16 @@
 import 'package:fitlifts/core/constants/my_colors.dart';
 import 'package:fitlifts/core/constants/my_fonts.dart';
 import 'package:fitlifts/presentation/routes/auto_router.dart';
-import 'package:fitlifts/presentation/screens/add_workout/providers/add_workout_provider.dart';
-import 'package:fitlifts/presentation/screens/add_workout/providers/search_provider.dart';
+import 'package:fitlifts/presentation/screens/general/workouts/add_workout/add_workout_provider.dart';
+import 'package:fitlifts/presentation/screens/general/workouts/add_workout/workouts_list/fetch_all_provider.dart';
+import 'package:fitlifts/presentation/screens/general/workouts/add_workout/workouts_list/search/search_provider.dart';
 import 'package:fitlifts/presentation/screens/auth/login/forgot%20password/forgot_pass_provider.dart';
 import 'package:fitlifts/presentation/screens/auth/login/login_provider.dart';
 import 'package:fitlifts/presentation/screens/auth/profile/profile_provider.dart';
 import 'package:fitlifts/presentation/screens/auth/providers/social_login_provider.dart';
 import 'package:fitlifts/presentation/screens/auth/register/register_provider.dart';
-import 'package:fitlifts/presentation/screens/gallery_view/add_progress_image/add_progress_provider.dart';
-import 'package:fitlifts/presentation/screens/gallery_view/gallery_view_provider.dart';
+import 'package:fitlifts/presentation/screens/general/gallery/add_progress_image/add_progress_provider.dart';
+import 'package:fitlifts/presentation/screens/general/gallery/gallery_view/gallery_view_provider.dart';
 import 'package:fitlifts/presentation/screens/general/gallery/gallery_provider.dart';
 import 'package:fitlifts/presentation/screens/general/history/providers/history_data_provider.dart';
 import 'package:fitlifts/core/utils/utils.dart';
@@ -27,8 +28,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await Utils.requestPermissions();
-    BackgroundIsolateBinaryMessenger.ensureInitialized(RootIsolateToken.instance!);
-    BackgroundIsolateBinaryMessenger.instance;
+  BackgroundIsolateBinaryMessenger.ensureInitialized(
+    RootIsolateToken.instance!,
+  );
+  BackgroundIsolateBinaryMessenger.instance;
   runApp(MyApp());
 }
 
@@ -40,7 +43,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       splitScreenMode: true,
-      designSize: const Size(360, 690),
+
+       designSize: const Size(360, 690),
       minTextAdapt: true,
       builder: (context, child) {
         return MultiProvider(
@@ -86,6 +90,9 @@ class MyApp extends StatelessWidget {
             ),
             ChangeNotifierProvider<FetchWorkoutsProvider>(
               create: (context) => FetchWorkoutsProvider(),
+            ),
+            ChangeNotifierProvider<LocalExercisesProvider>(
+              create: (context) => LocalExercisesProvider(),
             ),
           ],
           child: MaterialApp.router(

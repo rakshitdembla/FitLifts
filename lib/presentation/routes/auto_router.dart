@@ -4,7 +4,11 @@ import 'package:fitlifts/presentation/routes/auto_router.gr.dart';
 @AutoRouterConfig(replaceInRouteName: 'Route')
 class AppRouter extends RootStackRouter {
   @override
-  RouteType get defaultRouteType => RouteType.material();
+  RouteType get defaultRouteType => RouteType.custom(
+    transitionsBuilder:TransitionsBuilders.slideLeftWithFade,
+    duration: Duration(milliseconds: 700),
+    reverseDuration: Duration(milliseconds: 700)
+  );
 
   @override
   List<AutoRoute> get routes => [

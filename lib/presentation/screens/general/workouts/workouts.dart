@@ -10,6 +10,7 @@ class WorkoutsScreen extends StatefulWidget {
 class _WorkoutsScreenState extends State<WorkoutsScreen>
     with TickerProviderStateMixin {
   late TabController _controller;
+  bool isWorkoutsFetched = false;
 
   @override
   void initState() {
@@ -24,12 +25,27 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
   }
 
   @override
+  void didChangeDependencies() {
+    if (!isWorkoutsFetched) {
+      isWorkoutsFetched = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Provider.of<FetchWorkoutsProvider>(
+          context,
+          listen: false,
+        ).getWorkouts();
+      });
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: SizedBox(
-        height: 63.h,
-        width: 63.w,
+        height: 55.h,
+        width: 60.w,
         child: FloatingActionButton(
+            heroTag: "taghero",
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.r),
           ),
@@ -66,86 +82,123 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
       body: TabBarView(
         controller: _controller,
         children: [
-          Consumer<FetchWorkoutsProvider>(
-            builder: (context, state, child) {
-              if (state.isError) {
-                return Center(
-                  child: Text(
-                    "Error occurred. Please refresh and try again.",
-                    style: TextStyle(color: MyColors.greyText),
-                  ),
-                );
-              } else if (state.noDataAvailable) {
-                return Center(
-                  child: Text(
-                    "No workouts recorded yet.",
-                    style: TextStyle(color: MyColors.greyText),
-                  ),
-                );
-              } else if (state.isLoading) {
-                return Center(child: CircularProgressIndicator());
-              } else {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: state.groupedList.length,
-                  itemBuilder: (context, index) {
-                    String date = state.groupedList[index].key;
-                    List<WorkoutModel> dateWorkouts =
-                        state.groupedList[index].value;
-                    return ExpansionTile(
-                      tilePadding: EdgeInsets.symmetric(
-                        horizontal: 15.w,
-                        vertical: 4.h,
-                      ),
-                      title: Text(
-                        date,
-                        style: TextStyle(
-                          color: MyColors.primaryWhite,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 15.sp,
-                        ),
-                      ),
-                      iconColor: MyColors.primaryWhite,
-                      collapsedIconColor: MyColors.primaryWhite,
-                      children: [
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: dateWorkouts.length,
-                          itemBuilder: (context, index) {
-                            WorkoutModel workout = dateWorkouts[index];
-                            return ListTile(
-                              leading: Text(
-                                "${index + 1}",
-                                style: TextStyle(
-                                  color: MyColors.whiteText,
-                                  fontSize: 13.sp,
-                                ),
-                              ),
-                              title: Text(
-                                workout.exerciseName,
-                                style: TextStyle(color: MyColors.primaryWhite),
-                              ),
-                              subtitle: Text(
-                                "${workout.reps} reps * ${workout.weight} kg",
-                                style: TextStyle(color: MyColors.greyText),
-                              ),
-                              trailing: Text(
-                                DateFormat("hh:mm a").format(workout.date),
-                                style: TextStyle(
-                                  color: MyColors.greyText,
-                                  fontSize: 11.sp,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              }
+          RefreshBar(
+            onRefresh: () {
+              return Provider.of<FetchWorkoutsProvider>(
+                context,
+                listen: false,
+              ).refreshWorkouts();
             },
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Consumer<FetchWorkoutsProvider>(
+                builder: (context, state, child) {
+                  if (state.isError) {
+                    return Center(
+                      child: SizedBox(
+                        height:
+                          MediaQuery.of(context).size.height -
+                          kToolbarHeight -
+                          kTextTabBarHeight,
+                        child: Text(
+                          "Error occurred. Please refresh and try again.",
+                          style: TextStyle(color: MyColors.greyText),
+                        ),
+                      ),
+                    );
+                  } else if (state.noDataAvailable) {
+                    return SizedBox(
+                      height:
+                          MediaQuery.of(context).size.height -
+                          kToolbarHeight -
+                          kTextTabBarHeight - kBottomNavigationBarHeight
+                          ,
+                      child: Center(
+                        child: Text(
+                          "No workouts recorded yet.",
+                          style: TextStyle(color: MyColors.greyText),
+                        ),
+                      ),
+                    );
+                  } else if (state.isLoading) {
+                    return SizedBox(
+                      height:
+                          MediaQuery.of(context).size.height -
+                          kToolbarHeight -
+                          kTextTabBarHeight- kBottomNavigationBarHeight,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: MyColors.whiteText,
+                        ),
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state.groupedList.length,
+                      itemBuilder: (context, index) {
+                        String date = state.groupedList[index].key;
+                        List<WorkoutModel> dateWorkouts =
+                            state.groupedList[index].value;
+                        return ExpansionTile(
+                          tilePadding: EdgeInsets.symmetric(
+                            horizontal: 15.w,
+                            vertical: 4.h,
+                          ),
+                          title: Text(
+                            date,
+                            style: TextStyle(
+                              color: MyColors.primaryWhite,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                          iconColor: MyColors.primaryWhite,
+                          collapsedIconColor: MyColors.primaryWhite,
+                          children: [
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: dateWorkouts.length,
+                              itemBuilder: (context, index) {
+                                WorkoutModel workout = dateWorkouts[index];
+                                return ListTile(
+                                  leading: Text(
+                                    "${index + 1}",
+                                    style: TextStyle(
+                                      color: MyColors.whiteText,
+                                      fontSize: 13.sp,
+                                    ),
+                                  ),
+                                  title: Text(
+                                    workout.exerciseName,
+                                    style: TextStyle(
+                                      color: MyColors.primaryWhite,
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    "${workout.reps} reps * ${workout.weight} kg",
+                                    style: TextStyle(color: MyColors.greyText),
+                                  ),
+                                  trailing: Text(
+                                    DateFormat("hh:mm a").format(workout.date),
+                                    style: TextStyle(
+                                      color: MyColors.greyText,
+                                      fontSize: 11.sp,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 13.h),

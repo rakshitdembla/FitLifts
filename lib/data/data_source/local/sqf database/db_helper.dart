@@ -134,6 +134,7 @@ class DBHelper {
     );
   }
 
+  //GET TODAY'S WORKOUT DATA
   Future<double> getTotalWorkoutVolumeForToday() async {
     final dbClient = await fetchDB();
     var result = await dbClient!.rawQuery(
@@ -160,29 +161,6 @@ class DBHelper {
       orderBy: orderBy,
     );
     return result.map((x) => WorkoutModel.fromMap(x)).toList();
-  }
-
-  //DATE SPECIFIC WORKOUTS CALORIES
-  Future<double> getTotalCaloriesForDate(DateTime date) async {
-    final formattedDate = date.toIso8601String().split('T')[0];
-    final dbClient = await fetchDB();
-    var result = await dbClient!.rawQuery(
-      "SELECT SUM(${WorkoutConstants.caloriesBurned}) as ${MyStrings.workoutCalories} FROM ${WorkoutConstants.tableName} WHERE date = ?",
-      [formattedDate],
-    );
-
-    double totalCalories =
-        (result.first[MyStrings.workoutCalories] as num?)?.toDouble() ?? 0.0;
-
-    return totalCalories;
-  }
-
-  //CLEAR ALL DATA
-  Future<void> deleteAllData() async {
-    final dbClient = await fetchDB();
-    await dbClient!.delete(StepsConstants.tableName);
-    await dbClient.delete(WorkoutConstants.tableName);
-    await dbClient.delete(GalleryConstants.tableName);
   }
 
   // ***@GALLERY DB HELPERS***
@@ -218,6 +196,20 @@ class DBHelper {
     return result.map((x) => GalleryModel.fromMap(x)).toList();
   }
 
+  //GET ALL GALLERY BY BODYWEIGHT
+  Future<List<GalleryModel>> getGalleryByWeight(bool isASC) async {
+    final dbClient = await fetchDB();
+    String orderBy =
+        isASC
+            ? "${GalleryConstants.ratePump} ASC"
+            : "${GalleryConstants.ratePump} DESC";
+    final result = await dbClient!.query(
+      GalleryConstants.tableName,
+      orderBy: orderBy,
+    );
+    return result.map((x) => GalleryModel.fromMap(x)).toList();
+  }
+
   //UPDATE GALLERY ENTRY
   Future<int> updateGallery(GalleryModel gallery) async {
     final dbClient = await fetchDB();
@@ -243,5 +235,13 @@ class DBHelper {
   Future<void> closeDB() async {
     final dbClient = await fetchDB();
     await dbClient?.close();
+  }
+
+  //CLEAR ALL DATA
+  Future<void> deleteAllData() async {
+    final dbClient = await fetchDB();
+    await dbClient!.delete(StepsConstants.tableName);
+    await dbClient.delete(WorkoutConstants.tableName);
+    await dbClient.delete(GalleryConstants.tableName);
   }
 }
