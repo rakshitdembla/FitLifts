@@ -1,5 +1,5 @@
 import 'package:fitlifts/core/utils/utils.dart';
-import 'package:fitlifts/presentation/screens/auth/common_widgets/custom_dropdown.dart';
+import 'package:fitlifts/presentation/screens/auth/common_widgets/auth_dropdown.dart';
 import 'package:fitlifts/presentation/screens/auth/profile/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -46,7 +46,7 @@ class _ProfileFormState extends State<ProfileForm> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CustomDropdown(
+        AuthDropDown(
           hintText: "Your gender",
           icon: Icons.wc,
           items: ["Male", "Female"],

@@ -5,13 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class CustomDropdown extends StatefulWidget {
+class AuthDropDown extends StatefulWidget {
   final String hintText;
   final IconData icon;
   final List<String> items;
   final String label;
 
-  const CustomDropdown({
+  const AuthDropDown({
     super.key,
     required this.hintText,
     required this.icon,
@@ -20,10 +20,10 @@ class CustomDropdown extends StatefulWidget {
   });
 
   @override
-  State<CustomDropdown> createState() => _CustomDropdownState();
+  State<AuthDropDown> createState() => _AuthDropDownState();
 }
 
-class _CustomDropdownState extends State<CustomDropdown> {
+class _AuthDropDownState extends State<AuthDropDown> {
   @override
   Widget build(BuildContext context) {
     return Column(

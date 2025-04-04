@@ -25,74 +25,85 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Padding(
                   padding: EdgeInsets.fromLTRB(15.w, 5.h, 15.w, 10.h),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
+                  child: Consumer<HomeProvider>(
+                    builder: (cntxt, homeProvider, child) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          CircleAvatar(radius: 21.r, child: Icon(Icons.person)),
-                          SizedBox(width: 10.w),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          Row(
                             children: [
-                              Text(
-                                Greetintgs.getGreetings(),
-                                style: TextStyle(
-                                  color: MyColors.greyText,
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w600,
+                              CircleAvatar(
+                                radius: 21.r,
+                                child:
+                                    homeProvider.profileImage != null &&
+                                            homeProvider
+                                                .profileImage!
+                                                .isNotEmpty
+                                        ? ClipOval(
+                                          child: Image.file(
+                                            File(homeProvider.profileImage!),
+                                            fit: BoxFit.cover,
+                                            width: 70.w,
+                                            height: 70.h,
+                                          ),
+                                        )
+                                        : Icon(Icons.person),
+                              ),
+                              SizedBox(width: 10.w),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    Greetintgs.getGreetings(),
+                                    style: TextStyle(
+                                      color: MyColors.greyText,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Rakshit Dembla",
+                                    style: TextStyle(
+                                      color: MyColors.whiteText,
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
+                              IconButton(
+                                onPressed:
+                                   () {},
+                                icon: Icon(
+                                  Icons.diamond,
+                                  color: MyColors.whiteText,
+                                  size: 28.r,
                                 ),
                               ),
-                              Text(
-                                "Rakshit Dembla",
-                                style: TextStyle(
-                                  color: MyColors.whiteText,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w900,
-                                ),
+                              SizedBox(width: 15.w),
+                              Icon(
+                                Icons.settings,
+                                color: MyColors.whiteText,
+                                size: 28.r,
                               ),
                             ],
                           ),
-                          Spacer(),
-                          IconButton(
-                            onPressed:
-                                () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => TestDataScreen(),
-                                  ),
-                                ),
-                            icon: Icon(
-                              Icons.diamond,
-                              color: MyColors.whiteText,
-                              size: 28.r,
-                            ),
-                          ),
-                          SizedBox(width: 15.w),
-                          Icon(
-                            Icons.settings,
-                            color: MyColors.whiteText,
-                            size: 28.r,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20.h),
-                      Column(
-                        children: [
-                          Card(
-                            color: MyColors.darkGrey,
-                            child: Consumer<HomeProvider>(
-                              builder: (cntxt, state, child) {
-                                return ListTile(
+                          SizedBox(height: 20.h),
+                          Column(
+                            children: [
+                              Card(
+                                color: MyColors.darkGrey,
+                                child: ListTile(
                                   onTap: () {
-                                    if (state.isTracking) {
-                                      state.stopTracking();
+                                    if (homeProvider.isTracking) {
+                                      homeProvider.stopTracking();
                                     } else {
-                                      state.startTracking();
+                                      homeProvider.startTracking();
                                     }
                                   },
                                   title: Text(
-                                    state.isTracking
+                                    homeProvider.isTracking
                                         ? "Tap to stop tracking"
                                         : "Tap to start tracking",
                                     style: TextStyle(
@@ -102,43 +113,36 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   subtitle: Text(
-                                    state.isTracking
+                                    homeProvider.isTracking
                                         ? "Current Status : Tracking.."
-                                        : state.isError
+                                        : homeProvider.isError
                                         ? "Current Status : Unknown"
                                         : "Current Status : Not Tracking",
                                     style: TextStyle(color: MyColors.greyText),
                                   ),
                                   leading: Icon(
-                                    state.isTracking
+                                    homeProvider.isTracking
                                         ? Icons.pause
-                                        : state.isError
+                                        : homeProvider.isError
                                         ? Icons.block
                                         : Icons.play_arrow,
                                     color: MyColors.whiteText,
                                     size: 28.r,
                                   ),
-                                );
-                              },
-                            ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      SizedBox(height: 8.h),
-                      Builder(
-                        builder: (BuildContext ctx) {
-                          HomeProvider homeProvider = Provider.of<HomeProvider>(
-                            ctx,
-                            listen: true,
-                          );
-                          return SizedBox(
+                          SizedBox(height: 8.h),
+
+                          SizedBox(
                             width: double.infinity,
                             child: GridView.count(
                               padding: EdgeInsets.zero,
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               crossAxisCount: 2,
-                              childAspectRatio: (113.w / 87.h),
+                              childAspectRatio: (113.w / 84.h),
                               mainAxisSpacing: 10.h,
                               crossAxisSpacing: 10.w,
                               children: [
@@ -171,7 +175,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   title: "Calories",
                                   unit: "kcal",
-                                  value: homeProvider.calories.toStringAsFixed(0),
+                                  value: homeProvider.calories.toStringAsFixed(
+                                    0,
+                                  ),
                                 ),
                                 StatsCard(
                                   containerColor: MyColors.electricBlue,
@@ -192,33 +198,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ],
                             ),
-                          );
-                        },
-                      ),
-                      SizedBox(height: 10.h),
-                      DivideTitle(title: "Explore More"),
-                      SizedBox(height: 10.h),
-                      ExploreCard(
-                        imageAsset: Assets.assetsTrackProgress,
-                        title: "Track your fitness journey",
-                      ),
-                      SizedBox(height: 10.h),
-                      ExploreCard(
-                        imageAsset: Assets.assetsAbsExercise,
-                        title: "Explore new exercises",
-                      ),
-                      SizedBox(height: 10.h),
-                      ExploreCard(
-                        imageAsset: Assets.assetsProgressOverload,
-                        title: "Your past performances",
-                      ),
-                      SizedBox(height: 10.h),
-                      ExploreCard(
-                        imageAsset: Assets.assetsRawWeights,
-                        title: "Track Workouts",
-                      ),
-                      SizedBox(height: 10.h),
-                    ],
+                          ),
+                          SizedBox(height: 10.h),
+                          DivideTitle(title: "Explore More"),
+                          SizedBox(height: 10.h),
+                          ExploreCard(
+                            imageAsset: Assets.assetsTrackProgress,
+                            title: "Track your fitness journey",
+                          ),
+                          SizedBox(height: 10.h),
+                          ExploreCard(
+                            imageAsset: Assets.assetsAbsExercise,
+                            title: "Explore new exercises",
+                          ),
+                          SizedBox(height: 10.h),
+                          ExploreCard(
+                            imageAsset: Assets.assetsProgressOverload,
+                            title: "Your past performances",
+                          ),
+                          SizedBox(height: 10.h),
+                          ExploreCard(
+                            imageAsset: Assets.assetsRawWeights,
+                            title: "Track Workouts",
+                          ),
+                          SizedBox(height: 10.h),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ],

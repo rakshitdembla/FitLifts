@@ -22,13 +22,12 @@ class AddProgressProvider with ChangeNotifier {
     double? parsedWeight =
         double.tryParse(bodyWeight) ?? await Utils.getBodyWeight();
 
-        if (parsedPump != null && parsedPump > 10){
-          Utils.showCustomToast("Please enter valid pump max 10");
+    if (parsedPump != null && parsedPump > 10 && parsedPump < 0) {
+      Utils.showCustomToast("Please enter valid pump max 10");
       _isLoading = false;
       notifyListeners();
       return;
-
-        }
+    }
 
     try {
       await DBHelper().insertGallery(
@@ -71,13 +70,12 @@ class AddProgressProvider with ChangeNotifier {
         previousWeight ??
         await Utils.getBodyWeight();
 
-             if (parsedPump != null && parsedPump > 10){
-          Utils.showCustomToast("Please enter valid pump max 10");
+    if (parsedPump != null && parsedPump > 10 && parsedPump < 0) {
+      Utils.showCustomToast("Please enter valid pump max 10");
       _isLoading = false;
       notifyListeners();
       return;
-
-        }
+    }
 
     try {
       await DBHelper().updateGallery(

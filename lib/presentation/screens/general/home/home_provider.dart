@@ -31,6 +31,9 @@ class HomeProvider with ChangeNotifier {
   double _workoutVolume = 0.0;
   double get workoutVolume => _workoutVolume;
 
+  String? _profileImage;
+  String? get profileImage => _profileImage;
+
   bool _gotInitialData = false;
   StreamSubscription<StepCount>? _stepsSubscription;
   StreamSubscription<StepCount>? get stepsSubscription => _stepsSubscription;
@@ -45,7 +48,10 @@ class HomeProvider with ChangeNotifier {
     _isTracking = false;
     getBodyWeight = await Utils.getBodyWeight();
     _dbSteps = await Utils.getLastSteps();
+    _profileImage = await Utils.getProfileImage();
+    debugPrint("here is home $_profileImage");
     _gotInitialData = true;
+    notifyListeners();
 
     final Map<String, double> stepDataMap =
         await TodayStepDataIsolate.getSteps();
@@ -178,7 +184,7 @@ class HomeProvider with ChangeNotifier {
       getInitialData();
     }
 
-        await Future.delayed(const Duration(seconds: 1));
-        Utils.showCustomToast("Data refreshed successfully.");
+    await Future.delayed(const Duration(seconds: 1));
+    Utils.showCustomToast("Data refreshed successfully.");
   }
 }

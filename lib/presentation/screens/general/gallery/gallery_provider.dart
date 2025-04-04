@@ -4,7 +4,6 @@ import 'package:fitlifts/data/models/gallery_model.dart';
 import 'package:fitlifts/core/utils/utils.dart';
 import 'package:fitlifts/presentation/screens/general/gallery/isolates/get_gallery.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import '../../../routes/auto_router.gr.dart';
@@ -21,8 +20,8 @@ class GalleryProvider with ChangeNotifier {
   List<GalleryModel> _imagesList = [];
   List<GalleryModel> get imagesList => _imagesList;
 
-  String _selectedSortOption = "latest";
-  String get selectedSortOption => _selectedSortOption;
+  String? _selectedSortOption;
+  String? get selectedSortOption => _selectedSortOption;
 
   void updateSort(String newSort) {
     _selectedSortOption = newSort;
@@ -62,7 +61,7 @@ class GalleryProvider with ChangeNotifier {
   }
 
   Future<void> captureImage(BuildContext context) async {
-    final pickedIMG = await ImagePicker().pickImage(source: ImageSource.camera);
+    final pickedIMG = await Utils.showImagePicker(context,"Choose a profile picture");
     if (pickedIMG != null) {
       _isLoading = true;
       notifyListeners();
@@ -90,7 +89,8 @@ class GalleryProvider with ChangeNotifier {
       } catch (e) {
         Utils.showCustomToast("An error occured, Please try again.");
       }
-    }
+
+    } 
   }
 
   Future<void> refresh() async {

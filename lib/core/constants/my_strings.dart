@@ -25,4 +25,5 @@ class MyStrings {
   static const String savedBodyWeight = "body_weight";
   static const String savedToken = "token";
   static const String savedSteps = "dbSteps";
+  static const String savedProfile = "profile_image";
 }

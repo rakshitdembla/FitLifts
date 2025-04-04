@@ -13,8 +13,10 @@ class _GalleryScreenState extends State<GalleryScreen> {
   @override
   void didChangeDependencies() {
     if (!isGalleryLoaded) {
+      isGalleryLoaded = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Provider.of<GalleryProvider>(context, listen: false).getAllGallery();
+        
       });
     }
     super.didChangeDependencies();
@@ -23,6 +25,43 @@ class _GalleryScreenState extends State<GalleryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: MyColors.primaryCharcoal,
+        automaticallyImplyLeading: false,
+        title: Text(
+          "My Fitness Journey",
+          style: TextStyle(
+            color: MyColors.whiteText,
+            fontWeight: FontWeight.w900,
+            fontSize: 19.sp,
+          ),
+        ),
+        actions: [
+          CustomDropDown(
+            style: GoogleFonts.poppins(color: MyColors.greyText, fontSize: 13),
+            hintText: "Sort by",
+            items: [
+              DropdownMenuItem<String>(value: "latest", child: Text("Latest")),
+              DropdownMenuItem<String>(value: "oldest", child: Text("Oldest")),
+              DropdownMenuItem<String>(
+                value: "highestWeight",
+                child: Text("Highest Weight"),
+              ),
+              DropdownMenuItem<String>(
+                value: "lowestWeight",
+                child: Text("Lowest Weight"),
+              ),
+              DropdownMenuItem<String>(value: "pump", child: Text("Pump")),
+            ],
+            value: Provider.of<GalleryProvider>(context,listen: true).selectedSortOption,
+            onChanged: (value) {
+              if (value != null) {
+                Provider.of<GalleryProvider>(context,listen: false).updateSort(value);
+              }
+            },
+          ),
+        ],
+      ),
       floatingActionButton: SizedBox(
         height: 55.h,
         width: 60.w,
@@ -51,7 +90,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
           return Provider.of<GalleryProvider>(context, listen: false).refresh();
         },
         child: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(12.w, 10.h, 12.w, 8.h),
+          padding: EdgeInsets.fromLTRB(10.w, 3.h, 10.w, 8.h),
           physics: AlwaysScrollableScrollPhysics(),
           child: Consumer<GalleryProvider>(
             builder: (ctx, galleryProvider, child) {
@@ -59,7 +98,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
                 return SizedBox(
                   height:
                       MediaQuery.of(context).size.height -
-                      kBottomNavigationBarHeight,
+                      kBottomNavigationBarHeight -  kToolbarHeight
+                      ,
                   child: Center(
                     child: CircularProgressIndicator(color: MyColors.whiteText),
                   ),
@@ -68,7 +108,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                 return galleryProvider.imagesList.isEmpty
                     ? SizedBox(
                       height:
-                          MediaQuery.of(context).size.height -
+                          MediaQuery.of(context).size.height -  kToolbarHeight -
                           kBottomNavigationBarHeight,
                       child: Center(
                         child: Text(
@@ -81,110 +121,64 @@ class _GalleryScreenState extends State<GalleryScreen> {
                         ),
                       ),
                     )
-                    : SafeArea(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SortBar(
-                            items: [
-                              DropdownMenuItem(
-                                value: "latest",
-                                child: Text("Latest"),
+                    : GridView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 5.w,
+                        mainAxisSpacing: 5.h,
+                        childAspectRatio: (85.w / 80.h),
+                      ),
+                      itemBuilder: (ctx, index) {
+                        GalleryModel galleryModel =
+                            galleryProvider.imagesList[index];
+                        return InkWell(
+                          onTap: () {
+                            context.router.push(
+                              GalleryViewRoute(galleryModel: galleryModel),
+                            );
+                          },
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(15.r),
+                                child: Image.file(
+                                  File(galleryModel.imagePath),
+                                  fit: BoxFit.fill,
+                                ),
                               ),
-                              DropdownMenuItem(
-                                value: "oldest",
-                                child: Text("Oldest"),
-                              ),
-                              DropdownMenuItem(
-                                value: "highestWeight",
-                                child: Text("Highest Weight"),
-                              ),
-                              DropdownMenuItem(
-                                value: "lowestWeight",
-                                child: Text("Lowest Weight"),
-                              ),
-                              DropdownMenuItem(
-                                value: "pump",
-                                child: Text("Pump"),
+                              Opacity(
+                                opacity: 0.65,
+                                child: Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 5.w,
+                                      vertical: 3.h,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: MyColors.primaryBlack,
+                                      borderRadius: BorderRadius.circular(7.r),
+                                    ),
+                                    child: Text(
+                                      "${galleryModel.bodyWeight} Kg",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: MyColors.primaryWhite,
+                                        fontWeight: FontWeight.w900,
+                                        fontSize: 9.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ],
-                            value: galleryProvider.selectedSortOption,
-                            onChanged: (value) {
-                              if (value != null) {
-                                galleryProvider.updateSort(value);
-                              }
-                            },
-                            title: "My Fitness Journey",
-                            showDropdown: true,
                           ),
-                          SizedBox(height: 13.h),
-                          GridView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 5.w,
-                                  mainAxisSpacing: 5.h,
-                                  childAspectRatio: (85.w/80.h),
-                                ),
-                            itemBuilder: (ctx, index) {
-                              GalleryModel galleryModel =
-                                  galleryProvider.imagesList[index];
-                              return InkWell(
-                                onTap: () {
-                                  context.router.push(
-                                    GalleryViewRoute(
-                                      galleryModel: galleryModel,
-                                    ),
-                                  );
-                                },
-                                child: Stack(
-                                  fit: StackFit.expand,
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(15.r),
-                                      child: Image.file(
-                                        File(galleryModel.imagePath),
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                                    Opacity(
-                                      opacity: 0.65,
-                                      child: Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 5.w,
-                                            vertical: 3.h,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: MyColors.primaryBlack,
-                                            borderRadius: BorderRadius.circular(
-                                              7.r,
-                                            ),
-                                          ),
-                                          child: Text(
-                                            "${galleryModel.bodyWeight} Kg",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: MyColors.primaryWhite,
-                                              fontWeight: FontWeight.w900,
-                                              fontSize: 9.sp,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                            itemCount: galleryProvider.imagesList.length,
-                          ),
-                        ],
-                      ),
+                        );
+                      },
+                      itemCount: galleryProvider.imagesList.length,
                     );
               }
             },

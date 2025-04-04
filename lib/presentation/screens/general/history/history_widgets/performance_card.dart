@@ -42,7 +42,9 @@ class PerformanceCard extends StatelessWidget {
                       ),
                       SizedBox(width: 8),
                       Text(
-                        "Steps -> ${historyDataModel.steps}",
+                        historyDataModel.steps.toString().length > 6
+                            ? "Steps - ${historyDataModel.steps.toString().substring(0, 6)}.. "
+                            : "Steps - ${historyDataModel.steps}",
                         style: TextStyle(
                           fontWeight: FontWeight.w900,
                           fontSize: 14.sp,
@@ -61,7 +63,12 @@ class PerformanceCard extends StatelessWidget {
                       ),
                       SizedBox(width: 8),
                       Text(
-                        "Workout Volume -> ${historyDataModel.workoutVolume} kg",
+                        historyDataModel.workoutVolume
+                                    .toStringAsFixed(1)
+                                    .length >
+                                8
+                            ? "Workout - ${historyDataModel.workoutVolume.toStringAsFixed(1).substring(0, 8)}.. kg"
+                            : "Workout - ${historyDataModel.workoutVolume.toStringAsFixed(1)} kg",
                         style: TextStyle(
                           fontWeight: FontWeight.w900,
                           fontSize: 14.sp,
@@ -77,7 +84,12 @@ class PerformanceCard extends StatelessWidget {
                       Icon(Icons.place_outlined, color: Colors.greenAccent),
                       SizedBox(width: 8),
                       Text(
-                        "Distance Travelled -> ${historyDataModel.distance} km",
+                        (historyDataModel.distance / 1000)
+                                    .toStringAsFixed(2)
+                                    .length >
+                                5
+                            ? "Distance - ${(historyDataModel.distance / 1000).toStringAsFixed(2).substring(0, 5)}.. km"
+                            : "Distance - ${(historyDataModel.distance / 1000).toStringAsFixed(2)} km",
                         style: TextStyle(
                           fontWeight: FontWeight.w900,
                           fontSize: 14.sp,
@@ -96,7 +108,13 @@ class PerformanceCard extends StatelessWidget {
                       ),
                       SizedBox(width: 8),
                       Text(
-                        "Calories Burnt (Steps) -> ${historyDataModel.stepsCalories}",
+                        historyDataModel.stepsCalories
+                                    .toStringAsFixed(0)
+                                    .length >
+                                5
+                            ? "Steps Calories - ${historyDataModel.stepsCalories.toStringAsFixed(0).substring(0, 5)}.. kcal"
+                            : "Steps Calories - ${historyDataModel.stepsCalories.toStringAsFixed(0)} kcal",
+
                         style: TextStyle(
                           fontWeight: FontWeight.w900,
                           fontSize: 14.sp,
@@ -112,7 +130,12 @@ class PerformanceCard extends StatelessWidget {
                       Icon(Icons.bolt_outlined, color: Colors.yellowAccent),
                       SizedBox(width: 8),
                       Text(
-                        "Calories Burnt (Workout) -> ${historyDataModel.workoutCalories}",
+                        historyDataModel.workoutCalories
+                                    .toStringAsFixed(0)
+                                    .length >
+                                5
+                            ? "Workout Calories - ${historyDataModel.workoutCalories.toStringAsFixed(0).substring(0, 5)}.. kcal"
+                            : "Workout Calories - ${historyDataModel.workoutCalories.toStringAsFixed(0)} kcal",
                         style: TextStyle(
                           fontWeight: FontWeight.w900,
                           fontSize: 14.sp,

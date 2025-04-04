@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitlifts/core/constants/my_strings.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fitlifts/core/constants/my_colors.dart';
@@ -130,23 +131,110 @@ class Utils {
     }
   }
 
-  static Future<double> getLocalBodyWeight() async{
-     SharedPreferences prefs = await SharedPreferences.getInstance();
-     return prefs.getDouble(MyStrings.savedBodyWeight) ?? 75.00;
-  }
-  static Future<void> saveLocalBodyWeight(double bodyWeight) async{
-     SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setDouble(MyStrings.savedBodyWeight,bodyWeight);
+  static Future<double> getLocalBodyWeight() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getDouble(MyStrings.savedBodyWeight) ?? 75.00;
   }
 
+  static Future<void> saveLocalBodyWeight(double bodyWeight) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setDouble(MyStrings.savedBodyWeight, bodyWeight);
+  }
 
-   static Future<int> getLastSteps() async {
+  static Future<int> getLastSteps() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getInt(MyStrings.savedSteps) ?? 0;
   }
 
- static Future<void> saveLastSteps(int dbSteps) async {
+  static Future<void> saveLastSteps(int dbSteps) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt(MyStrings.savedSteps, dbSteps);
+  }
+
+  static Future<XFile?> showImagePicker(
+    BuildContext context,
+    String? title,
+  ) async {
+    final ImagePicker picker = ImagePicker();
+    XFile? pickedImage;
+
+    await showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: MyColors.primaryCharcoal,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+          ),
+          padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 20.w),
+          child: Wrap(
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  title.toString(),
+                  style: TextStyle(
+                    color: MyColors.whiteText,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 16.sp,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5.h),
+              Divider(color: Colors.grey),
+              SizedBox(height: 0.h),
+              ListTile(
+                leading: Icon(Icons.camera, color: MyColors.whiteText),
+                title: Text(
+                  'Camera',
+                  style: TextStyle(color: MyColors.whiteText),
+                ),
+                onTap: () async {
+                  pickedImage = await picker.pickImage(
+                    source: ImageSource.camera,
+                  );
+                  if (context.mounted) {
+                    Navigator.pop(context, pickedImage);
+                  } else {
+                    Utils.showCustomToast("Unable to pick image");
+                  }
+                },
+              ),
+
+              ListTile(
+                leading: Icon(Icons.photo_library, color: MyColors.whiteText),
+                title: Text(
+                  'Gallery',
+                  style: TextStyle(color: MyColors.whiteText),
+                ),
+                onTap: () async {
+                  pickedImage = await picker.pickImage(
+                    source: ImageSource.gallery,
+                  );
+                  if (context.mounted) {
+                    Navigator.pop(context, pickedImage);
+                  } else {
+                    Utils.showCustomToast("Unable to pick image");
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    return pickedImage;
+  }
+
+  static void saveProfileImage(String imagePath) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setString(MyStrings.savedProfile, imagePath);
+  }
+  static Future<String?> getProfileImage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(MyStrings.savedProfile);
   }
 }

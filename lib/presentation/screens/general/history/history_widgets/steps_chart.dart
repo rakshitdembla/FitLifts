@@ -20,22 +20,19 @@ class _StepBarChartState extends State<StepBarChart> {
       height: 350.h,
       width: double.infinity.w,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
         color: MyColors.electricBlue,
       ),
 
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16.r),
 
       child: Consumer<GraphProvider>(
         builder: (context, graphProvider, child) {
-          return
-          
-              graphProvider.isLoading
-                    ? Center(
-                      child: CircularProgressIndicator(color: MyColors.whiteText,)
-                    )
-                    :
-              SfCartesianChart(
+          return graphProvider.isLoading
+              ? Center(
+                child: CircularProgressIndicator(color: MyColors.whiteText),
+              )
+              : SfCartesianChart(
                 title: ChartTitle(
                   text: "Last 7 Days Steps",
                   textStyle: TextStyle(
@@ -74,13 +71,11 @@ class _StepBarChartState extends State<StepBarChart> {
                 ),
 
                 series: [
-                  //data defined in series all details about chart
                   ColumnSeries<GraphDataModel, String>(
-                    //column serier bar chart
                     dataSource: graphProvider.filteredList,
                     xValueMapper: (GraphDataModel data, _) => data.date,
-                    borderRadius: BorderRadius.circular(30),
-                    width: 0.3.r,
+                    borderRadius: BorderRadius.circular(30.r),
+                    width: 0.2.r,
                     animationDuration: 1000,
                     yValueMapper: (GraphDataModel data, _) => data.steps,
                     color: Colors.white,

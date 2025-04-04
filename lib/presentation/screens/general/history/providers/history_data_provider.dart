@@ -3,29 +3,44 @@ import 'package:fitlifts/data/models/workout_model.dart';
 import 'package:fitlifts/data/models/history_data_model.dart';
 import 'package:fitlifts/data/models/step_model.dart';
 import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/screens/general/history/providers/graph_provider.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class HistoryDataProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  bool isReversed = false;
+  bool _gotInitalData = false;
+  bool get gotInitialData => _gotInitalData;
 
   List<HistoryDataModel> _historyDataList = [];
   List<HistoryDataModel> get historyDataList => _historyDataList;
 
+  String? _currentDropdownValue;
+  String? get currentDropdownValue => _currentDropdownValue;
+
+  void updateSort(String? value) {
+    _currentDropdownValue = value;
+    getHistoryData();
+    notifyListeners();
+  }
+
   Future<void> getHistoryData() async {
+    _gotInitalData = false;
     _isLoading = true;
+
     notifyListeners();
     try {
-      List<WorkoutModel> workoutsList = await DBHelper().getAllWorkout(true);
-      List<StepModel> stepsList = await DBHelper().getAllSteps(true);
+      List<WorkoutModel> workoutsList = await DBHelper().getAllWorkout(false);
+      List<StepModel> stepsList = await DBHelper().getAllSteps(false);
 
-      Map<String, HistoryDataModel> historyMap = {}; //1
+      Map<String, HistoryDataModel> historyMap = {};
+      String? formattedDate;
 
       for (var workout in workoutsList) {
-        String formattedDate = formatDate(workout.date);
+        formattedDate = formatDate(workout.date);
 
         if (!historyMap.containsKey(formattedDate)) {
           historyMap[formattedDate] = HistoryDataModel(
@@ -49,7 +64,7 @@ class HistoryDataProvider with ChangeNotifier {
       }
 
       for (var step in stepsList) {
-        String formattedDate = formatDate(step.date);
+        formattedDate = formatDate(step.date);
 
         if (!historyMap.containsKey(formattedDate)) {
           historyMap[formattedDate] = HistoryDataModel(
@@ -70,21 +85,27 @@ class HistoryDataProvider with ChangeNotifier {
               historyMap[formattedDate]!.stepsCalories + step.calories,
         );
       }
-
-      _historyDataList =
-          historyMap.values.toList()..sort(
-            (a, b) => DateFormat(
-              "d MMM, yyyy",
-            ).parse(a.date).compareTo(DateFormat("d MMM, yyyy").parse(b.date)),
-          );
-
-      if (isReversed) {
-        _historyDataList = _historyDataList.reversed.toList();
+      if (_currentDropdownValue == "oldest") {
+        _historyDataList =
+            historyMap.values.toList()..sort(
+              (a, b) => DateFormat("d MMM, yyyy")
+                  .parse(a.date)
+                  .compareTo(DateFormat("d MMM, yyyy").parse(b.date)),
+            );
+      } else {
+        _historyDataList =
+            historyMap.values.toList()..sort(
+              (a, b) => DateFormat("d MMM, yyyy")
+                  .parse(b.date)
+                  .compareTo(DateFormat("d MMM, yyyy").parse(a.date)),
+            );
       }
 
       _isLoading = false;
+      _gotInitalData = true;
       notifyListeners();
     } catch (e) {
+      _gotInitalData = true;
       _isLoading = false;
       Utils.showCustomToast("An error occured in fetching data");
     }
@@ -96,5 +117,15 @@ class HistoryDataProvider with ChangeNotifier {
 
   String getDayFromDate(DateTime date) {
     return DateFormat("EEEE").format(date);
+  }
+
+  Future<void> refresh(BuildContext context) async {
+    if (Provider.of<GraphProvider>(context, listen: false).gotInitialData &&
+        _gotInitalData) {
+      Provider.of<GraphProvider>(context, listen: false).getWeekSteps();
+      getHistoryData();
+    }
+    await Future.delayed(const Duration(seconds: 1));
+    Utils.showCustomToast("Data refreshed successfully.");
   }
 }

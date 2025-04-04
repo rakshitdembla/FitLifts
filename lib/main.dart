@@ -1,6 +1,8 @@
 import 'package:fitlifts/core/constants/my_colors.dart';
 import 'package:fitlifts/core/constants/my_fonts.dart';
 import 'package:fitlifts/presentation/routes/auto_router.dart';
+import 'package:fitlifts/presentation/screens/add_custom_exercise/add_custom_exercise_provider.dart';
+import 'package:fitlifts/presentation/screens/general/settings/settings_provider.dart';
 import 'package:fitlifts/presentation/screens/general/workouts/add_workout/add_workout_provider.dart';
 import 'package:fitlifts/presentation/screens/general/workouts/add_workout/workouts_list/fetch_all_provider.dart';
 import 'package:fitlifts/presentation/screens/general/workouts/add_workout/workouts_list/search/search_provider.dart';
@@ -44,7 +46,7 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
       splitScreenMode: true,
 
-       designSize: const Size(360, 690),
+      designSize: const Size(360, 690),
       minTextAdapt: true,
       builder: (context, child) {
         return MultiProvider(
@@ -93,6 +95,12 @@ class MyApp extends StatelessWidget {
             ),
             ChangeNotifierProvider<LocalExercisesProvider>(
               create: (context) => LocalExercisesProvider(),
+            ),
+            ChangeNotifierProvider<SettingsProvider>(
+              create: (context) => SettingsProvider(),
+            ),
+            ChangeNotifierProvider<AddCustomExerciseProvider>(
+              create: (context) => AddCustomExerciseProvider(),
             ),
           ],
           child: MaterialApp.router(

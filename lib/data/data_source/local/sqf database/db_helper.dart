@@ -201,8 +201,8 @@ class DBHelper {
     final dbClient = await fetchDB();
     String orderBy =
         isASC
-            ? "${GalleryConstants.ratePump} ASC"
-            : "${GalleryConstants.ratePump} DESC";
+            ? "CAST(${GalleryConstants.bodyWeight} AS REAL) ASC"
+            : "CAST(${GalleryConstants.bodyWeight} AS REAL) DESC";
     final result = await dbClient!.query(
       GalleryConstants.tableName,
       orderBy: orderBy,
