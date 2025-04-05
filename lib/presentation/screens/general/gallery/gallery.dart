@@ -128,7 +128,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                         crossAxisCount: 3,
                         crossAxisSpacing: 5.w,
                         mainAxisSpacing: 5.h,
-                        childAspectRatio: (85.w / 80.h),
+                        childAspectRatio: (85/ 80),
                       ),
                       itemBuilder: (ctx, index) {
                         GalleryModel galleryModel =

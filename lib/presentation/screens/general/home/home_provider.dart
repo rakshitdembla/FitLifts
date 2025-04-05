@@ -10,18 +10,24 @@ import 'package:pedometer/pedometer.dart';
 import '../../../../core/constants/my_strings.dart';
 
 class HomeProvider with ChangeNotifier {
+  // Tracking state
   bool _isTracking = false;
   bool get isTracking => _isTracking;
 
+  // Error state
   bool _isError = false;
   bool get isError => _isError;
 
-  int _steps = 0;
+  // Step-related variables
+  int _steps = 0; // Current session steps
   int get steps => _steps;
 
-  int _dbSteps = 0;
+  int _totalSteps = 0; // Total steps from device (including previous sessions)
+
+  int _dbSteps = 0; // Steps stored in database
   int get dbSteps => _dbSteps;
 
+  // Fitness metrics
   double _calories = 0.0;
   double get calories => _calories;
 
@@ -31,102 +37,123 @@ class HomeProvider with ChangeNotifier {
   double _workoutVolume = 0.0;
   double get workoutVolume => _workoutVolume;
 
+  // User profile
   String? _profileImage;
   String? get profileImage => _profileImage;
 
-  bool _gotInitialData = false;
+  // Data loading states
+  bool _gotInitialData = true;
+  bool get gotInitialData => _gotInitialData;
+
+  bool _stopTrackingSuccess = true;
+  bool get stopTrackingSuccess => _stopTrackingSuccess;
+
+  // Step counting subscription
   StreamSubscription<StepCount>? _stepsSubscription;
   StreamSubscription<StepCount>? get stepsSubscription => _stepsSubscription;
+
+  // User's body weight for calorie calculation
   late double getBodyWeight;
+
   HomeProvider() {
-    getInitialData();
+    getInitialData(); // Initialize with today's data
   }
 
-  //-- Load Today's Data
+  /// Loads today's step, workout, and profile data from storage
   Future<void> getInitialData() async {
+    _gotInitialData = false;
     _isError = false;
     _isTracking = false;
+
+    // Fetch user data
     getBodyWeight = await Utils.getBodyWeight();
     _dbSteps = await Utils.getLastSteps();
     _profileImage = await Utils.getProfileImage();
-    debugPrint("here is home $_profileImage");
-    _gotInitialData = true;
     notifyListeners();
 
+    // Get step data from isolate
     final Map<String, double> stepDataMap =
         await TodayStepDataIsolate.getSteps();
     if (stepDataMap.containsKey("error")) {
       Utils.showCustomToast(
-        "Failed to load your step history. Please check your connection and try again.",
+        "We couldn't fetch your step history. Please reconnect and try again!",
       );
       return;
     }
+
+    // Update step metrics
     _steps = stepDataMap[MyStrings.steps]!.toInt();
     _calories = stepDataMap[MyStrings.calories]!;
     _distance = stepDataMap[MyStrings.distance]!;
 
+    // Get workout data from isolate
     final getWorkoutData = await TodayWorkoutDataIsolate.getWorkoutVolume();
 
     if (getWorkoutData is String) {
       Utils.showCustomToast(
-        "Couldn't load your workout data. Please refresh to try again.",
+        "Oops! Workout data couldn't be loaded. Pull to refresh.",
       );
+      _gotInitialData = true;
       return;
     }
 
     _workoutVolume = getWorkoutData as double;
+    _gotInitialData = true;
     notifyListeners();
   }
 
-  //-- On Start Tracking Event
+  /// Starts tracking steps using device sensors
   Future<void> startTracking() async {
-    if (!_gotInitialData) {
-      Utils.showCustomToast("Please wait while we save your previous session.");
-      return;
-    }
-    Utils.showCustomToast("Starting step tracking...");
+    // Reset tracking state
+    _stepsSubscription?.cancel();
+    _steps = 0;
+    _distance = 0.0;
+    _calories = 0.0;
     _isTracking = true;
     _isError = false;
+    notifyListeners();
 
+    // Check permissions first
     final checkPermission = await CheckPermissionIsolate.check();
     if (checkPermission == false) {
       Utils.showCustomToast(
-        "Please enable activity tracking permissions in settings to count your steps.",
+        "Please allow activity tracking in settings to count your steps.",
       );
+      _isTracking = false;
+      _isError = true;
+      notifyListeners();
       return;
     } else if (checkPermission == null) {
-      Utils.showCustomToast("Unable to verify permissions. Please try again.");
+      Utils.showCustomToast("Permission check failed. Give it another go!");
       _isError = true;
       _isTracking = false;
       notifyListeners();
       return;
     }
-
-    _stepsSubscription?.cancel();
-    _steps = 0;
-    _distance = 0.0;
-    _calories = 0.0;
-    notifyListeners();
+    Utils.showCustomToast("Step tracking started. Let's get moving!");
 
     try {
+      // Subscribe to step count stream
       _stepsSubscription = Pedometer.stepCountStream.distinct().listen(
         (StepCount event) {
           final newSteps = event.steps;
-          final stepsDifference = newSteps - _steps;
+          _totalSteps = event.steps;
 
-          if (stepsDifference >= 5) {
-            if (newSteps < dbSteps) {
-              _steps = newSteps;
-              _distance = _steps * 0.762;
-              _calories = (_steps * getBodyWeight * 0.57) / 1000;
-            } else {
-              _steps = newSteps - dbSteps;
-              _distance = _steps * 0.762;
-              _calories = (_steps * getBodyWeight * 0.57) / 1000;
-            }
+          // Calculate metrics based on new steps
+          if (newSteps < dbSteps) {
+            // Handle case where step count resets (device restart)
+            _steps = newSteps;
+          } else {
+            // Normal case - subtract previously stored steps
+            _steps = newSteps - dbSteps;
           }
+
+          // Update derived metrics
+          _distance = _steps * 0.762; // Convert steps to distance (in meters)
+          _calories =
+              (_steps * getBodyWeight * 0.57) /
+              1000; // Calculate calories burned
           notifyListeners();
-          _dbSteps = newSteps;
         },
         onError: (error) {
           _isError = true;
@@ -147,17 +174,20 @@ class HomeProvider with ChangeNotifier {
     }
   }
 
-  //-- On Stop Tracking Event
+  /// Stops tracking and saves the current session data
   Future<void> stopTracking() async {
-    _gotInitialData = false;
+    _stopTrackingSuccess = false;
+    _dbSteps = _totalSteps;
     _isError = false;
     _isTracking = false;
     notifyListeners();
 
+    // Save steps if we have valid data
     if (dbSteps > 0) {
       await Utils.saveLastSteps(_dbSteps);
     }
 
+    // Save step data through isolate
     final stepsResult = await SaveStepsIsolate.saveSteps(
       StepModel(
         date: DateTime.now(),
@@ -168,23 +198,23 @@ class HomeProvider with ChangeNotifier {
     );
 
     if (stepsResult == false) {
-      Utils.showCustomToast(
-        "Couldn't save your step data. Don't worry, we'll try again later.",
-      );
+      Utils.showCustomToast("Step data wasn't saved. We'll try again shortly.");
     }
 
+    // Clean up subscription
     _stepsSubscription?.cancel();
     _stepsSubscription = null;
 
+    // Refresh data
     getInitialData();
+
+    _stopTrackingSuccess = true;
   }
 
+  /// Refreshes all data manually
   Future<void> refreshData() async {
-    if (_gotInitialData) {
-      getInitialData();
-    }
-
+    getInitialData();
     await Future.delayed(const Duration(seconds: 1));
-    Utils.showCustomToast("Data refreshed successfully.");
+    Utils.showCustomToast("All set! Your data has been refreshed.");
   }
 }

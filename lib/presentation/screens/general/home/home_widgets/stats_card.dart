@@ -58,11 +58,8 @@ class StatsCard extends StatelessWidget {
                 RichText(
                   overflow: TextOverflow.ellipsis,
                   text: TextSpan(
-                    
                     text: value,
                     style: TextStyle(
-                      
-                      
                       fontSize: 20.sp,
                       fontWeight: FontWeight.w600,
                       color: MyColors.whiteText,

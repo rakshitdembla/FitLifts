@@ -32,17 +32,22 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-   await dotenv.load(fileName: "assets/.env");
+  await dotenv.load(fileName: "assets/.env");
   await Utils.requestPermissions();
   BackgroundIsolateBinaryMessenger.ensureInitialized(
     RootIsolateToken.instance!,
   );
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   BackgroundIsolateBinaryMessenger.instance;
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   final _appRouter = AppRouter();
+
   MyApp({super.key});
 
   @override
