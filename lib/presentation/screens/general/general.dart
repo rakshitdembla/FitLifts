@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fitlifts/core/constants/my_colors.dart';
+import 'package:fitlifts/presentation/screens/general/controller_service.dart';
 import 'package:fitlifts/presentation/screens/general/gallery/gallery_imports.dart';
 import 'package:fitlifts/presentation/screens/general/history/history_imports.dart';
 import 'package:fitlifts/presentation/screens/general/home/home_imports.dart';
@@ -74,12 +75,12 @@ class _GeneralState extends State<General> {
       backgroundColor: MyColors.darkGrey,
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset:
-          true, // This needs to be true if you want to move up the screen on a non-scrollable screen when keyboard appears. Default is true.
+          true, 
       stateManagement: true,
       hideNavigationBarWhenKeyboardAppears: true,
       confineToSafeArea: true,
       context,
-      controller: _controller,
+      controller: TabControllerService.persistentTabController,
       screens: allScreens(),
       items: _navBarsItems(),
       navBarStyle: NavBarStyle.style13,

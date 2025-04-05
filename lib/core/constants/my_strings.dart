@@ -13,6 +13,7 @@ class MyStrings {
   static const String age = "age";
   static const String height = "height";
   static const String bodyWeight = "bodyWeight";
+  static const String isPremiumUser = "premium_user";
 
   // SQF Today's Data Map Keys
   static const String calories = "total_calories";

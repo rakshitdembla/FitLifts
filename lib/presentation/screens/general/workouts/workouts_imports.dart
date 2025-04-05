@@ -12,6 +12,7 @@ import 'package:fitlifts/data/models/workout_model.dart';
 import 'package:fitlifts/presentation/common_widgets/explore_card.dart';
 import 'package:fitlifts/presentation/common_widgets/refreshbar.dart';
 import 'package:fitlifts/presentation/routes/auto_router.gr.dart';
+import 'package:fitlifts/presentation/screens/general/controller_service.dart';
 import 'package:fitlifts/presentation/screens/general/workouts/workout_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

@@ -32,22 +32,28 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Row(
                             children: [
-                              CircleAvatar(
-                                radius: 21.r,
-                                child:
-                                    homeProvider.profileImage != null &&
-                                            homeProvider
-                                                .profileImage!
-                                                .isNotEmpty
-                                        ? ClipOval(
-                                          child: Image.file(
-                                            File(homeProvider.profileImage!),
-                                            fit: BoxFit.cover,
-                                            width: 70.w,
-                                            height: 70.h,
-                                          ),
-                                        )
-                                        : Icon(Icons.person),
+                              InkWell(
+                                onTap: () {
+                                  TabControllerService.persistentTabController
+                                      .jumpToTab(4);
+                                },
+                                child: CircleAvatar(
+                                  radius: 21.r,
+                                  child:
+                                      homeProvider.profileImage != null &&
+                                              homeProvider
+                                                  .profileImage!
+                                                  .isNotEmpty
+                                          ? ClipOval(
+                                            child: Image.file(
+                                              File(homeProvider.profileImage!),
+                                              fit: BoxFit.cover,
+                                              width: 70.w,
+                                              height: 70.h,
+                                            ),
+                                          )
+                                          : Icon(Icons.person),
+                                ),
                               ),
                               SizedBox(width: 10.w),
                               Column(
@@ -73,19 +79,31 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               Spacer(),
                               IconButton(
-                                onPressed:
-                                   () {},
+                                onPressed: () {
+                                  context.router.push(UnlockPremiumRoute());
+                                },
                                 icon: Icon(
                                   Icons.diamond,
-                                  color: MyColors.whiteText,
+                                  color:
+                                      Provider.of<CheckPremium>(
+                                            cntxt,
+                                          ).isUserPremium
+                                          ? MyColors.electricBlue
+                                          : MyColors.whiteText,
                                   size: 28.r,
                                 ),
                               ),
-                              SizedBox(width: 15.w),
-                              Icon(
-                                Icons.settings,
-                                color: MyColors.whiteText,
-                                size: 28.r,
+                              SizedBox(width: 5.w),
+                              IconButton(
+                                onPressed: () {
+                                  TabControllerService.persistentTabController
+                                      .jumpToTab(4);
+                                },
+                                icon: Icon(
+                                  Icons.settings,
+                                  color: MyColors.whiteText,
+                                  size: 28.r,
+                                ),
                               ),
                             ],
                           ),
@@ -203,24 +221,43 @@ class _HomeScreenState extends State<HomeScreen> {
                           DivideTitle(title: "Explore More"),
                           SizedBox(height: 10.h),
                           ExploreCard(
+                            onPressed: () {
+                              TabControllerService.persistentTabController
+                                  .jumpToTab(2);
+                            },
+
                             imageAsset: Assets.assetsTrackProgress,
                             title: "Track your fitness journey",
                           ),
                           SizedBox(height: 10.h),
+
                           ExploreCard(
-                            imageAsset: Assets.assetsAbsExercise,
-                            title: "Explore new exercises",
-                          ),
-                          SizedBox(height: 10.h),
-                          ExploreCard(
+                            onPressed: () {
+                              TabControllerService.persistentTabController
+                                  .jumpToTab(3);
+                            },
                             imageAsset: Assets.assetsProgressOverload,
                             title: "Your past performances",
                           ),
                           SizedBox(height: 10.h),
+
                           ExploreCard(
+                            onPressed: () {
+                              context.router.push(AddCustomExerciseRoute());
+                            },
+                            imageAsset: Assets.assetsAbsExercise,
+                            title: "Add custom exercise",
+                          ),
+                          SizedBox(height: 10.h),
+                          ExploreCard(
+                            onPressed: () {
+                              TabControllerService.persistentTabController
+                                  .jumpToTab(1);
+                            },
                             imageAsset: Assets.assetsRawWeights,
                             title: "Track Workouts",
                           ),
+
                           SizedBox(height: 10.h),
                         ],
                       );

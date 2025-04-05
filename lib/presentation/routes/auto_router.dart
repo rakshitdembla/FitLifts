@@ -1,14 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fitlifts/presentation/routes/auto_router.gr.dart';
-import 'package:fitlifts/presentation/screens/add_custom_exercise/add_custom_exercise_imports.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Route')
 class AppRouter extends RootStackRouter {
   @override
   RouteType get defaultRouteType => RouteType.custom(
-    transitionsBuilder:TransitionsBuilders.slideLeftWithFade,
-    duration: Duration(milliseconds: 700),
-    reverseDuration: Duration(milliseconds: 700)
+    transitionsBuilder:TransitionsBuilders.slideLeft,
+    duration: Duration(milliseconds: 300),
+    reverseDuration: Duration(milliseconds: 250)
   );
 
   @override

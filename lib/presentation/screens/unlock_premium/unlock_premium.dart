@@ -1,11 +1,33 @@
 part of "unlock_premium_imports.dart";
 
 @RoutePage()
-class UnlockPremium extends StatelessWidget {
+class UnlockPremium extends StatefulWidget {
   const UnlockPremium({super.key});
 
   @override
+  State<UnlockPremium> createState() => _UnlockPremiumState();
+}
+
+class _UnlockPremiumState extends State<UnlockPremium> {
+  late UnlockPremiumProvider provider;
+      @override
+    void initState() {
+      super.initState();
+       provider = Provider.of<UnlockPremiumProvider>(context, listen: false);
+      Provider.of<UnlockPremiumProvider>(context, listen: false).initStateFN();
+    }
+
+    @override
+    void dispose() {
+           provider.disposeFN();
+     
+      super.dispose();
+    }
+  @override
   Widget build(BuildContext context) {
+    
+
+
     return Scaffold(
       backgroundColor: MyColors.primaryCharcoal,
 

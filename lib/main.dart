@@ -1,3 +1,4 @@
+import 'package:fitlifts/check_premium.dart';
 import 'package:fitlifts/core/constants/my_colors.dart';
 import 'package:fitlifts/core/constants/my_fonts.dart';
 import 'package:fitlifts/presentation/routes/auto_router.dart';
@@ -18,8 +19,10 @@ import 'package:fitlifts/presentation/screens/general/history/providers/history_
 import 'package:fitlifts/core/utils/utils.dart';
 import 'package:fitlifts/presentation/screens/general/home/home_provider.dart';
 import 'package:fitlifts/presentation/screens/general/workouts/workout_provider.dart';
+import 'package:fitlifts/presentation/screens/unlock_premium/unlock_premium_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'presentation/screens/general/history/providers/graph_provider.dart';
@@ -29,6 +32,7 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+   await dotenv.load(fileName: "assets/.env");
   await Utils.requestPermissions();
   BackgroundIsolateBinaryMessenger.ensureInitialized(
     RootIsolateToken.instance!,
@@ -101,6 +105,12 @@ class MyApp extends StatelessWidget {
             ),
             ChangeNotifierProvider<AddCustomExerciseProvider>(
               create: (context) => AddCustomExerciseProvider(),
+            ),
+            ChangeNotifierProvider<UnlockPremiumProvider>(
+              create: (context) => UnlockPremiumProvider(),
+            ),
+            ChangeNotifierProvider<CheckPremium>(
+              create: (context) => CheckPremium(),
             ),
           ],
           child: MaterialApp.router(

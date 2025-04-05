@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitlifts/core/utils/utils.dart';
 import 'package:fitlifts/presentation/routes/auto_router.gr.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../check_premium.dart';
 
 class RegisterProvider with ChangeNotifier {
   bool _isLoading = false;
@@ -20,14 +23,16 @@ class RegisterProvider with ChangeNotifier {
     notifyListeners();
     try {
       if (!Utils.isValidEmail(email)) {
-        Utils.showCustomToast("Please enter a valid email (e.g., name@example.com)");
+        Utils.showCustomToast(
+          "Please enter a valid email (e.g., name@example.com)",
+        );
         _isLoading = false;
         notifyListeners();
         return;
       }
 
       if (!Utils.isValidPassword(password)) {
-         Utils.showCustomToast(
+        Utils.showCustomToast(
           "Use 8+ characters with at least 1 number for your password",
         );
         _isLoading = false;
@@ -36,7 +41,7 @@ class RegisterProvider with ChangeNotifier {
       }
 
       if (password != cPassword) {
-         Utils.showCustomToast("Passwords don't match. Please re-enter them");
+        Utils.showCustomToast("Passwords don't match. Please re-enter them");
         _isLoading = false;
         notifyListeners();
         return;
@@ -48,13 +53,16 @@ class RegisterProvider with ChangeNotifier {
       );
       await Utils.saveToken(_auth.currentUser!.uid);
       _isLoading = false;
+
       notifyListeners();
       if (context.mounted) {
+        Provider.of<CheckPremium>(context, listen: false).checkUser();
         context.router.push(UserProfileScreenRoute());
       }
     } catch (e) {
-     Utils.showCustomToast(
-        "Registration failed. If this continues, try a different email/password",
+      Utils.showCustomToast(
+        // "Registration failed. If this continues, try a different email/password",
+        e.toString()
       );
       _isLoading = false;
       notifyListeners();

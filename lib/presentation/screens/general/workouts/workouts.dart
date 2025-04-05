@@ -45,7 +45,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
         height: 55.h,
         width: 60.w,
         child: FloatingActionButton(
-            heroTag: "taghero",
+          heroTag: "taghero",
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.r),
           ),
@@ -81,6 +81,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
       ),
       body: TabBarView(
         controller: _controller,
+
         children: [
           RefreshBar(
             onRefresh: () {
@@ -97,9 +98,9 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                     return Center(
                       child: SizedBox(
                         height:
-                          MediaQuery.of(context).size.height -
-                          kToolbarHeight -
-                          kTextTabBarHeight,
+                            MediaQuery.of(context).size.height -
+                            kToolbarHeight -
+                            kTextTabBarHeight,
                         child: Text(
                           "Error occurred. Please refresh and try again.",
                           style: TextStyle(color: MyColors.greyText),
@@ -111,8 +112,8 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                       height:
                           MediaQuery.of(context).size.height -
                           kToolbarHeight -
-                          kTextTabBarHeight - kBottomNavigationBarHeight
-                          ,
+                          kTextTabBarHeight -
+                          kBottomNavigationBarHeight,
                       child: Center(
                         child: Text(
                           "No workouts recorded yet.",
@@ -125,7 +126,8 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                       height:
                           MediaQuery.of(context).size.height -
                           kToolbarHeight -
-                          kTextTabBarHeight- kBottomNavigationBarHeight,
+                          kTextTabBarHeight -
+                          kBottomNavigationBarHeight,
                       child: Center(
                         child: CircularProgressIndicator(
                           color: MyColors.whiteText,
@@ -205,8 +207,8 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  InkWell(
-                    onTap: () {
+                  ExploreCard(
+                    onPressed: () {
                       context.router.push(
                         ExercisesViewRoute(
                           appBarTitle: "Abs",
@@ -214,14 +216,13 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                         ),
                       );
                     },
-                    child: ExploreCard(
-                      imageAsset: Assets.assetsFullBody,
-                      title: 'Abs',
-                    ),
+                    imageAsset: Assets.assetsFullBody,
+                    title: 'Abs',
                   ),
+
                   SizedBox(height: 10.h),
-                  InkWell(
-                    onTap: () {
+                  ExploreCard(
+                    onPressed: () {
                       context.router.push(
                         ExercisesViewRoute(
                           appBarTitle: "Cardio",
@@ -229,14 +230,13 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                         ),
                       );
                     },
-                    child: ExploreCard(
-                      imageAsset: Assets.assetsGirlCardio,
-                      title: "Cardio",
-                    ),
+                    imageAsset: Assets.assetsGirlCardio,
+                    title: "Cardio",
                   ),
+
                   SizedBox(height: 10.h),
-                  InkWell(
-                    onTap: () {
+                  ExploreCard(
+                    onPressed: () {
                       context.router.push(
                         ExercisesViewRoute(
                           appBarTitle: "Chest",
@@ -244,14 +244,13 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                         ),
                       );
                     },
-                    child: ExploreCard(
-                      imageAsset: Assets.assetsChest,
-                      title: "Chest",
-                    ),
+                    imageAsset: Assets.assetsChest,
+                    title: "Chest",
                   ),
+
                   SizedBox(height: 10.h),
-                  InkWell(
-                    onTap: () {
+                  ExploreCard(
+                    onPressed: () {
                       context.router.push(
                         ExercisesViewRoute(
                           appBarTitle: "Arms",
@@ -259,14 +258,13 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                         ),
                       );
                     },
-                    child: ExploreCard(
-                      imageAsset: Assets.assetsArms,
-                      title: "Arms",
-                    ),
+                    imageAsset: Assets.assetsArms,
+                    title: "Arms",
                   ),
+
                   SizedBox(height: 10.h),
-                  InkWell(
-                    onTap: () {
+                  ExploreCard(
+                    onPressed: () {
                       context.router.push(
                         ExercisesViewRoute(
                           appBarTitle: "Shoulder",
@@ -274,14 +272,13 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                         ),
                       );
                     },
-                    child: ExploreCard(
-                      imageAsset: Assets.assetsShoulder,
-                      title: "Shoulder",
-                    ),
+                    imageAsset: Assets.assetsShoulder,
+                    title: "Shoulder",
                   ),
+
                   SizedBox(height: 10.h),
-                  InkWell(
-                    onTap: () {
+                  ExploreCard(
+                    onPressed: () {
                       context.router.push(
                         ExercisesViewRoute(
                           appBarTitle: "Back",
@@ -289,14 +286,13 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                         ),
                       );
                     },
-                    child: ExploreCard(
-                      imageAsset: Assets.assetsBack,
-                      title: "Back",
-                    ),
+                    imageAsset: Assets.assetsBack,
+                    title: "Back",
                   ),
+
                   SizedBox(height: 10.h),
-                  InkWell(
-                    onTap: () {
+                  ExploreCard(
+                    onPressed: () {
                       context.router.push(
                         ExercisesViewRoute(
                           appBarTitle: "Legs",
@@ -304,10 +300,8 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                         ),
                       );
                     },
-                    child: ExploreCard(
-                      imageAsset: Assets.assetsSquatsGirl,
-                      title: "Legs",
-                    ),
+                    imageAsset: Assets.assetsSquatsGirl,
+                    title: "Legs",
                   ),
                 ],
               ),

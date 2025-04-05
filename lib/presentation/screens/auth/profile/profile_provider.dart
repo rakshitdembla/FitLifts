@@ -50,21 +50,21 @@ class ProfileProvider with ChangeNotifier {
       return;
     }
 
-    if (parsedAge is! int || parsedAge <= 0) {
+    if (parsedAge == null || parsedAge <= 0) {
       _isLoading = false;
       notifyListeners();
       Utils.showCustomToast("Please enter a valid age");
       return;
     }
 
-    if (parsedHeight is! int || parsedHeight <= 0) {
+    if (parsedHeight == null || parsedHeight <= 0) {
       _isLoading = false;
       notifyListeners();
       Utils.showCustomToast("Please enter a valid height");
       return;
     }
 
-    if (parsedBodyWeight is! double || parsedBodyWeight <= 0) {
+    if (parsedBodyWeight == null || parsedBodyWeight <= 0) {
       _isLoading = false;
       notifyListeners();
       Utils.showCustomToast("Please enter a valid weight");
@@ -82,6 +82,7 @@ class ProfileProvider with ChangeNotifier {
         MyStrings.age: parsedAge,
         MyStrings.height: parsedHeight,
         MyStrings.bodyWeight: parsedBodyWeight,
+        MyStrings.isPremiumUser: false
       };
 
       debugPrint(userMap.toString());

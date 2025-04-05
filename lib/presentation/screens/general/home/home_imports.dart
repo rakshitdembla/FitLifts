@@ -1,16 +1,23 @@
 import 'dart:io';
 
+import 'package:auto_route/auto_route.dart';
+import 'package:fitlifts/check_premium.dart';
 import 'package:fitlifts/core/constants/my_assets.dart';
 import 'package:fitlifts/core/constants/my_colors.dart';
 import 'package:fitlifts/presentation/common_widgets/divider_text.dart';
 import 'package:fitlifts/presentation/common_widgets/explore_card.dart';
 import 'package:fitlifts/presentation/common_widgets/refreshbar.dart';
+import 'package:fitlifts/presentation/screens/general/controller_service.dart';
 import 'package:fitlifts/presentation/screens/general/home/home_provider.dart';
 import 'package:fitlifts/presentation/screens/general/home/home_widgets/stats_card.dart';
+import 'package:fitlifts/presentation/screens/general/settings/settings_imports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utils/greetintgs.dart';
+import '../../../routes/auto_router.gr.dart';
+
 
 
 part "home.dart";
