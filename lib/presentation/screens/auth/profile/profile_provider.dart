@@ -82,7 +82,8 @@ class ProfileProvider with ChangeNotifier {
         MyStrings.age: parsedAge,
         MyStrings.height: parsedHeight,
         MyStrings.bodyWeight: parsedBodyWeight,
-        MyStrings.isPremiumUser: false
+        MyStrings.isPremiumUser: false,
+        MyStrings.profileUrl : null
       };
 
       debugPrint(userMap.toString());

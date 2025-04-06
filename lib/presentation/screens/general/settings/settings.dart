@@ -17,7 +17,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         gotInitialData = true;
       }
     });
-
     super.didChangeDependencies();
   }
 
@@ -28,95 +27,105 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: Consumer<SettingsProvider>(
         builder: (context, state, child) {
           return state.isLoading
-              ? Center(child: CircularProgressIndicator())
+              ? CircularProgressLoading()
               : SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 15.h),
                 child: SafeArea(
                   child: Column(
                     children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 20.w,
-                          vertical: 15.h,
-                        ),
-                        decoration: BoxDecoration(
-                          color: MyColors.darkGrey,
-                          borderRadius: BorderRadius.circular(10.r),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                state.uploadProfileImage(context);
-                              },
-                              child: CircleAvatar(
+                      InkWell(
+                        onTap: () {
+                          context.router.push(
+                            UpdateProfilePageRoute(
+                              previousName: state.userName,
+                              previousBodyWeight: state.bodyWeight,
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 30.w,
+                            vertical: 15.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: MyColors.darkGrey,
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
                                 radius: 35.r,
-                                child:
-                                    state.profileImage != null &&
-                                            state.profileImage!.isNotEmpty
-                                        ? ClipOval(
-                                          child: Image.file(
-                                            File(state.profileImage!),
+                                child: ClipOval(
+                                  child:
+                                      state.profileImage != null &&
+                                              state.profileImage!.isNotEmpty
+                                          ? Image.network(
+                                            state.profileImage!,
                                             fit: BoxFit.cover,
                                             width: 70.w,
                                             height: 70.h,
-                                          ),
-                                        )
-                                        : Icon(Icons.person, size: 32.5.r),
+                                          )
+                                          : Icon(Icons.person, size: 32.5.r),
+                                ),
                               ),
-                            ),
-                            SizedBox(width: 20.w),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  state.userName ?? "User",
-                                  style: TextStyle(
-                                    color: MyColors.whiteText,
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 18.sp,
+
+                              Spacer(),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    state.userName ?? "User",
+                                    style: TextStyle(
+                                    
+                                      color: MyColors.whiteText,
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 18.sp,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: 3.h),
-                                Text(
-                                  state.userEmail.toString(),
-                                  style: TextStyle(
-                                    color: MyColors.greyText,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 13.sp,
+                                  SizedBox(height: 3.h),
+                                  Text(
+                                    state.userEmail ?? "user@example.com",
+                                    style: TextStyle(
+                                      color: MyColors.greyText,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 13.sp,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: 1.h),
-                                Text(
-                                  "Current Body Weight - ${state.bodyWeight} kg",
-                                  style: TextStyle(
-                                    color: MyColors.greyText,
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 13.sp,
+                                  SizedBox(height: 1.h),
+                                  Text(
+                                    "Body Weight - ${state.bodyWeight} kg",
+                                    style: TextStyle(
+                                      color: MyColors.greyText,
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 13.sp,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       SizedBox(height: 10.h),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: Text(
+                          "Dark Theme",
+                          style: TextStyle(
+                            color: MyColors.whiteText,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 17.sp,
+                          ),
+                        ),
+                        trailing: Switch.adaptive(
+                          activeColor: MyColors.whiteText,
+                          activeTrackColor: MyColors.electricBlue,
+                          value: true,
+                          onChanged: (value) {},
+                        ),
+                      ),
 
-                      SettingsTile(
-                        title: "Dark Theme",
-                        trailingWidget: Switch.adaptive(
-                          value: true,
-                          onChanged: (value) {},
-                        ),
-                      ),
-                      SettingsTile(
-                        title: "Allow Notifications",
-                        trailingWidget: Switch.adaptive(
-                          value: true,
-                          onChanged: (value) {},
-                        ),
-                      ),
                       SettingsTile(
                         onTapAction: () {
                           context.router.push(UnlockPremiumRoute());
@@ -147,6 +156,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           size: 30.r,
                         ),
                       ),
+                      SettingsTile(
+                        onTapAction: () {
+                          context.router.push(TrackingAccuracyPageRoute());
+                        },
+                        title: "Tracking Accuracy",
+                        trailingWidget: Icon(
+                          Icons.android,
+                          color: MyColors.primaryWhite,
+                          size: 30.r,
+                        ),
+                      ),
+
                       SettingsTile(
                         title: "Privacy Policy",
                         onTapAction: () {

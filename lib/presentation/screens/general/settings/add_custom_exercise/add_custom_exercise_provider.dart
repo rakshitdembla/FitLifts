@@ -6,8 +6,8 @@ import 'package:fitlifts/data/data_source/local/exercises%20database/chest_exerc
 import 'package:fitlifts/data/data_source/local/exercises%20database/shoulder_exercises.dart';
 import 'package:fitlifts/data/models/exercise.dart';
 import 'package:flutter/widgets.dart';
-import '../../../data/data_source/local/exercises database/abs_exercises.dart';
-import '../../../data/data_source/local/exercises database/legs_exercises.dart';
+import '../../../../../data/data_source/local/exercises database/abs_exercises.dart';
+import '../../../../../data/data_source/local/exercises database/legs_exercises.dart';
 
 class AddCustomExerciseProvider with ChangeNotifier {
   bool _isLoading = false;

@@ -38,6 +38,7 @@ dependencies:
   cloud_firestore: ^5.6.5
   razorpay_flutter: ^1.4.0
   flutter_dotenv: ^5.2.1
+  dio: ^5.8.0+1
 
 dev_dependencies:
   flutter_test:

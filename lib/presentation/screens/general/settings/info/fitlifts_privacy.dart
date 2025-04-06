@@ -12,15 +12,18 @@ class PrivacyPolicyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Privacy Policy', style: TextStyle(color: MyColors.whiteText)),
+        scrolledUnderElevation: 0.0,
+        title: Text(
+          'Privacy Policy',
+          style: TextStyle(color: MyColors.whiteText),
+        ),
         backgroundColor: MyColors.primaryCharcoal,
         automaticallyImplyLeading: true,
         iconTheme: IconThemeData(color: MyColors.whiteText),
       ),
       backgroundColor: MyColors.primaryCharcoal,
-      body: Padding(
-        padding: EdgeInsets.all(16.0.r),
-        child: SingleChildScrollView(
+      body:  SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 16.w,vertical: 16.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -48,27 +51,33 @@ class PrivacyPolicyPage extends StatelessWidget {
               ),
               SizedBox(height: 8.h),
               InfoTextWidget(
-                text: "🔒 Local Storage - All your fitness data, including workouts, progress images, and stats, are stored on your device only.",
+                text:
+                    "🔒 Local Storage - All your fitness data, including workouts, progress images, and stats, are stored on your device only.",
               ),
               InfoTextWidget(
-                text: "🛡️ No Cloud Storage - We do not upload or store your fitness data on any cloud servers. Your data remains completely private.",
+                text:
+                    "🛡️ No Cloud Storage - We do not upload or store your fitness data on any cloud servers. Your data remains completely private.",
               ),
               InfoTextWidget(
-                text: "📊 Minimal Data on Cloud - We only store essential details like your name, email, age, gender, and body weight using Firebase for login purposes.",
+                text:
+                    "📊 Minimal Data on Cloud - We only store essential details like your name, email, age, gender, and body weight using Firebase for login purposes.",
               ),
               InfoTextWidget(
-                text: "📥 Premium Local Backup - As a premium feature, you can export and import your data for backup. No cloud involvement—your data stays with you.",
+                text:
+                    "📥 Premium Local Backup - As a premium feature, you can export and import your data for backup. No cloud involvement—your data stays with you.",
               ),
               InfoTextWidget(
-                text: "🗑️ Full Data Control - You can delete all your data from your device anytime through the settings page.",
+                text:
+                    "🗑️ Full Data Control - You can delete all your data from your device anytime through the settings page.",
               ),
               InfoTextWidget(
-                text: "🔑 Secure Login - We use Firebase authentication to ensure secure login while keeping your personal data minimal.",
+                text:
+                    "🔑 Secure Login - We use Firebase authentication to ensure secure login while keeping your personal data minimal.",
               ),
             ],
           ),
         ),
-      ),
+    
     );
   }
 }

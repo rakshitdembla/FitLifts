@@ -48,7 +48,7 @@ class ChartProvider with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       _isLoading = false;
-      Utils.showCustomToast(" Couldn't load your step history. Please try again.");
+      Utils.showCustomToast("Couldn't load your step history. Please try again.");
         notifyListeners();
     }
   }
