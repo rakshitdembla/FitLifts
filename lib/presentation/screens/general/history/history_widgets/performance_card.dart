@@ -40,10 +40,10 @@ class PerformanceCard extends StatelessWidget {
                         Icons.directions_walk_outlined,
                         color: MyColors.graphBarCyan,
                       ),
-                      SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Text(
-                        historyDataModel.steps.toString().length > 6
-                            ? "Steps - ${historyDataModel.steps.toString().substring(0, 6)}.. "
+                        historyDataModel.steps.toString().length > 5
+                            ? "Steps - ${historyDataModel.steps.toString().substring(0, 5)}+ "
                             : "Steps - ${historyDataModel.steps}",
                         style: TextStyle(
                           fontWeight: FontWeight.w900,
@@ -61,13 +61,13 @@ class PerformanceCard extends StatelessWidget {
                         Icons.fitness_center_outlined,
                         color: Colors.deepOrangeAccent,
                       ),
-                      SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Text(
                         historyDataModel.workoutVolume
                                     .toStringAsFixed(1)
                                     .length >
                                 8
-                            ? "Workout - ${historyDataModel.workoutVolume.toStringAsFixed(1).substring(0, 8)}.. kg"
+                            ? "Workout - ${historyDataModel.workoutVolume.toStringAsFixed(1).substring(0, 8)}+ kg"
                             : "Workout - ${historyDataModel.workoutVolume.toStringAsFixed(1)} kg",
                         style: TextStyle(
                           fontWeight: FontWeight.w900,
@@ -82,13 +82,13 @@ class PerformanceCard extends StatelessWidget {
                   Row(
                     children: [
                       Icon(Icons.place_outlined, color: Colors.greenAccent),
-                      SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Text(
                         (historyDataModel.distance / 1000)
                                     .toStringAsFixed(2)
                                     .length >
                                 5
-                            ? "Distance - ${(historyDataModel.distance / 1000).toStringAsFixed(2).substring(0, 5)}.. km"
+                            ? "Distance - ${(historyDataModel.distance / 1000).toStringAsFixed(2).substring(0, 5)}+ km"
                             : "Distance - ${(historyDataModel.distance / 1000).toStringAsFixed(2)} km",
                         style: TextStyle(
                           fontWeight: FontWeight.w900,
@@ -106,13 +106,13 @@ class PerformanceCard extends StatelessWidget {
                         Icons.local_fire_department_outlined,
                         color: Colors.orangeAccent,
                       ),
-                      SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Text(
                         historyDataModel.stepsCalories
                                     .toStringAsFixed(0)
                                     .length >
-                                5
-                            ? "Steps Calories - ${historyDataModel.stepsCalories.toStringAsFixed(0).substring(0, 5)}.. kcal"
+                                4
+                            ? "Steps Calories - ${historyDataModel.stepsCalories.toStringAsFixed(0).substring(0, 4)}+ kcal"
                             : "Steps Calories - ${historyDataModel.stepsCalories.toStringAsFixed(0)} kcal",
 
                         style: TextStyle(
@@ -128,13 +128,13 @@ class PerformanceCard extends StatelessWidget {
                   Row(
                     children: [
                       Icon(Icons.bolt_outlined, color: Colors.yellowAccent),
-                      SizedBox(width: 8),
+                      SizedBox(width: 8.w),
                       Text(
                         historyDataModel.workoutCalories
                                     .toStringAsFixed(0)
                                     .length >
-                                5
-                            ? "Workout Calories - ${historyDataModel.workoutCalories.toStringAsFixed(0).substring(0, 5)}.. kcal"
+                                4
+                            ? "Workout Calories - ${historyDataModel.workoutCalories.toStringAsFixed(0).substring(0, 4)}+ kcal"
                             : "Workout Calories - ${historyDataModel.workoutCalories.toStringAsFixed(0)} kcal",
                         style: TextStyle(
                           fontWeight: FontWeight.w900,

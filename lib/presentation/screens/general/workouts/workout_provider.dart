@@ -19,8 +19,6 @@ class FetchWorkoutsProvider with ChangeNotifier {
   List<MapEntry<String, List<WorkoutModel>>> _groupedList = [];
   List<MapEntry<String, List<WorkoutModel>>> get groupedList => _groupedList;
 
-  bool _gotInitialData = false;
-
 
   Future<void> getWorkouts() async {
     _isLoading = true;
@@ -33,13 +31,11 @@ class FetchWorkoutsProvider with ChangeNotifier {
     if (getAllWorkout == null) {
       _isLoading = false;
       _isError = true;
-       _gotInitialData = true;
-      notifyListeners();    
+      notifyListeners();
       return;
     } else if (getAllWorkout.isEmpty) {
       _isLoading = false;
       _noDataAvailable = true;
-        _gotInitialData = true;
       notifyListeners();
       return;
     } else {
@@ -50,15 +46,14 @@ class FetchWorkoutsProvider with ChangeNotifier {
     _groupedList = _groupedWorkouts.entries.toList();
 
     _isLoading = false;
-    _gotInitialData = true;
+ 
     notifyListeners();
   }
 
-  Future<void> refreshWorkouts() async{
-    if (_gotInitialData) {
+  Future<void> refreshWorkouts() async {
       getWorkouts();
-    }
-     await Future.delayed(const Duration(seconds: 1));
-     Utils.showCustomToast("Workouts refreshed successfully.");
+  
+    await Future.delayed(const Duration(milliseconds: 700));
+    Utils.showCustomToast("Workouts refreshed successfully.");
   }
 }

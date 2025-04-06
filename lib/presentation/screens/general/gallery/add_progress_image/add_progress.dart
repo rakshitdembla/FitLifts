@@ -3,6 +3,7 @@ import 'package:fitlifts/data/models/gallery_model.dart';
 import 'package:fitlifts/presentation/common_widgets/datetime_widget.dart';
 import 'package:fitlifts/presentation/common_widgets/elevated_cta.dart';
 import 'package:fitlifts/presentation/common_widgets/num_field.dart';
+import 'package:fitlifts/presentation/screens/auth/common_widgets/circular_progress.dart';
 import 'package:fitlifts/presentation/screens/general/gallery/add_progress_image/add_progress_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -50,6 +51,7 @@ class _AddProgressState extends State<AddProgress> {
     return Scaffold(
       backgroundColor: MyColors.primaryCharcoal,
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         title: Text(
           "Progress Image Details",
           style: TextStyle(
@@ -62,8 +64,9 @@ class _AddProgressState extends State<AddProgress> {
         automaticallyImplyLeading: true,
         iconTheme: IconThemeData(color: MyColors.whiteText),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.fromLTRB(9.w, 15.h, 9.w, 25.w),
+
         child: Column(
           children: [
             NumField(
@@ -84,44 +87,55 @@ class _AddProgressState extends State<AddProgress> {
             SizedBox(height: 25.h),
             DateTimeWidget(showDate: false),
             SizedBox(height: 30.h),
-            Spacer(),
-            Consumer<AddProgressProvider>(
-              builder: (context, addProgressProvider, child) {
-                return addProgressProvider.isLoading
-                    ? Center(
-                      child: CircularProgressIndicator(
-                        color: MyColors.whiteText,
-                      ),
-                    )
-                    : ElevatedCTA(
-                      title: widget.isUpdate ? "Update" : 'Save',
-                      onPressed: () {
-                        widget.isUpdate
-                            ? addProgressProvider.updateProgress(
-                              widget.galleryModel!.id!,
-                              widget.galleryModel!.imagePath,
-                              widget.galleryModel!.date,
-
-                              bodyWeightController.text.toString(),
-
-                              pumpController.text,
-                              widget.galleryModel?.ratePump,
-                              widget.galleryModel?.bodyWeight,
-
-                              context,
-                            )
-                            : addProgressProvider.createProgress(
-                              widget.imagePath!,
-                              pumpController.text.toString(),
-                              bodyWeightController.text.toString(),
-                              context,
-                            );
-                      },
-                    );
-              },
-            ),
           ],
         ),
+      ),
+
+      bottomNavigationBar: Consumer<AddProgressProvider>(
+        builder: (context, addProgressProvider, child) {
+          return addProgressProvider.isLoading
+              ? Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 10.h,
+                  left: 9.w,
+                  right: 9.w,
+                ),
+                child: CircularProgressLoading(),
+              )
+              : Padding(
+                  padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 10.h,
+                  left: 9.w,
+                  right: 9.w,
+                ),
+                child: ElevatedCTA(
+                  title: widget.isUpdate ? "Update" : "Save",
+                  onPressed: () {
+                    widget.isUpdate
+                        ? addProgressProvider.updateProgress(
+                          widget.galleryModel!.id!,
+                          widget.galleryModel!.imagePath,
+                          widget.galleryModel!.date,
+                          bodyWeightController.text.toString(),
+                          pumpController.text,
+                          widget.galleryModel?.ratePump,
+                          widget.galleryModel?.bodyWeight,
+                          context,
+                          bodyWeightController,
+                          pumpController,
+                        )
+                        : addProgressProvider.createProgress(
+                          widget.imagePath!,
+                          pumpController.text.toString(),
+                          bodyWeightController.text.toString(),
+                          context,
+                          bodyWeightController,
+                          pumpController,
+                        );
+                  },
+                ),
+              );
+        },
       ),
     );
   }

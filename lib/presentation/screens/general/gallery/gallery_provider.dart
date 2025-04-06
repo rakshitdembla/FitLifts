@@ -12,11 +12,6 @@ class GalleryProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  bool _isError = false;
-  bool get isError => _isError;
-
-  bool _gotInitialData = false;
-
   List<GalleryModel> _imagesList = [];
   List<GalleryModel> get imagesList => _imagesList;
 
@@ -30,9 +25,7 @@ class GalleryProvider with ChangeNotifier {
   }
 
   Future<void> getAllGallery() async {
-    debugPrint("get gallery called");
     _isLoading = true;
-    _gotInitialData = false;
     notifyListeners();
 
     bool getByPump = _selectedSortOption == "pump";
@@ -48,20 +41,17 @@ class GalleryProvider with ChangeNotifier {
     );
     if (getGallery == null) {
       _isLoading = false;
-      _gotInitialData = true;
-      Utils.showCustomToast(
-        "Failed to fetch data, Please try refreshing the page",
-      );
+      Utils.showCustomToast("Couldn't load gallery. Pull to refresh.");
+      notifyListeners();
       return;
     }
     _imagesList = getGallery;
     _isLoading = false;
-    _gotInitialData = true;
     notifyListeners();
   }
 
   Future<void> captureImage(BuildContext context) async {
-    final pickedIMG = await Utils.showImagePicker(context,"Choose a profile picture");
+    final pickedIMG = await Utils.showImagePicker(context, "Capture or select");
     if (pickedIMG != null) {
       _isLoading = true;
       notifyListeners();
@@ -83,21 +73,19 @@ class GalleryProvider with ChangeNotifier {
           notifyListeners();
         } else {
           _isLoading = false;
-          Utils.showCustomToast("Failed to save image");
+          Utils.showCustomToast("Image save failed");
           notifyListeners();
         }
       } catch (e) {
-        Utils.showCustomToast("An error occured, Please try again.");
+        Utils.showCustomToast("Oops! Try again.");
+        _isLoading = false;
+        notifyListeners();
       }
-
-    } 
+    }
   }
 
   Future<void> refresh() async {
-    if (_gotInitialData) {
-      getAllGallery();
-    }
-
+    getAllGallery();
     await Future.delayed(Duration(seconds: 1));
   }
 }

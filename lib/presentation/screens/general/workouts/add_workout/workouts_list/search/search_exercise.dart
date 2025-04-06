@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fitlifts/core/constants/my_colors.dart';
 import 'package:fitlifts/data/models/exercise.dart';
+import 'package:fitlifts/presentation/screens/auth/common_widgets/circular_progress.dart';
 import 'package:fitlifts/presentation/screens/general/workouts/add_workout/workouts_list/search/search_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 
 @RoutePage()
@@ -22,6 +22,7 @@ class _SearchExerciseState extends State<SearchExercise> {
     return Scaffold(
       backgroundColor: MyColors.primaryCharcoal,
       appBar: AppBar(
+         scrolledUnderElevation: 0.0,
         automaticallyImplyLeading: true,
         iconTheme: IconThemeData(color: MyColors.whiteText),
         backgroundColor: MyColors.primaryCharcoal,
@@ -50,12 +51,7 @@ class _SearchExerciseState extends State<SearchExercise> {
       body: Consumer<SearchProvider>(
         builder: (context, searchProvider, child) {
           return searchProvider.isLoading
-              ? Center(
-                child: LoadingAnimationWidget.waveDots(
-                  color: MyColors.whiteText,
-                  size: 40.r,
-                ),
-              )
+              ? CircularProgressLoading()
               : ListView.builder(
                 padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 12.h),
                 itemCount: searchProvider.filteredList.length,

@@ -183,7 +183,7 @@ class Utils {
               ),
               SizedBox(height: 5.h),
               Divider(color: Colors.grey),
-              SizedBox(height: 0.h),
+             
               ListTile(
                 leading: Icon(Icons.camera, color: MyColors.whiteText),
                 title: Text(

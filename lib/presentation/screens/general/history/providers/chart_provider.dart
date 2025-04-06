@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../../data/models/step_model.dart';
 
-class GraphProvider with ChangeNotifier {
+class ChartProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -18,13 +18,9 @@ class GraphProvider with ChangeNotifier {
   double _interval = 1000;
   double get interval => _interval;
 
-    bool _gotInitalData = false;
-  bool get gotInitialData => _gotInitalData;
-
   Future<void> getWeekSteps() async {
     _isLoading = true;
     notifyListeners();
-    _gotInitalData = false;
     try {
       Map<String, GraphDataModel> map = {};
       List<StepModel> weeklySteps = await DBHelper().getWeekSteps();
@@ -49,12 +45,11 @@ class GraphProvider with ChangeNotifier {
 
       getHighestSteps();
       _isLoading = false;
-      _gotInitalData = true;
       notifyListeners();
     } catch (e) {
-      _gotInitalData = true;
       _isLoading = false;
-      Utils.showCustomToast("Failed to get past week data");
+      Utils.showCustomToast(" Couldn't load your step history. Please try again.");
+        notifyListeners();
     }
   }
 

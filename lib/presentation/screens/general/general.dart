@@ -18,9 +18,6 @@ class General extends StatefulWidget {
 }
 
 class _GeneralState extends State<General> {
-  final PersistentTabController _controller = PersistentTabController(
-    initialIndex: 0,
-  );
   int selectedIndex = 0;
   List<Widget> allScreens() {
     return [

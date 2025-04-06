@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fitlifts/presentation/routes/auto_router.gr.dart';
+import 'package:fitlifts/presentation/screens/auth/common_widgets/circular_progress.dart';
 import 'package:fitlifts/presentation/screens/general/workouts/add_workout/workouts_list/fetch_all_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,6 +36,7 @@ class _WorkoutsListState extends State<WorkoutsList> {
         return Scaffold(
           backgroundColor: MyColors.primaryCharcoal,
           appBar: AppBar(
+             scrolledUnderElevation: 0.0,
             actions: [
               Padding(
                 padding: EdgeInsets.only(right: 10.w),
@@ -62,9 +64,7 @@ class _WorkoutsListState extends State<WorkoutsList> {
           ),
           body:
               state.isLoading
-                  ? Center(
-                    child: CircularProgressIndicator(color: MyColors.whiteText),
-                  )
+                  ? CircularProgressLoading()
                   : ListView.builder(
                     itemBuilder: (context, index) {
                       String exerciseTitle = state.exerciseTitles[index];

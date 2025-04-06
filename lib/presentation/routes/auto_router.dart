@@ -6,8 +6,8 @@ class AppRouter extends RootStackRouter {
   @override
   RouteType get defaultRouteType => RouteType.custom(
     transitionsBuilder:TransitionsBuilders.slideLeft,
-    duration: Duration(milliseconds: 300),
-    reverseDuration: Duration(milliseconds: 250)
+    duration: Duration(milliseconds: 250),
+    reverseDuration: Duration(milliseconds: 200)
   );
 
   @override
@@ -29,6 +29,7 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: AboutPageRoute.page),
     AutoRoute(page: PrivacyPolicyPageRoute.page),
     AutoRoute(page: AddCustomExerciseRoute.page),
+    AutoRoute(page: GalleryViewDetailsRoute.page)
   ];
 
   @override

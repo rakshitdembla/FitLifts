@@ -1,11 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fitlifts/core/constants/my_colors.dart';
 import 'package:fitlifts/data/models/exercise.dart';
+import 'package:fitlifts/presentation/screens/auth/common_widgets/circular_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 @RoutePage()
-class ExercisesView extends StatelessWidget {
+class ExercisesView extends StatefulWidget {
   final String appBarTitle;
   final List<Exercise> exercisesList;
   const ExercisesView({
@@ -15,110 +16,166 @@ class ExercisesView extends StatelessWidget {
   });
 
   @override
+  State<ExercisesView> createState() => _ExercisesViewState();
+}
+
+class _ExercisesViewState extends State<ExercisesView> {
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.primaryCharcoal,
       appBar: AppBar(
+        foregroundColor: MyColors.primaryCharcoal,
         backgroundColor: MyColors.primaryCharcoal,
+        scrolledUnderElevation: 0.0,
         automaticallyImplyLeading: true,
         iconTheme: IconThemeData(color: MyColors.whiteText),
         centerTitle: true,
         title: Text(
-          appBarTitle,
+          widget.appBarTitle,
           style: TextStyle(
             color: MyColors.whiteText,
             fontWeight: FontWeight.w900,
           ),
         ),
       ),
-      body: ListView.builder(
-        shrinkWrap: true,
-        itemCount: exercisesList.length,
-        itemBuilder: (context, index) {
-          Exercise exercise = exercisesList[index];
-          return ExpansionTile(
-            tilePadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 4.h),
-            subtitle: Text(
-              exercise.equipment,
-              style: TextStyle(color: MyColors.greyText),
-            ),
-            title: Text(
-              exercise.name,
-              style: TextStyle(
-                color: MyColors.primaryWhite,
-                fontWeight: FontWeight.w900,
-                fontSize: 15.sp,
+      body:
+          _isLoading
+              ? CircularProgressLoading()
+              : ListView.builder(
+                shrinkWrap: true,
+                itemCount: widget.exercisesList.length,
+                itemBuilder: (context, index) {
+                  Exercise exercise = widget.exercisesList[index];
+                  return ExpansionTile(
+                    tilePadding: EdgeInsets.symmetric(
+                      horizontal: 15.w,
+                      vertical: 4.h,
+                    ),
+                    subtitle: Text(
+                      exercise.equipment,
+                      style: TextStyle(color: MyColors.greyText),
+                    ),
+                    title: Text(
+                      exercise.name,
+                      style: TextStyle(
+                        color: MyColors.primaryWhite,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 15.sp,
+                      ),
+                    ),
+                    iconColor: MyColors.primaryWhite,
+                    collapsedIconColor: MyColors.primaryWhite,
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 14.w),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Target Muscle - ${exercise.targetMuscle}",
+                                style: TextStyle(
+                                  color: const Color.fromARGB(
+                                    255,
+                                    122,
+                                    169,
+                                    250,
+                                  ),
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 16.sp,
+                                ),
+                              ),
+                              SizedBox(height: 7.h),
+                              Text(
+                                "Secondary Muscle - ${exercise.secondaryMuscles?.join(",").replaceAll(",", ", ").toString() ?? "none"}",
+                                style: TextStyle(
+                                  color: const Color.fromARGB(
+                                    255,
+                                    226,
+                                    225,
+                                    225,
+                                  ),
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 14.sp,
+                                ),
+                              ),
+                              SizedBox(height: 15.h),
+                              Text(
+                                "Instructions",
+                                style: TextStyle(
+                                  color: const Color.fromARGB(
+                                    255,
+                                    255,
+                                    223,
+                                    126,
+                                  ),
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 18.sp,
+                                ),
+                              ),
+                              SizedBox(height: 5.h),
+                              Text(
+                                exercise.instructions
+                                    .split("\n")
+                                    .map((line) => line.trim())
+                                    .join("\n\n")
+                                    .trimRight(),
+                                style: TextStyle(
+                                  color: MyColors.whiteText,
+                                  fontSize: 13.sp,
+                                ),
+                              ),
+                              SizedBox(height: 15.h),
+
+                              Text(
+                                "Common Mistakes",
+                                style: TextStyle(
+                                  color: const Color.fromARGB(
+                                    255,
+                                    255,
+                                    163,
+                                    130,
+                                  ),
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 18.sp,
+                                ),
+                              ),
+                              SizedBox(height: 5.h),
+                              Text(
+                                exercise.commonMistakes
+                                    .split("\n")
+                                    .map((line) => (line.trim()))
+                                    .join("\n\n")
+                                    .trimRight(),
+                                style: TextStyle(
+                                  color: MyColors.whiteText,
+                                  fontSize: 13.sp,
+                                ),
+                              ),
+                              SizedBox(height: 15.h),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
-            ),
-            iconColor: MyColors.primaryWhite,
-            collapsedIconColor: MyColors.primaryWhite,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 14.w),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Target Muscle - ${exercise.targetMuscle}",
-                      style: TextStyle(
-                        color: MyColors.graphBarCyan,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 16.sp,
-                      ),
-                    ),
-                    SizedBox(height: 7.h),
-                    Text(
-                      "Secondary Muscle - ${exercise.secondaryMuscles?.join(",").replaceAll(",", ", ").toString() ?? "none"}",
-                      style: TextStyle(
-                        color: const Color.fromARGB(255, 226, 225, 225),
-                        fontWeight: FontWeight.w900,
-                        fontSize: 14.sp,
-                      ),
-                    ),
-                    SizedBox(height: 15.h),
-                    Text(
-                      "Instructions",
-                      style: TextStyle(
-                        color: MyColors.gold,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 18.sp,
-                      ),
-                    ),
-                    SizedBox(height: 5.h,),
-                    Text(
-                      exercise.instructions
-                          .split("\n")
-                          .map((line) => line.trim())
-                          .join("\n\n").trimRight() ,
-                      style: TextStyle(color: MyColors.whiteText,fontSize: 13.sp),
-                    ),
-                    SizedBox(height: 15.h),
-                    
-                    Text(
-                      "Common Mistakes",
-                      style: TextStyle(
-                        color: MyColors.fieryRed,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 18.sp,
-                      ),
-                    ),
-                    SizedBox(height: 5.h,),
-                    Text(
-                      exercise.commonMistakes
-                          .split("\n")
-                          .map((line) => (line.trim()))
-                          .join("\n\n").trimRight(),
-                      style: TextStyle(color: MyColors.whiteText,fontSize: 13.sp),
-                    ),
-                    SizedBox(height: 15.h,)
-                  ],
-                ),
-              ),
-            ],
-          );
-        },
-      ),
     );
   }
 }

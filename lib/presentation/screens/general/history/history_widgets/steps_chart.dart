@@ -1,5 +1,6 @@
 import 'package:fitlifts/core/constants/my_colors.dart';
-import 'package:fitlifts/presentation/screens/general/history/providers/graph_provider.dart';
+import 'package:fitlifts/presentation/screens/auth/common_widgets/circular_progress.dart';
+import 'package:fitlifts/presentation/screens/general/history/providers/chart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -26,12 +27,10 @@ class _StepBarChartState extends State<StepBarChart> {
 
       padding: EdgeInsets.all(16.r),
 
-      child: Consumer<GraphProvider>(
-        builder: (context, graphProvider, child) {
-          return graphProvider.isLoading
-              ? Center(
-                child: CircularProgressIndicator(color: MyColors.whiteText),
-              )
+      child: Consumer<ChartProvider>(
+        builder: (context, chartProvider, child) {
+          return chartProvider.isLoading
+              ? CircularProgressLoading()
               : SfCartesianChart(
                 title: ChartTitle(
                   text: "Last 7 Days Steps",
@@ -62,8 +61,8 @@ class _StepBarChartState extends State<StepBarChart> {
                   majorGridLines: const MajorGridLines(width: 0),
                   axisLine: const AxisLine(width: 0), // Remove X-axis line
                   minimum: 0,
-                  interval: graphProvider.interval,
-                  maximum: graphProvider.maximum,
+                  interval: chartProvider.interval,
+                  maximum: chartProvider.maximum,
                   labelStyle: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w900,
@@ -72,10 +71,10 @@ class _StepBarChartState extends State<StepBarChart> {
 
                 series: [
                   ColumnSeries<GraphDataModel, String>(
-                    dataSource: graphProvider.filteredList,
+                    dataSource: chartProvider.filteredList,
                     xValueMapper: (GraphDataModel data, _) => data.date,
                     borderRadius: BorderRadius.circular(30.r),
-                    width: 0.2.r,
+                    width: 0.2.w,
                     animationDuration: 1000,
                     yValueMapper: (GraphDataModel data, _) => data.steps,
                     color: Colors.white,

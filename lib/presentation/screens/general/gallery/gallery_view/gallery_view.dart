@@ -14,7 +14,8 @@ class _GalleryViewState extends State<GalleryView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.primaryCharcoal,
-      appBar: AppBar(
+      appBar: AppBar(    
+        scrolledUnderElevation: 0.0,
         title: Text(
           DateFormat("d MMM, yyyy").format(widget.galleryModel.date),
           style: TextStyle(
@@ -26,10 +27,17 @@ class _GalleryViewState extends State<GalleryView> {
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 10.w),
-            child: Icon(
-              Icons.info_outline,
-              color: MyColors.whiteText,
-              size: 27.r,
+            child: IconButton(
+              onPressed: () {
+                context.router.push(
+                  GalleryViewDetailsRoute(galleryModel: widget.galleryModel),
+                );
+              },
+              icon: Icon(
+                Icons.info_outline,
+                color: MyColors.whiteText,
+                size: 27.r,
+              ),
             ),
           ),
         ],
@@ -39,12 +47,20 @@ class _GalleryViewState extends State<GalleryView> {
         iconTheme: IconThemeData(color: MyColors.whiteText),
       ),
       body: Center(
-        child: Image.file(
-          File(widget.galleryModel.imagePath),
-          fit: BoxFit.contain,
+        child: InteractiveViewer(
+          panEnabled: true,
+          minScale: 0.5,
+          maxScale: 4,
+          child: SizedBox.expand(
+            child: Image.file(
+              File(widget.galleryModel.imagePath),
+              fit: BoxFit.contain,
+            ),
+          ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
+        height: 60.h,
         color: MyColors.primaryCharcoal,
         child: Consumer<GalleryViewProvider>(
           builder: (context, galleryProvider, child) {
@@ -52,7 +68,7 @@ class _GalleryViewState extends State<GalleryView> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 galleryProvider.isUpdateLoading
-                    ? CircularProgressIndicator(color: MyColors.whiteText)
+                    ? CircularProgressLoading()
                     : IconButton(
                       onPressed: () {
                         galleryProvider.updateProgress(
@@ -67,7 +83,7 @@ class _GalleryViewState extends State<GalleryView> {
                       ),
                     ),
                 galleryProvider.isDeleteLoading
-                    ? CircularProgressIndicator(color: MyColors.whiteText)
+                    ? CircularProgressLoading()
                     : IconButton(
                       onPressed: () {
                         galleryProvider.deleteProgress(

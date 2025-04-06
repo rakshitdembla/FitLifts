@@ -25,7 +25,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'presentation/screens/general/history/providers/graph_provider.dart';
+import 'presentation/screens/general/history/providers/chart_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -72,8 +72,8 @@ class MyApp extends StatelessWidget {
             ChangeNotifierProvider<GalleryProvider>(
               create: (context) => GalleryProvider(),
             ),
-            ChangeNotifierProvider<GraphProvider>(
-              create: (context) => GraphProvider(),
+            ChangeNotifierProvider<ChartProvider>(
+              create: (context) => ChartProvider(),
             ),
             ChangeNotifierProvider<HistoryDataProvider>(
               create: (context) => HistoryDataProvider(),

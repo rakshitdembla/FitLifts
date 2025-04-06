@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:isolate';
-
 import 'package:fitlifts/data/models/gallery_model.dart';
 import 'package:flutter/services.dart';
-
 import '../../../../../data/data_source/local/sqf database/db_helper.dart';
 
 class GetGalleryIsolate {

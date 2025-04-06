@@ -22,7 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
       body: RefreshBar(
         onRefresh: () async {
           if (providerListener.gotInitialData &&
-              providerListener.stopTrackingSuccess && !providerListener.isTracking) {
+              providerListener.stopTrackingSuccess &&
+              !providerListener.isTracking) {
             return providerListener.refreshData();
           } else {
             return await Future.delayed(const Duration(seconds: 1));
@@ -128,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   homeProvider.startTracking();
                                 } else {
                                   Utils.showCustomToast(
-                                    "Hang tight! Saving your last session...",
+                                    "One moment, your session is being saved...",
                                   );
                                 }
                               }
@@ -154,8 +155,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             leading: Icon(
                               homeProvider.isTracking
                                   ? Icons.pause
-                                  : homeProvider.isError
-                                  ? Icons.block
                                   : Icons.play_arrow,
                               color: MyColors.whiteText,
                               size: 28.r,
@@ -229,8 +228,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               unit: "kg",
                               value:
                                   homeProvider.workoutVolume.toString().length >
-                                          7
-                                      ? "${homeProvider.workoutVolume.toStringAsFixed(1).substring(0, 7)}..."
+                                          8
+                                      ? "${homeProvider.workoutVolume.toStringAsFixed(1).substring(0, 8)}+"
                                       : homeProvider.workoutVolume
                                           .toStringAsFixed(1),
                             ),

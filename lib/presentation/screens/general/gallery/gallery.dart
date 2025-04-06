@@ -16,7 +16,6 @@ class _GalleryScreenState extends State<GalleryScreen> {
       isGalleryLoaded = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Provider.of<GalleryProvider>(context, listen: false).getAllGallery();
-        
       });
     }
     super.didChangeDependencies();
@@ -24,8 +23,12 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenwidth = MediaQuery.of(context).size.width;
+    final itemWidth = (screenwidth)/3;
+    final itemHeight = itemWidth * (85 / 80);
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         backgroundColor: MyColors.primaryCharcoal,
         automaticallyImplyLeading: false,
         title: Text(
@@ -38,7 +41,10 @@ class _GalleryScreenState extends State<GalleryScreen> {
         ),
         actions: [
           CustomDropDown(
-            style: GoogleFonts.poppins(color: MyColors.greyText, fontSize: 13),
+            style: GoogleFonts.poppins(
+              color: MyColors.greyText,
+              fontSize: 13.sp,
+            ),
             hintText: "Sort by",
             items: [
               DropdownMenuItem<String>(value: "latest", child: Text("Latest")),
@@ -53,10 +59,17 @@ class _GalleryScreenState extends State<GalleryScreen> {
               ),
               DropdownMenuItem<String>(value: "pump", child: Text("Pump")),
             ],
-            value: Provider.of<GalleryProvider>(context,listen: true).selectedSortOption,
+            value:
+                Provider.of<GalleryProvider>(
+                  context,
+                  listen: true,
+                ).selectedSortOption,
             onChanged: (value) {
               if (value != null) {
-                Provider.of<GalleryProvider>(context,listen: false).updateSort(value);
+                Provider.of<GalleryProvider>(
+                  context,
+                  listen: false,
+                ).updateSort(value);
               }
             },
           ),
@@ -66,7 +79,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
         height: 55.h,
         width: 60.w,
         child: FloatingActionButton(
-          heroTag: "herotag",
+          heroTag: "galleryhero",
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.r),
           ),
@@ -98,18 +111,18 @@ class _GalleryScreenState extends State<GalleryScreen> {
                 return SizedBox(
                   height:
                       MediaQuery.of(context).size.height -
-                      kBottomNavigationBarHeight -  kToolbarHeight
-                      ,
-                  child: Center(
-                    child: CircularProgressIndicator(color: MyColors.whiteText),
-                  ),
+                      kBottomNavigationBarHeight -
+                      kToolbarHeight -
+                      MediaQuery.of(context).padding.top,
+                  child: CircularProgressLoading()
                 );
               } else {
                 return galleryProvider.imagesList.isEmpty
                     ? SizedBox(
                       height:
-                          MediaQuery.of(context).size.height -  kToolbarHeight -
-                          kBottomNavigationBarHeight,
+                          MediaQuery.of(context).size.height -
+                          kToolbarHeight -
+                          kBottomNavigationBarHeight ,
                       child: Center(
                         child: Text(
                           "No Progress Images Found!",
@@ -128,7 +141,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                         crossAxisCount: 3,
                         crossAxisSpacing: 5.w,
                         mainAxisSpacing: 5.h,
-                        childAspectRatio: (85/ 80),
+                        childAspectRatio: itemWidth/itemHeight
                       ),
                       itemBuilder: (ctx, index) {
                         GalleryModel galleryModel =

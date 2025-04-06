@@ -45,7 +45,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
         height: 55.h,
         width: 60.w,
         child: FloatingActionButton(
-          heroTag: "taghero",
+          heroTag: "addworkout_hero",
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.r),
           ),
@@ -58,13 +58,15 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
       ),
       backgroundColor: MyColors.primaryCharcoal,
       appBar: AppBar(
+       
         toolbarHeight: 10.h,
         backgroundColor: MyColors.primaryCharcoal,
         automaticallyImplyLeading: false,
         bottom: TabBar(
           indicatorColor: MyColors.electricBlue,
           overlayColor: WidgetStateProperty.all(
-            Colors.blueAccent.withOpacity(0.1),
+            const Color(0x1A448AFF)
+
           ),
           indicator: UnderlineTabIndicator(
             borderSide: BorderSide(width: 2.0.w, color: MyColors.electricBlue),
@@ -128,11 +130,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                           kToolbarHeight -
                           kTextTabBarHeight -
                           kBottomNavigationBarHeight,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          color: MyColors.whiteText,
-                        ),
-                      ),
+                      child: CircularProgressLoading()
                     );
                   } else {
                     return ListView.builder(
@@ -202,16 +200,16 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 13.h),
-            child: SingleChildScrollView(
+          //tab bar index 1
+         SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 13.h),
               child: Column(
                 children: [
                   ExploreCard(
                     onPressed: () {
                       context.router.push(
                         ExercisesViewRoute(
-                          appBarTitle: "Abs",
+                          appBarTitle: "Abs Workouts",
                           exercisesList: absExercises,
                         ),
                       );
@@ -225,7 +223,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                     onPressed: () {
                       context.router.push(
                         ExercisesViewRoute(
-                          appBarTitle: "Cardio",
+                          appBarTitle: "Cardio Workouts",
                           exercisesList: cardioExercises,
                         ),
                       );
@@ -239,7 +237,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                     onPressed: () {
                       context.router.push(
                         ExercisesViewRoute(
-                          appBarTitle: "Chest",
+                          appBarTitle: "Chest Workouts",
                           exercisesList: chestExercises,
                         ),
                       );
@@ -253,7 +251,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                     onPressed: () {
                       context.router.push(
                         ExercisesViewRoute(
-                          appBarTitle: "Arms",
+                          appBarTitle: "Arms Workouts",
                           exercisesList: armsExercises,
                         ),
                       );
@@ -267,7 +265,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                     onPressed: () {
                       context.router.push(
                         ExercisesViewRoute(
-                          appBarTitle: "Shoulder",
+                          appBarTitle: "Shoulder Workouts",
                           exercisesList: shoulderExercises,
                         ),
                       );
@@ -281,7 +279,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                     onPressed: () {
                       context.router.push(
                         ExercisesViewRoute(
-                          appBarTitle: "Back",
+                          appBarTitle: "Back Workouts",
                           exercisesList: backExercises,
                         ),
                       );
@@ -295,7 +293,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                     onPressed: () {
                       context.router.push(
                         ExercisesViewRoute(
-                          appBarTitle: "Legs",
+                          appBarTitle: "Legs Workouts",
                           exercisesList: legExercises,
                         ),
                       );
@@ -306,7 +304,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                 ],
               ),
             ),
-          ),
+        
         ],
       ),
     );

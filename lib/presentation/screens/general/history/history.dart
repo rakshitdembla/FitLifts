@@ -14,7 +14,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   void didChangeDependencies() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!isInitialDataLoaded) {
-        Provider.of<GraphProvider>(context, listen: false).getWeekSteps();
+        Provider.of<ChartProvider>(context, listen: false).getWeekSteps();
         Provider.of<HistoryDataProvider>(
           context,
           listen: false,
@@ -29,6 +29,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         backgroundColor: MyColors.primaryCharcoal,
         automaticallyImplyLeading: false,
         title: Text(
@@ -41,7 +42,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         ),
         actions: [
           CustomDropDown(
-            style: GoogleFonts.poppins(color: MyColors.greyText, fontSize: 13),
+            style: GoogleFonts.poppins(color: MyColors.greyText, fontSize: 13.sp),
             hintText: "Sort by",
             items: [
               DropdownMenuItem<String>(value: "latest", child: Text("Latest")),
@@ -52,10 +53,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   context,
                   listen: false,
                 ).currentDropdownValue,
-                onChanged: (value) {
+            onChanged: (value) {
               if (value != null) {
-                Provider.of<HistoryDataProvider>(context,listen: false).updateSort(value);
-              }} ,
+                Provider.of<HistoryDataProvider>(
+                  context,
+                  listen: false,
+                ).updateSort(value);
+              }
+            },
           ),
         ],
       ),
@@ -81,7 +86,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           ? SizedBox()
                           : dataProvider.historyDataList.isEmpty
                           ? SizedBox(
-                            height: MediaQuery.of(context).size.height - (350.h + kBottomNavigationBarHeight),
+                            height:
+                                MediaQuery.of(context).size.height -
+                                (350.h + kBottomNavigationBarHeight),
                             child: Center(
                               child: Text(
                                 "No Data Available",

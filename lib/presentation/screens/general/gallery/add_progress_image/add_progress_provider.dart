@@ -1,9 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fitlifts/data/data_source/local/sqf%20database/db_helper.dart';
 import 'package:fitlifts/data/models/gallery_model.dart';
-import 'package:fitlifts/presentation/routes/auto_router.gr.dart';
 import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/screens/general/controller_service.dart';
+import 'package:fitlifts/presentation/screens/general/gallery/gallery_provider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../routes/auto_router.gr.dart';
 
 class AddProgressProvider with ChangeNotifier {
   bool _isLoading = false;
@@ -14,6 +18,8 @@ class AddProgressProvider with ChangeNotifier {
     String ratePump,
     String bodyWeight,
     BuildContext context,
+    TextEditingController bodyWeightController,
+    TextEditingController pumpController,
   ) async {
     _isLoading = true;
     notifyListeners();
@@ -22,14 +28,15 @@ class AddProgressProvider with ChangeNotifier {
     double? parsedWeight =
         double.tryParse(bodyWeight) ?? await Utils.getBodyWeight();
 
-    if (parsedPump != null && parsedPump > 10 && parsedPump < 0) {
-      Utils.showCustomToast("Please enter valid pump max 10");
+    if (parsedPump != null && (parsedPump > 10 || parsedPump < 0)) {
+      Utils.showCustomToast("Pump rating must be between 0-10");
       _isLoading = false;
       notifyListeners();
       return;
     }
 
     try {
+      await Utils.saveLocalBodyWeight(parsedWeight);
       await DBHelper().insertGallery(
         GalleryModel(
           imagePath: imagePath,
@@ -39,13 +46,21 @@ class AddProgressProvider with ChangeNotifier {
         ),
       );
       if (context.mounted) {
-        context.router.push(GeneralRoute());
+        await Provider.of<GalleryProvider>(
+          context,
+          listen: false,
+        ).getAllGallery();
+        if (context.mounted) {
+          TabControllerService.persistentTabController.index = 2;
+          context.router.replaceAll([GeneralRoute()]);
+        }
       }
-      Utils.showCustomToast("Progress Saved Successfully!");
+      Utils.showCustomToast("Progress saved!");
+      clearControllers(bodyWeightController, pumpController);
       _isLoading = false;
       notifyListeners();
     } catch (e) {
-      Utils.showCustomToast("An error occured, Please try again.");
+      Utils.showCustomToast("Failed to save progress");
       _isLoading = false;
       notifyListeners();
     }
@@ -59,8 +74,9 @@ class AddProgressProvider with ChangeNotifier {
     String ratePump,
     int? previousPump,
     double? previousWeight,
-
     BuildContext context,
+    TextEditingController bodyWeightController,
+    TextEditingController pumpController,
   ) async {
     _isLoading = true;
     notifyListeners();
@@ -70,8 +86,8 @@ class AddProgressProvider with ChangeNotifier {
         previousWeight ??
         await Utils.getBodyWeight();
 
-    if (parsedPump != null && parsedPump > 10 && parsedPump < 0) {
-      Utils.showCustomToast("Please enter valid pump max 10");
+    if (parsedPump != null && (parsedPump > 10 || parsedPump < 0)) {
+      Utils.showCustomToast("Pump rating must be between 0-10");
       _isLoading = false;
       notifyListeners();
       return;
@@ -89,15 +105,31 @@ class AddProgressProvider with ChangeNotifier {
       );
 
       if (context.mounted) {
-        context.router.push(GeneralRoute());
+        await Provider.of<GalleryProvider>(
+          context,
+          listen: false,
+        ).getAllGallery();
+        if (context.mounted) {
+          TabControllerService.persistentTabController.index = 2;
+           context.router.replaceAll([GeneralRoute()]);
+        }
       }
-      Utils.showCustomToast("Progress Updated Successfully!");
+      Utils.showCustomToast("Progress updated!");
+      clearControllers(bodyWeightController, pumpController);
       _isLoading = false;
       notifyListeners();
     } catch (e) {
-      Utils.showCustomToast(e.toString());
+      Utils.showCustomToast("Update failed");
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void clearControllers(
+    TextEditingController bodyWeightController,
+    TextEditingController pumpController,
+  ) {
+    bodyWeightController.clear();
+    pumpController.clear();
   }
 }

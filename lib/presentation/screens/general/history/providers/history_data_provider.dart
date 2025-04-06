@@ -3,7 +3,7 @@ import 'package:fitlifts/data/models/workout_model.dart';
 import 'package:fitlifts/data/models/history_data_model.dart';
 import 'package:fitlifts/data/models/step_model.dart';
 import 'package:fitlifts/core/utils/utils.dart';
-import 'package:fitlifts/presentation/screens/general/history/providers/graph_provider.dart';
+import 'package:fitlifts/presentation/screens/general/history/providers/chart_provider.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -12,8 +12,6 @@ class HistoryDataProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  bool _gotInitalData = false;
-  bool get gotInitialData => _gotInitalData;
 
   List<HistoryDataModel> _historyDataList = [];
   List<HistoryDataModel> get historyDataList => _historyDataList;
@@ -28,7 +26,6 @@ class HistoryDataProvider with ChangeNotifier {
   }
 
   Future<void> getHistoryData() async {
-    _gotInitalData = false;
     _isLoading = true;
 
     notifyListeners();
@@ -102,12 +99,10 @@ class HistoryDataProvider with ChangeNotifier {
       }
 
       _isLoading = false;
-      _gotInitalData = true;
       notifyListeners();
     } catch (e) {
-      _gotInitalData = true;
       _isLoading = false;
-      Utils.showCustomToast("An error occured in fetching data");
+      Utils.showCustomToast("We couldn't load your history data. Please try again later.");
     }
   }
 
@@ -120,12 +115,11 @@ class HistoryDataProvider with ChangeNotifier {
   }
 
   Future<void> refresh(BuildContext context) async {
-    if (Provider.of<GraphProvider>(context, listen: false).gotInitialData &&
-        _gotInitalData) {
-      Provider.of<GraphProvider>(context, listen: false).getWeekSteps();
+   
+      Provider.of<ChartProvider>(context, listen: false).getWeekSteps();
       getHistoryData();
-    }
+    
     await Future.delayed(const Duration(seconds: 1));
-    Utils.showCustomToast("Data refreshed successfully.");
+    Utils.showCustomToast( "Your data has been refreshed successfully!");
   }
 }

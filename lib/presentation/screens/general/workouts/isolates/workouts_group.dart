@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:isolate';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-
 import '../../../../../data/models/workout_model.dart';
 
 class GroupWorkoutsIsolate {

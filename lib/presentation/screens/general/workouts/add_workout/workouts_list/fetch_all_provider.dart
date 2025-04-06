@@ -17,7 +17,7 @@ class LocalExercisesProvider with ChangeNotifier {
   List<String> _exerciseTitles = [];
   List<String> get exerciseTitles => _exerciseTitles;
 
-  void getWorkouts() {
+  void getWorkouts() async{
     _isLoading = true;
     notifyListeners();
     _allExercises.clear();
@@ -41,6 +41,7 @@ class LocalExercisesProvider with ChangeNotifier {
       "Legs",
       "Shoulder",
     ]);
+        await Future.delayed(Duration(milliseconds: 700));
     _isLoading = false;
     notifyListeners();
   }

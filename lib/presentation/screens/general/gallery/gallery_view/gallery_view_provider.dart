@@ -3,7 +3,6 @@ import 'package:fitlifts/data/data_source/local/sqf%20database/db_helper.dart';
 import 'package:fitlifts/data/models/gallery_model.dart';
 import 'package:fitlifts/core/utils/utils.dart';
 import 'package:flutter/widgets.dart';
-
 import '../../../../routes/auto_router.gr.dart';
 
 class GalleryViewProvider with ChangeNotifier {
@@ -22,7 +21,7 @@ class GalleryViewProvider with ChangeNotifier {
         AddProgressRoute(galleryModel: galleryModel, isUpdate: true),
       );
     } else {
-      Utils.showCustomToast("An unexpected error occured!");
+      Utils.showCustomToast("Something went wrong!");
     }
 
     _isUpdateLoading = false;
@@ -35,13 +34,13 @@ class GalleryViewProvider with ChangeNotifier {
 
     try {
       await DBHelper().deleteGallery(deleteId);
-      Utils.showCustomToast("Progress Deleted Successfully!");
+      Utils.showCustomToast("Progress photo deleted successfully!");
       if (context.mounted) {
         context.router.push(GeneralRoute());
       }
       _isDeleteLoading = false;
     } catch (error) {
-      Utils.showCustomToast(error.toString());
+      Utils.showCustomToast("Couldn't delete this entry - try again");
       _isDeleteLoading = false;
     }
   }

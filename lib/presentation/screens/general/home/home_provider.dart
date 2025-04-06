@@ -76,7 +76,7 @@ class HomeProvider with ChangeNotifier {
         await TodayStepDataIsolate.getSteps();
     if (stepDataMap.containsKey("error")) {
       Utils.showCustomToast(
-        "We couldn't fetch your step history. Please reconnect and try again!",
+        "We couldn't fetch your step history. Please try again!",
       );
       return;
     }
@@ -124,7 +124,7 @@ class HomeProvider with ChangeNotifier {
       notifyListeners();
       return;
     } else if (checkPermission == null) {
-      Utils.showCustomToast("Permission check failed. Give it another go!");
+      Utils.showCustomToast("Permission check failed. Please try again!");
       _isError = true;
       _isTracking = false;
       notifyListeners();
