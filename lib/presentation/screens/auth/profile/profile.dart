@@ -17,7 +17,7 @@ class UserProfileScreen extends StatelessWidget {
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      behavior: HitTestBehavior.opaque, 
+      behavior: HitTestBehavior.opaque,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: MyColors.primaryCharcoal,
@@ -29,8 +29,7 @@ class UserProfileScreen extends StatelessWidget {
           surfaceTintColor: Colors.transparent,
         ),
         body: SingleChildScrollView(
-          
-           padding: EdgeInsets.fromLTRB(15.w, 0.h, 15.w, 13.h),
+          padding: EdgeInsets.fromLTRB(15.w, 0.h, 15.w, 13.h),
           child: Column(
             children: [
               Column(
@@ -46,7 +45,7 @@ class UserProfileScreen extends StatelessWidget {
                     height: 250.h,
                     width: MediaQuery.of(context).size.width,
                   ),
-      
+
                   SizedBox(height: 12.h),
                 ],
               ),

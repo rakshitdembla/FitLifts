@@ -16,20 +16,23 @@ class SettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(right: 5.w),
-      child: ListTile(
-        onTap: onTapAction ,
-        contentPadding: EdgeInsets.zero,
-        leading: Text(
-          title,
-          style: TextStyle(
-            color: MyColors.whiteText,
-            fontWeight: FontWeight.w700,
-            fontSize: 17.sp,
+    return InkWell(
+      onTap: onTapAction ,
+      child: Padding(
+        padding: EdgeInsets.only(right: 5.w),
+        child: ListTile(
+         
+          contentPadding: EdgeInsets.zero,
+          leading: Text(
+            title,
+            style: TextStyle(
+              color: MyColors.whiteText,
+              fontWeight: FontWeight.w700,
+              fontSize: 17.sp,
+            ),
           ),
+          trailing: trailingWidget,
         ),
-        trailing: trailingWidget,
       ),
     );
   }

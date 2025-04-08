@@ -59,7 +59,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
       body: Consumer<SettingsProvider>(
         builder: (context, state, child) {
           return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
+            padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10.w),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -69,29 +69,31 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                     onTap: () {
                       state.pickImage(context);
                     },
-                    child: CircleAvatar(
-                      radius: 60.r,
-                      child:
-                          state.profileImage != null &&
-                                  state.profileImage!.isNotEmpty
-                              ? ClipOval(
-                                child: Image.network(
-                                  state.profileImage!,
-                                  fit: BoxFit.cover,
-                                  width: 120.w,
-                                  height: 120.h,
-                                ),
-                              )
-                              : 
-                              state.initialImage != null
-                                          ? Image.file(
-                                            state.initialImage!,
-                                            fit: BoxFit.cover,
-                                            width: 70.w,
-                                            height: 70.h,
-                                          )
-                             : Icon(Icons.person, size: 60.r),
-                    ),
+                    child:
+                        CircleAvatar(
+                          radius: 60.r,
+                          child: ClipOval(
+                            child:
+                                state.profileImage != null &&
+                                        state.profileImage!.isNotEmpty
+                                    ? Image.network(
+                                      state.profileImage!,
+                                      fit: BoxFit.cover,
+                                      width: 120.w,
+                                      height: 120.h,
+                                    )
+                                    : state.initialImage != null
+                                    ? Image.file(
+                                      state.initialImage!,
+                                      fit: BoxFit.cover,
+                                      width: 120.w,
+                                      height: 120.h,
+                                    )
+                                    : Icon(Icons.person, size: 60.r),
+                          ),
+                        ),
+                       
+                     
                   ),
                   SizedBox(height: 20.h),
                   CredentialsField(

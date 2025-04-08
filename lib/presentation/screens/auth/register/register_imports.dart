@@ -1,8 +1,6 @@
 import 'dart:io';
-
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:fitlifts/presentation/routes/auto_router.gr.dart';
+import 'package:fitlifts/presentation/common_widgets/circular_progress.dart';
 import 'package:fitlifts/presentation/screens/auth/common_widgets/auth_title.dart';
 import 'package:fitlifts/presentation/screens/auth/common_widgets/social_login_button.dart';
 import 'package:fitlifts/presentation/screens/auth/register/register_provider.dart';

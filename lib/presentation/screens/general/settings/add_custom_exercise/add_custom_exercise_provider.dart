@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:fitlifts/core/utils/utils.dart';
 import 'package:fitlifts/data/data_source/local/exercises%20database/arms_exercises.dart';
 import 'package:fitlifts/data/data_source/local/exercises%20database/back_exercises.dart';
@@ -21,8 +22,9 @@ class AddCustomExerciseProvider with ChangeNotifier {
   String? _selectedRadio = "Home Workout";
   String? get selectedRadio => _selectedRadio;
 
-  Future<void> addExercise(Exercise exercise) async {
+  Future<void> addExercise(Exercise exercise, BuildContext context) async {
     _isLoading = true;
+    notifyListeners();
 
     if (_dropdownValue == "Abs") {
       absExercises.add(exercise);
@@ -39,14 +41,19 @@ class AddCustomExerciseProvider with ChangeNotifier {
     } else if (_dropdownValue == "Arms") {
       armsExercises.add(exercise);
     } else {
-      Utils.showCustomToast("Please select targeted muscle");
+      Utils.showCustomToast("Please select a target muscle group");
       _isLoading = false;
+      notifyListeners();
       return;
     }
 
-    Utils.showCustomToast("Exercise added successfully.");
+    Utils.showCustomToast("Exercise added successfully!");
+    if (context.mounted) {
+      context.router.pop();
+    }
     _isLoading = false;
     _dropdownValue = null;
+    notifyListeners();
   }
 
   void updateDropdown(String? value) {
@@ -54,7 +61,7 @@ class AddCustomExerciseProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateRadio (String? value) {
+  void updateRadio(String? value) {
     _selectedRadio = value;
     notifyListeners();
   }

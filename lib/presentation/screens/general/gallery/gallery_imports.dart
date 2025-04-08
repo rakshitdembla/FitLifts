@@ -10,6 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../auth/common_widgets/circular_progress.dart';
+import '../../../common_widgets/circular_progress.dart';
 
 part "gallery.dart";

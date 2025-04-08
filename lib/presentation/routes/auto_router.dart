@@ -12,7 +12,7 @@ class AppRouter extends RootStackRouter {
 
   @override
   List<AutoRoute> get routes => [
-    AutoRoute(page: GeneralRoute.page, path: "/", initial: true),
+    AutoRoute(page: GeneralRoute.page),
     AutoRoute(page: ExercisesViewRoute.page),
     AutoRoute(page: AddWorkoutRoute.page),
     AutoRoute(page: WorkoutsListRoute.page),
@@ -23,7 +23,7 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: LoginScreenRoute.page),
     AutoRoute(page: GalleryViewRoute.page),
     AutoRoute(page: UnlockPremiumRoute.page),
-    AutoRoute(page: SplashScreenRoute.page),
+    AutoRoute(page: SplashScreenRoute.page, path: "/", initial: true),
     AutoRoute(page: UserProfileScreenRoute.page),
     AutoRoute(page: ForgotPasswordScreenRoute.page),
     AutoRoute(page: AboutPageRoute.page),

@@ -3,6 +3,7 @@ import 'package:fitlifts/core/constants/my_colors.dart';
 import 'package:fitlifts/core/constants/my_fonts.dart';
 import 'package:fitlifts/presentation/routes/auto_router.dart';
 import 'package:fitlifts/presentation/screens/general/settings/add_custom_exercise/add_custom_exercise_provider.dart';
+import 'package:fitlifts/presentation/screens/general/settings/export_import_db/export_import_db.dart';
 import 'package:fitlifts/presentation/screens/general/settings/settings_provider.dart';
 import 'package:fitlifts/presentation/screens/general/workouts/add_workout/add_workout_provider.dart';
 import 'package:fitlifts/presentation/screens/general/workouts/add_workout/workouts_list/fetch_all_provider.dart';
@@ -24,6 +25,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'presentation/screens/general/history/providers/chart_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -42,6 +44,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   BackgroundIsolateBinaryMessenger.instance;
+  MobileAds.instance.initialize();
   runApp(MyApp());
 }
 
@@ -116,6 +119,9 @@ class MyApp extends StatelessWidget {
             ),
             ChangeNotifierProvider<CheckPremium>(
               create: (context) => CheckPremium(),
+            ),
+            ChangeNotifierProvider<ExportImportDbProvider>(
+              create: (context) => ExportImportDbProvider(),
             ),
           ],
           child: MaterialApp.router(

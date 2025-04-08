@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fitlifts/core/constants/my_colors.dart';
+import 'package:fitlifts/presentation/common_widgets/circular_progress.dart';
 import 'package:fitlifts/presentation/screens/auth/common_widgets/auth_title.dart';
 import 'package:fitlifts/presentation/screens/auth/common_widgets/credentials_text_field.dart';
 import 'package:fitlifts/presentation/screens/auth/login/forgot%20password/forgot_pass_provider.dart';
@@ -28,7 +29,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   void initState() {
-        widget.email != null
+    widget.email != null
         ? emailController.text = widget.email.toString()
         : emailController.text = "";
     super.initState();
@@ -39,6 +40,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Scaffold(
       backgroundColor: MyColors.primaryCharcoal,
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         backgroundColor: MyColors.primaryCharcoal,
         automaticallyImplyLeading: true,
         iconTheme: IconThemeData(color: MyColors.whiteText),
@@ -60,7 +62,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 label: "Email",
                 focusNode: emailNode,
                 hinttext: "Enter your email",
-                maxLength: 124,
+                maxLength: 64,
                 onSubmitted: (_) {
                   FocusScope.of(context).unfocus();
                 },
@@ -75,13 +77,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               Consumer<ForgotPassProvider>(
                 builder: (context, forgotPassProvider, child) {
                   return forgotPassProvider.isLoading
-                      ? Center(
-                        child: CircularProgressIndicator(
-                          color: MyColors.whiteText,
-                        ),
-                      )
+                      ? CircularProgressLoading()
                       : ElevatedCTA(
-                        title: "Reset",
+                        title: "Send Reset Link",
                         onPressed: () {
                           forgotPassProvider.forgotPassword(
                             emailController.text.toLowerCase().trim(),

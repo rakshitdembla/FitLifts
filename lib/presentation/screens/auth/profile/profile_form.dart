@@ -1,4 +1,5 @@
 import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/common_widgets/circular_progress.dart';
 import 'package:fitlifts/presentation/screens/auth/common_widgets/auth_dropdown.dart';
 import 'package:fitlifts/presentation/screens/auth/profile/profile_provider.dart';
 import 'package:flutter/material.dart';
@@ -115,15 +116,13 @@ class _ProfileFormState extends State<ProfileForm> {
         Consumer<ProfileProvider>(
           builder: (context, profileProvider, child) {
             return profileProvider.isLoading
-                ? Center(
-                  child: CircularProgressIndicator(color: MyColors.whiteText),
-                )
+                ? CircularProgressLoading()
                 : ElevatedCTA(
                   title: "Complete",
                   onPressed: () {
                     profileProvider.createUserProfile(
                       context,
-                      Utils.getUserEmail()!,
+                       Utils.getUserEmail()!,
                       nameController.text.trim(),
                       ageController.text.trim(),
                       heightController.text.trim(),

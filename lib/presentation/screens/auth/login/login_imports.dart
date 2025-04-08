@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:fitlifts/core/constants/my_assets.dart';
 import 'package:fitlifts/core/constants/my_colors.dart';
 import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/common_widgets/circular_progress.dart';
 import 'package:fitlifts/presentation/common_widgets/divider_text.dart';
 import 'package:fitlifts/presentation/routes/auto_router.gr.dart';
 import 'package:fitlifts/presentation/screens/auth/common_widgets/auth_bottom_bar.dart';

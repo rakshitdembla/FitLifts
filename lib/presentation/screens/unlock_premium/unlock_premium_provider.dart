@@ -36,7 +36,9 @@ class UnlockPremiumProvider with ChangeNotifier {
 
   void startPayment() {
     if (_userToken == null) {
-      Utils.showCustomToast("An unexpected error occured");
+      Utils.showCustomToast(
+        "Unable to verify your account. Please try again later.",
+      );
       return;
     }
     var options = {
@@ -51,7 +53,9 @@ class UnlockPremiumProvider with ChangeNotifier {
     try {
       _razorpay.open(options);
     } catch (e) {
-      Utils.showCustomToast(e.toString());
+      Utils.showCustomToast(
+        "Failed to process payment. Please check your connection and try again.",
+      );
     }
   }
 
@@ -64,23 +68,27 @@ class UnlockPremiumProvider with ChangeNotifier {
           .collection(MyStrings.firebaseCollection)
           .doc(_userToken)
           .set({MyStrings.isPremiumUser: true});
-      Utils.showCustomToast("Payment successful: ${response.paymentId}");
+      Utils.showCustomToast("Payment successful! Premium features unlocked.");
       if (context.mounted) {
         Provider.of<CheckPremium>(context, listen: false).checkUser();
       } else {
-        Utils.showCustomToast("Please restart your app.");
+        Utils.showCustomToast(
+          "Premium unlocked! Restart the app to access all features.",
+        );
       }
     } catch (e) {
-      Utils.showCustomToast(e.toString());
+      Utils.showCustomToast(
+        "Payment processed but we couldn't upgrade your account. Contact support with payment ID: ${response.paymentId}",
+      );
     }
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    Utils.showCustomToast("Payment failed: ${response.message}");
+    Utils.showCustomToast(
+      "Payment failed. Please try again or use a different payment method.",
+    );
     notifyListeners();
   }
 
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    debugPrint("External wallet selected: ${response.walletName}");
-  }
+  void _handleExternalWallet(ExternalWalletResponse response) {}
 }

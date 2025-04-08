@@ -32,26 +32,30 @@ class _AddCustomExerciseState extends State<AddCustomExercise> {
     equipmentsController.dispose();
     equipmentsNode.dispose();
 
+    mistakesController.dispose();
+    mistakesNode.dispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyColors.primaryCharcoal,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'Add Exercise',
-          style: TextStyle(color: MyColors.whiteText),
-        ),
-        backgroundColor: MyColors.primaryCharcoal,
-        automaticallyImplyLeading: true,
-        iconTheme: IconThemeData(color: MyColors.whiteText),
-      ),
-      body: Consumer<AddCustomExerciseProvider>(
-        builder: (context, state, child) {
-          return SingleChildScrollView(
+    return Consumer<AddCustomExerciseProvider>(
+      builder: (context, state, child) {
+        return Scaffold(
+          backgroundColor: MyColors.primaryCharcoal,
+          appBar: AppBar(
+            scrolledUnderElevation: 0.0,
+            centerTitle: true,
+            title: Text(
+              'Add Exercise',
+              style: TextStyle(color: MyColors.whiteText),
+            ),
+            backgroundColor: MyColors.primaryCharcoal,
+            automaticallyImplyLeading: true,
+            iconTheme: IconThemeData(color: MyColors.whiteText),
+          ),
+          body: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 11.w, vertical: 10.h),
             child: Column(
               children: [
@@ -151,19 +155,37 @@ class _AddCustomExerciseState extends State<AddCustomExercise> {
                   ],
                 ),
                 SizedBox(height: 20.h),
+              ],
+            ),
+          ),
 
-                state.isLoading
-                    ? Center(child: CircularProgressIndicator())
-                    : ElevatedCTA(
+          bottomNavigationBar:
+              state.isLoading
+                  ? Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      11.w,
+                      0.h,
+                      11.w,
+                      (MediaQuery.of(context).viewInsets.bottom + 10.h),
+                    ),
+
+                    child: CircularProgressLoading(),
+                  )
+                  : Padding(
+                     padding: EdgeInsets.fromLTRB(
+                      11.w,
+                      0.h,
+                      11.w,
+                      (MediaQuery.of(context).viewInsets.bottom + 10.h),
+                    ),
+                    child: ElevatedCTA(
                       title: "Add Exercise",
                       onPressed: () {
                         if (exerciseNameController.text.isEmpty) {
                           Utils.showCustomToast("Exercise name is mandatory");
                           return;
                         } else if (state.dropdownValue == null) {
-                          Utils.showCustomToast(
-                            "Please select targetted muscle",
-                          );
+                          Utils.showCustomToast("Please select targetted muscle");
                           return;
                         }
                         state.addExercise(
@@ -172,23 +194,21 @@ class _AddCustomExerciseState extends State<AddCustomExercise> {
                             targetMuscle: state.dropdownValue!,
                             secondaryMuscles: [],
                             equipment: equipmentsController.text.toString(),
-                            instructions:
-                                instructionsController.text.toString(),
+                            instructions: instructionsController.text.toString(),
                             commonMistakes: mistakesController.text.toString(),
                             setsAndReps: "",
                             homeWorkout:
                                 state.selectedRadio == "Home Workout"
                                     ? true
-                                    : false,
+                                    : false,                              
                           ),
+                          context
                         );
                       },
                     ),
-              ],
-            ),
-          );
-        },
-      ),
+                  ),
+        );
+      },
     );
   }
 }

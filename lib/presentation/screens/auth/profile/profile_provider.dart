@@ -50,21 +50,23 @@ class ProfileProvider with ChangeNotifier {
       return;
     }
 
-    if (parsedAge == null || parsedAge <= 0) {
+    if (parsedAge == null || parsedAge <= 0 || parsedAge >= 100) {
       _isLoading = false;
       notifyListeners();
       Utils.showCustomToast("Please enter a valid age");
       return;
     }
 
-    if (parsedHeight == null || parsedHeight <= 0) {
+    if (parsedHeight == null || parsedHeight <= 0 || parsedHeight > 300) {
       _isLoading = false;
       notifyListeners();
       Utils.showCustomToast("Please enter a valid height");
       return;
     }
 
-    if (parsedBodyWeight == null || parsedBodyWeight <= 0) {
+    if (parsedBodyWeight == null ||
+        parsedBodyWeight <= 0 ||
+        parsedBodyWeight > 300.00) {
       _isLoading = false;
       notifyListeners();
       Utils.showCustomToast("Please enter a valid weight");
@@ -83,10 +85,9 @@ class ProfileProvider with ChangeNotifier {
         MyStrings.height: parsedHeight,
         MyStrings.bodyWeight: parsedBodyWeight,
         MyStrings.isPremiumUser: false,
-        MyStrings.profileUrl : null
+        MyStrings.profileUrl: null,
       };
 
-      debugPrint(userMap.toString());
       await _firestore
           .collection(MyStrings.firebaseCollection)
           .doc(userToken.toString())
@@ -99,11 +100,12 @@ class ProfileProvider with ChangeNotifier {
       notifyListeners();
 
       if (context.mounted) {
-        context.router.push(GeneralRoute());
+        context.router.replaceAll([GeneralRoute()]);
       }
     } catch (e) {
-      Utils.showCustomToast("Failed to create profile. Please check your connection");
-      debugPrint(e.toString());
+      Utils.showCustomToast(
+        "Failed to create profile. Please check your connection",
+      );
       _isLoading = false;
       notifyListeners();
     }

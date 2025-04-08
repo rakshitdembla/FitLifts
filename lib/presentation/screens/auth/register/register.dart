@@ -30,20 +30,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {
-        FocusScope.of(context).unfocus(); 
+      onTap: () {
+        FocusScope.of(context).unfocus();
       },
       behavior: HitTestBehavior.opaque,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: MyColors.primaryCharcoal,
         appBar: AppBar(
+          scrolledUnderElevation: 0.0,
           backgroundColor: MyColors.primaryCharcoal,
           automaticallyImplyLeading: true,
           iconTheme: IconThemeData(color: MyColors.whiteText),
         ),
         body: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(15.w, 0.h, 15.w, 13.h),
+          padding: EdgeInsets.symmetric(horizontal: 15.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -54,14 +55,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 label: "Email",
                 focusNode: emailNode,
                 hinttext: "Enter your email",
-                maxLength: 124,
+                maxLength: 64,
                 onSubmitted: (_) {
                   FocusScope.of(context).requestFocus(passNode);
                 },
-                prefixIcon: Icon(Icons.email_outlined, color: MyColors.greyText),
+                prefixIcon: Icon(
+                  Icons.email_outlined,
+                  color: MyColors.greyText,
+                ),
                 isPassword: false,
               ),
-      
+
               SizedBox(height: 15.h),
               CredentialsField(
                 controller: passController,
@@ -71,7 +75,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 label: "Password",
                 focusNode: passNode,
                 hinttext: "••••••••••",
-                maxLength: 64,
+                maxLength: 52,
                 prefixIcon: Icon(
                   Icons.lock_open_outlined,
                   color: MyColors.greyText,
@@ -87,21 +91,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 label: "Confirm Password",
                 focusNode: cPassNode,
                 hinttext: "••••••••••",
-                maxLength: 64,
+                maxLength: 52,
                 prefixIcon: Icon(Icons.password, color: MyColors.greyText),
                 isPassword: true,
               ),
-      
+
               SizedBox(height: 25.h),
-      
+
               Consumer<RegisterProvider>(
                 builder: (context, registerProvider, child) {
                   return registerProvider.isLoading
-                      ? Center(
-                        child: CircularProgressIndicator(
-                          color: MyColors.whiteText,
-                        ),
-                      )
+                      ? CircularProgressLoading()
                       : ElevatedCTA(
                         title: "Sign Up",
                         onPressed: () {
@@ -146,16 +146,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       );
                     },
                   )
-                  : SizedBox(height: 35.h),
-              SizedBox(height: 85.h),
-              Center(
-                child: AuthBottomBar(
-                  onPressed: () {
-                    context.router.push(LoginScreenRoute());
-                  },
-                  text1: "Already have an account?",
-                  text2: "Sign In",
-                ),
+                  : SizedBox.shrink(),
+            ],
+          ),
+        ),
+        bottomNavigationBar: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AuthBottomBar(
+                onPressed: () {
+                  context.router.pop();
+                },
+                text1: "Already have an account?",
+                text2: "Sign In",
               ),
             ],
           ),

@@ -1,5 +1,5 @@
 import 'package:fitlifts/core/constants/my_colors.dart';
-import 'package:fitlifts/presentation/screens/auth/common_widgets/circular_progress.dart';
+import 'package:fitlifts/presentation/common_widgets/circular_progress.dart';
 import 'package:fitlifts/presentation/screens/general/history/providers/chart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -63,9 +63,11 @@ class _StepBarChartState extends State<StepBarChart> {
                   minimum: 0,
                   interval: chartProvider.interval,
                   maximum: chartProvider.maximum,
-                  labelStyle: const TextStyle(
+                  labelStyle:  TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w900,
+                    fontSize: MediaQuery.of(context).size.width * 0.03,
+
                   ),
                 ),
 

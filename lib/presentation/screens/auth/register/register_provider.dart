@@ -3,15 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitlifts/core/utils/utils.dart';
 import 'package:fitlifts/presentation/routes/auto_router.gr.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
-
-import '../../../../check_premium.dart';
 
 class RegisterProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> registerWithEmailPassword(
     String email,
@@ -47,21 +44,28 @@ class RegisterProvider with ChangeNotifier {
         return;
       }
 
-      await _auth.createUserWithEmailAndPassword(
+      UserCredential user = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      if (user.user == null) {
+        _isLoading = false;
+        notifyListeners();
+        Utils.showCustomToast(
+          "Oops! Unable to sign up. Please check your credentials or internet connection",
+        );
+        return;
+      }
+
       await Utils.saveToken(_auth.currentUser!.uid);
       _isLoading = false;
-
       notifyListeners();
       if (context.mounted) {
-        Provider.of<CheckPremium>(context, listen: false).checkUser();
-        context.router.push(UserProfileScreenRoute());
+        context.router.replaceAll([UserProfileScreenRoute()]);
       }
     } catch (e) {
       Utils.showCustomToast(
-        // "Registration failed. If this continues, try a different email/password",
         e.toString()
       );
       _isLoading = false;

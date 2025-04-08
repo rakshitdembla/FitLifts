@@ -35,6 +35,13 @@ class AddProgressProvider with ChangeNotifier {
       return;
     }
 
+    if (parsedWeight > 300.00) {
+      Utils.showCustomToast("Please enter a valid body weight");
+      _isLoading = false;
+      notifyListeners();
+      return;
+    }
+
     try {
       await Utils.saveLocalBodyWeight(parsedWeight);
       await DBHelper().insertGallery(
@@ -111,7 +118,7 @@ class AddProgressProvider with ChangeNotifier {
         ).getAllGallery();
         if (context.mounted) {
           TabControllerService.persistentTabController.index = 2;
-           context.router.replaceAll([GeneralRoute()]);
+          context.router.replaceAll([GeneralRoute()]);
         }
       }
       Utils.showCustomToast("Progress updated!");

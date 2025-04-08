@@ -22,6 +22,10 @@ class Assets {
   /// assets/chest.jpg
   static const String assetsChest = "assets/chest.jpg";
 
+  /// Assets for assetsFitliftsLogo
+  /// assets/fitlifts_logo.png
+  static const String assetsFitliftsLogo = "assets/fitlifts_logo.png";
+
   /// Assets for assetsFullBody
   /// assets/full_body.jpg
   static const String assetsFullBody = "assets/full_body.jpg";
@@ -38,6 +42,10 @@ class Assets {
   /// assets/gym_vector.svg
   static const String assetsGymVector = "assets/gym_vector.svg";
 
+  /// Assets for assetsMehediHasan7a2epYk4OoUnsplash
+  /// assets/mehedi-hasan-7a2ep_yk4Oo-unsplash.jpg
+  static const String assetsMehediHasan7a2epYk4OoUnsplash = "assets/mehedi-hasan-7a2ep_yk4Oo-unsplash.jpg";
+
   /// Assets for assetsProgressOverload
   /// assets/progress_overload.jpg
   static const String assetsProgressOverload = "assets/progress_overload.jpg";
@@ -49,10 +57,6 @@ class Assets {
   /// Assets for assetsShoulder
   /// assets/shoulder.jpg
   static const String assetsShoulder = "assets/shoulder.jpg";
-
-  /// Assets for assetsSplashImg
-  /// assets/splash_img.jpg
-  static const String assetsSplashImg = "assets/splash_img.jpg";
 
   /// Assets for assetsSquatsGirl
   /// assets/squats_girl.jpg

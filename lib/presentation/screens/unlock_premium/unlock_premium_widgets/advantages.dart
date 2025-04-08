@@ -21,8 +21,6 @@ class Advantages extends StatelessWidget {
           height: 48.h,
           width: 48.h,
           decoration: BoxDecoration(
-            // color: const Color.fromARGB(255, 70, 70, 70),
-            // borderRadius: BorderRadius.circular(8),
           ),
           child: icon,
         ),

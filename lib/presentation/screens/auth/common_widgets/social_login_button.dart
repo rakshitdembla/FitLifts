@@ -45,7 +45,7 @@ class SocialLoginButton extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(height: 28.h, width: 28.w, child: Image(image: iconImage)),
-            SizedBox(width: 45.w),
+            Spacer(),
             Text(
               title,
               style: TextStyle(
@@ -54,6 +54,7 @@ class SocialLoginButton extends StatelessWidget {
                 color: MyColors.primaryWhite,
               ),
             ),
+              Spacer(),
           ],
         ),
       ),

@@ -10,29 +10,26 @@ class UnlockPremium extends StatefulWidget {
 
 class _UnlockPremiumState extends State<UnlockPremium> {
   late UnlockPremiumProvider provider;
-      @override
-    void initState() {
-      super.initState();
-       provider = Provider.of<UnlockPremiumProvider>(context, listen: false);
-      Provider.of<UnlockPremiumProvider>(context, listen: false).initStateFN();
-    }
+  @override
+  void initState() {
+    super.initState();
+    provider = Provider.of<UnlockPremiumProvider>(context, listen: false);
+    Provider.of<UnlockPremiumProvider>(context, listen: false).initStateFN();
+  }
 
-    @override
-    void dispose() {
-           provider.disposeFN();
-     
-      super.dispose();
-    }
+  @override
+  void dispose() {
+    provider.disposeFN();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    
-
-
     return Scaffold(
       backgroundColor: MyColors.primaryCharcoal,
 
       body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 14),
+        padding: EdgeInsets.symmetric(vertical: 0.h, horizontal: 14.w),
         child: SafeArea(
           child: Center(
             child: Column(
@@ -41,7 +38,7 @@ class _UnlockPremiumState extends State<UnlockPremium> {
                   alignment: Alignment.bottomRight,
                   child: IconButton(
                     onPressed: () {
-                      context.router.push(SplashScreenRoute());
+                      context.router.pop();
                     },
                     icon: Icon(Icons.cancel, size: 27.5.r),
                   ),

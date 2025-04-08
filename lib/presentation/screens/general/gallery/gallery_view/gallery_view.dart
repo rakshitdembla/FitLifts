@@ -53,6 +53,9 @@ class _GalleryViewState extends State<GalleryView> {
           maxScale: 4,
           child: SizedBox.expand(
             child: Image.file(
+               errorBuilder: (context,error,stackTrace) {
+                                    return Center(child: Icon(Icons.image_not_supported_outlined,color: MyColors.whiteText,),);
+                                  },
               File(widget.galleryModel.imagePath),
               fit: BoxFit.contain,
             ),

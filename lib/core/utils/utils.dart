@@ -10,9 +10,12 @@ import 'package:fitlifts/presentation/routes/auto_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import "package:flutter_secure_storage/flutter_secure_storage.dart";
 
 class Utils {
   Utils._();
+
+  static bool _isPickingImage = false;
 
   static ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar(
     bool isSuccess,
@@ -48,16 +51,8 @@ class Utils {
   }
 
   static Future<void> requestPermissions() async {
-    bool isNotificationsAllowed = await Permission.notification.isGranted;
-    bool isActivityAllowed = await Permission.activityRecognition.isGranted;
-
-    if (!isNotificationsAllowed) {
-      await Permission.notification.request();
-    }
-
-    if (!isActivityAllowed) {
-      await Permission.activityRecognition.request();
-    }
+    await Permission.notification.request();
+    await Permission.activityRecognition.request();
   }
 
   static void showCustomToast(String message) {
@@ -100,13 +95,18 @@ class Utils {
   }
 
   static Future<void> saveToken(String tokenValue) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(MyStrings.savedToken, tokenValue);
+    final secureStorage = FlutterSecureStorage();
+    await secureStorage.write(key: MyStrings.savedToken, value: tokenValue);
   }
 
   static Future<String?> getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(MyStrings.savedToken);
+    final secureStorage = FlutterSecureStorage();
+    return await secureStorage.read(key: MyStrings.savedToken);
+  }
+
+  static Future<void> deleteToken() async {
+    final secureStorage = FlutterSecureStorage();
+    await secureStorage.delete(key: MyStrings.savedToken);
   }
 
   static String? getUserEmail() {
@@ -157,6 +157,7 @@ class Utils {
   ) async {
     final ImagePicker picker = ImagePicker();
     XFile? pickedImage;
+    _isPickingImage = false;
 
     await showModalBottomSheet(
       context: context,
@@ -183,7 +184,7 @@ class Utils {
               ),
               SizedBox(height: 5.h),
               Divider(color: Colors.grey),
-             
+
               ListTile(
                 leading: Icon(Icons.camera, color: MyColors.whiteText),
                 title: Text(
@@ -191,9 +192,14 @@ class Utils {
                   style: TextStyle(color: MyColors.whiteText),
                 ),
                 onTap: () async {
-                  pickedImage = await picker.pickImage(
-                    source: ImageSource.camera,
-                  );
+                  if (!_isPickingImage) {
+                    _isPickingImage = true;
+                    pickedImage = await picker.pickImage(
+                      source: ImageSource.camera,
+                    );
+                  }
+
+                  _isPickingImage = false;
                   if (context.mounted) {
                     Navigator.pop(context, pickedImage);
                   } else {
@@ -209,9 +215,13 @@ class Utils {
                   style: TextStyle(color: MyColors.whiteText),
                 ),
                 onTap: () async {
-                  pickedImage = await picker.pickImage(
-                    source: ImageSource.gallery,
-                  );
+                  if (!_isPickingImage) {
+                    _isPickingImage = true;
+                    pickedImage = await picker.pickImage(
+                      source: ImageSource.gallery,
+                    );
+                  }
+                  _isPickingImage = false;
                   if (context.mounted) {
                     Navigator.pop(context, pickedImage);
                   } else {
@@ -228,13 +238,24 @@ class Utils {
     return pickedImage;
   }
 
-  static void saveProfileImage(String imagePath) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    prefs.setString(MyStrings.savedProfile, imagePath);
-  }
   static Future<String?> getProfileImage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(MyStrings.savedProfile);
+  }
+
+  static Future<void> firebaseAuthProfileCheck(BuildContext context) async {
+    final userProfileData =
+        await FirebaseFirestore.instance
+            .collection(MyStrings.firebaseCollection)
+            .doc(await Utils.getToken())
+            .get();
+
+    if (context.mounted) {
+      if (userProfileData.exists) {
+        context.router.replaceAll([GeneralRoute()]);
+      } else {
+        context.router.replaceAll([UserProfileScreenRoute()]);
+      }
+    }
   }
 }

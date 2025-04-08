@@ -21,7 +21,7 @@ class CredentialsField extends StatefulWidget {
     required this.onSubmitted,
     required this.prefixIcon,
     required this.isPassword,
-    required this.controller
+    required this.controller,
   });
 
   @override
@@ -53,7 +53,6 @@ class _CredentialsFieldState extends State<CredentialsField> {
           cursorColor: const Color.fromARGB(171, 81, 144, 252),
           style: TextStyle(color: MyColors.whiteText),
           decoration: InputDecoration(
-            
             counter: SizedBox.shrink(),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5.r),
@@ -63,7 +62,7 @@ class _CredentialsFieldState extends State<CredentialsField> {
               borderRadius: BorderRadius.circular(5.r),
               borderSide: BorderSide(
                 color: const Color.fromARGB(171, 81, 144, 252),
-              ), // Change focus border color
+              ),
             ),
 
             hintText: widget.hinttext,

@@ -1,20 +1,19 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../../../core/utils/utils.dart';
-import '../../../routes/auto_router.gr.dart';
 
 class SocialLoginProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   Future<void> continueWithGoogle(BuildContext context) async {
     _isLoading = true;
     notifyListeners();
+    await signoutGoogle();
     try {
       final GoogleSignInAccount? googleSignInAccount =
           await _googleSignIn.signIn();
@@ -40,25 +39,60 @@ class SocialLoginProvider with ChangeNotifier {
       final User? user = userCredential.user;
 
       if (user != null) {
-        assert(!user.isAnonymous);
-        final User? currentuser = _auth.currentUser;
-        assert(currentuser!.uid == user.uid);
+        if (user.isAnonymous) {
+          _isLoading = false;
+          notifyListeners();
+          Utils.showCustomToast("User is anonymous!");
+          return;
+        }
+
+        if (_auth.currentUser!.uid != user.uid) {
+          _isLoading = false;
+          notifyListeners();
+          Utils.showCustomToast(
+            "Something went wrong. Please try again later.",
+          );
+          return;
+        }
       } else {
-        Utils.showCustomToast("Couldn't complete Google sign-in. Try again later");
+        Utils.showCustomToast(
+          "Couldn't complete Google sign-in. Try again later",
+        );
         _isLoading = false;
         notifyListeners();
         return;
       }
       await Utils.saveToken(user.uid);
+
       _isLoading = false;
       notifyListeners();
       if (context.mounted) {
-        context.router.push(UserProfileScreenRoute());
+        await Utils.firebaseAuthProfileCheck(context);
       }
     } catch (e) {
       Utils.showCustomToast("Google sign-in failed. Check your connection");
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<void> signoutGoogle() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+    } catch (e) {
+      debugPrint("Firebase signOut failed: $e");
+    }
+
+    try {
+      await _googleSignIn.disconnect();
+    } catch (e) {
+      debugPrint("Google disconnect failed: $e");
+    }
+
+    try {
+      await _googleSignIn.signOut();
+    } catch (e) {
+      debugPrint("Google signOut failed: $e");
     }
   }
 }

@@ -71,6 +71,23 @@ class AboutPage extends StatelessWidget {
               text:
                   "⭐ Premium Backup (No Cloud) - Export and import data directly on your device, no cloud involvement.",
             ),
+            SizedBox(height: 24.h),
+            Text(
+              "Contact Us",
+              style: TextStyle(
+                fontSize: 20.sp,
+                fontWeight: FontWeight.bold,
+                color: MyColors.whiteText,
+              ),
+            ),
+            SizedBox(height: 8.h),
+            InfoTextWidget(
+              text:
+                  "📧 Have questions or found a bug? Reach us at: app.fitlifts@gmail.com",
+            ),
+            InfoTextWidget(
+              text: "💡 We'd love to hear your feedback and suggestions!",
+            ),
           ],
         ),
       ),

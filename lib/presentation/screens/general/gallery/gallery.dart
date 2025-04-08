@@ -158,6 +158,9 @@ class _GalleryScreenState extends State<GalleryScreen> {
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(15.r),
                                 child: Image.file(
+                                  errorBuilder: (context,error,stackTrace) {
+                                    return Center(child: Icon(Icons.image_not_supported_outlined,color: MyColors.whiteText,),);
+                                  },
                                   File(galleryModel.imagePath),
                                   fit: BoxFit.fill,
                                 ),

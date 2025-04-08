@@ -1,14 +1,12 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitlifts/core/utils/utils.dart';
-import 'package:fitlifts/presentation/routes/auto_router.gr.dart';
 import 'package:flutter/cupertino.dart';
 
 class LoginProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> loginWithEmailPassword(
     String email,
@@ -34,17 +32,27 @@ class LoginProvider with ChangeNotifier {
         return;
       }
 
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      UserCredential user = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      if (user.user == null) {
+        _isLoading = false;
+        notifyListeners();
+        Utils.showCustomToast(
+          "Oops! Unable to log in. Please check your credentials or internet connection",
+        );
+        return;
+      }
       await Utils.saveToken(_auth.currentUser!.uid);
+
       _isLoading = false;
       notifyListeners();
       if (context.mounted) {
-        context.router.push(GeneralRoute());
+        await Utils.firebaseAuthProfileCheck(context);
       }
     } catch (e) {
-      Utils.showCustomToast(
-        "Login failed. Check your email/password or reset if needed",
-      );
+      Utils.showCustomToast(e.toString());
       _isLoading = false;
       notifyListeners();
     }
