@@ -12,5 +12,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/constants/my_colors.dart';
+import '../../../providers/ads_provider.dart';
 
 part "add_custom_exercise.dart";

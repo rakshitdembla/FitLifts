@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../../../data/models/graph_model.dart';
+import 'package:intl/intl.dart';
 
 class StepBarChart extends StatefulWidget {
   const StepBarChart({super.key});
@@ -74,7 +75,10 @@ class _StepBarChartState extends State<StepBarChart> {
                 series: [
                   ColumnSeries<GraphDataModel, String>(
                     dataSource: chartProvider.filteredList,
-                    xValueMapper: (GraphDataModel data, _) => data.date,
+                    xValueMapper: (GraphDataModel data, _) {
+                      return DateFormat("d MMM").format(DateFormat("d MMM, yy").parse(data.date));
+                      
+                    },
                     borderRadius: BorderRadius.circular(30.r),
                     width: 0.2.w,
                     animationDuration: 1000,

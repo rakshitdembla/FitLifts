@@ -45,12 +45,11 @@ class LoginProvider with ChangeNotifier {
         return;
       }
       await Utils.saveToken(_auth.currentUser!.uid);
-
-      _isLoading = false;
-      notifyListeners();
       if (context.mounted) {
         await Utils.firebaseAuthProfileCheck(context);
       }
+      _isLoading = false;
+      notifyListeners();
     } catch (e) {
       Utils.showCustomToast(e.toString());
       _isLoading = false;

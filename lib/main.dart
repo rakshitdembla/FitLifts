@@ -1,4 +1,6 @@
-import 'package:fitlifts/check_premium.dart';
+import 'package:fitlifts/presentation/screens/general/workouts/exercises_view/exercises_view_provider.dart';
+import 'package:fitlifts/presentation/screens/providers/ads_provider.dart';
+import 'package:fitlifts/presentation/screens/providers/user_initial_details_provider.dart';
 import 'package:fitlifts/core/constants/my_colors.dart';
 import 'package:fitlifts/core/constants/my_fonts.dart';
 import 'package:fitlifts/presentation/routes/auto_router.dart';
@@ -117,11 +119,17 @@ class MyApp extends StatelessWidget {
             ChangeNotifierProvider<UnlockPremiumProvider>(
               create: (context) => UnlockPremiumProvider(),
             ),
-            ChangeNotifierProvider<CheckPremium>(
-              create: (context) => CheckPremium(),
+            ChangeNotifierProvider<UserInitialDetailsProvider>(
+              create: (context) => UserInitialDetailsProvider(),
             ),
             ChangeNotifierProvider<ExportImportDbProvider>(
               create: (context) => ExportImportDbProvider(),
+            ),
+            ChangeNotifierProvider<AdsProvider>(
+              create: (context) => AdsProvider(),
+            ),
+            ChangeNotifierProvider<ExercisesViewProvider>(
+              create: (context) => ExercisesViewProvider(),
             ),
           ],
           child: MaterialApp.router(

@@ -9,6 +9,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
+  void didChangeDependencies() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      Provider.of<HomeProvider>(context, listen: false).getInitialData(context);
+    });
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     HomeProvider providerListener = Provider.of<HomeProvider>(
       context,
@@ -21,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: MyColors.primaryCharcoal,
       body: RefreshBar(
         onRefresh: () async {
+          await providerListener.getInitialData(context);
           if (providerListener.gotInitialData &&
               providerListener.stopTrackingSuccess &&
               !providerListener.isTracking) {
@@ -36,6 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Consumer<HomeProvider>(
                   builder: (cntxt, homeProvider, child) {
+                    UserInitialDetailsProvider userInitialDetailsProvider =
+                        Provider.of<UserInitialDetailsProvider>(cntxt);
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -54,8 +65,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 .profileImage!
                                                 .isNotEmpty
                                         ? ClipOval(
-                                          child: Image.file(
-                                            File(homeProvider.profileImage!),
+                                          child: Image.network(
+                                            homeProvider.profileImage
+                                                .toString(),
                                             fit: BoxFit.cover,
                                             width: 70.w,
                                             height: 70.h,
@@ -77,7 +89,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                                 Text(
-                                  "Rakshit Dembla",
+                                  homeProvider.userName == null
+                                      ? "Champion"
+                                      : homeProvider.userName!
+                                              .split(" ")[0]
+                                              .length >
+                                          14
+                                      ? "${homeProvider.userName!.split(" ")[0].substring(0, 14)}.."
+                                      : homeProvider.userName!
+                                          .split(" ")[0]
+                                          .toString(),
                                   style: TextStyle(
                                     color: MyColors.whiteText,
                                     fontSize: 16.sp,
@@ -89,20 +110,22 @@ class _HomeScreenState extends State<HomeScreen> {
                             Spacer(),
                             IconButton(
                               onPressed: () {
-                                context.router.push(UnlockPremiumRoute());
+                                userInitialDetailsProvider.isUserPremium
+                                    ? Utils.showCustomToast(
+                                      "You're all set with premium access!",
+                                    )
+                                    : context.router.push(UnlockPremiumRoute());
                               },
                               icon: Icon(
-                                Icons.diamond,
+                                Icons.diamond_outlined,
                                 color:
-                                    Provider.of<CheckPremium>(
-                                          cntxt,
-                                        ).isUserPremium
-                                        ? MyColors.electricBlue
+                                    userInitialDetailsProvider.isUserPremium
+                                        ? MyColors.graphBarCyan
                                         : MyColors.whiteText,
                                 size: 28.r,
                               ),
                             ),
-                            SizedBox(width: 5.w),
+
                             IconButton(
                               onPressed: () {
                                 TabControllerService.persistentTabController
@@ -122,10 +145,23 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: ListTile(
                             onTap: () {
                               if (homeProvider.isTracking) {
+                                AdsProvider adsProvider =
+                                    Provider.of<AdsProvider>(
+                                      context,
+                                      listen: false,
+                                    );
+
+                                if (adsProvider.isHomeAdLoaded) {
+                                  adsProvider.homeAd!.show();
+                                }
                                 homeProvider.stopTracking();
                               } else {
                                 if (homeProvider.gotInitialData &&
                                     homeProvider.stopTrackingSuccess) {
+                                  Provider.of<AdsProvider>(
+                                    context,
+                                    listen: false,
+                                  ).initializeHomePageAd(context);
                                   homeProvider.startTracking();
                                 } else {
                                   Utils.showCustomToast(

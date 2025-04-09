@@ -1,6 +1,6 @@
-import 'dart:io';
 import 'package:auto_route/auto_route.dart';
-import 'package:fitlifts/check_premium.dart';
+import 'package:fitlifts/presentation/screens/providers/ads_provider.dart';
+import 'package:fitlifts/presentation/screens/providers/user_initial_details_provider.dart';
 import 'package:fitlifts/core/constants/my_assets.dart';
 import 'package:fitlifts/core/constants/my_colors.dart';
 import 'package:fitlifts/core/utils/utils.dart';

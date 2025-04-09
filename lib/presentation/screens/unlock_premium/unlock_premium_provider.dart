@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fitlifts/check_premium.dart';
+import 'package:fitlifts/presentation/screens/providers/user_initial_details_provider.dart';
 import 'package:fitlifts/core/constants/my_strings.dart';
 import 'package:fitlifts/core/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +11,8 @@ class UnlockPremiumProvider with ChangeNotifier {
   late Razorpay _razorpay;
   String? _userEmail;
   String? _userToken;
+
+  BuildContext? _context;
 
   UnlockPremiumProvider() {
     getUserData();
@@ -34,7 +36,9 @@ class UnlockPremiumProvider with ChangeNotifier {
 
   //___________________________________________________________________
 
-  void startPayment() {
+  void startPayment(BuildContext context) {
+    _context = context;
+
     if (_userToken == null) {
       Utils.showCustomToast(
         "Unable to verify your account. Please try again later.",
@@ -59,18 +63,18 @@ class UnlockPremiumProvider with ChangeNotifier {
     }
   }
 
-  void _handlePaymentSuccess(
-    PaymentSuccessResponse response,
-    BuildContext context,
-  ) async {
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
     try {
       await FirebaseFirestore.instance
           .collection(MyStrings.firebaseCollection)
           .doc(_userToken)
-          .set({MyStrings.isPremiumUser: true});
+          .set({MyStrings.isPremiumUser: true}, SetOptions(merge: true));
       Utils.showCustomToast("Payment successful! Premium features unlocked.");
-      if (context.mounted) {
-        Provider.of<CheckPremium>(context, listen: false).checkUser();
+      if (_context != null && _context!.mounted) {
+        Provider.of<UserInitialDetailsProvider>(
+          _context!,
+          listen: false,
+        ).getUserDetails();
       } else {
         Utils.showCustomToast(
           "Premium unlocked! Restart the app to access all features.",

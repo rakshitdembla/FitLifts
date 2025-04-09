@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../../../../../core/constants/my_colors.dart';
+import '../../../providers/ads_provider.dart';
 
 @RoutePage()
 class AddProgress extends StatefulWidget {
@@ -36,6 +37,11 @@ class _AddProgressState extends State<AddProgress> {
           widget.galleryModel?.bodyWeight?.toString() ?? "";
       pumpController.text = widget.galleryModel?.ratePump?.toString() ?? "";
     }
+
+    Provider.of<AdsProvider>(
+      context,
+      listen: false,
+    ).initializeUpdateProgressAd(context);
     super.initState();
   }
 
@@ -48,94 +54,109 @@ class _AddProgressState extends State<AddProgress> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyColors.primaryCharcoal,
-      appBar: AppBar(
-        scrolledUnderElevation: 0.0,
-        title: Text(
-          "Progress Image Details",
-          style: TextStyle(
-            color: MyColors.whiteText,
-            fontWeight: FontWeight.w900,
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          AdsProvider adsProvider = Provider.of<AdsProvider>(
+            context,
+            listen: false,
+          );
+          if (adsProvider.isProgressUpdateAdLoaded) {
+            adsProvider.progressUpdateAd!.show();
+          }
+        }
+      },
+
+      child: Scaffold(
+        backgroundColor: MyColors.primaryCharcoal,
+        appBar: AppBar(
+          scrolledUnderElevation: 0.0,
+          title: Text(
+            "Progress Image Details",
+            style: TextStyle(
+              color: MyColors.whiteText,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          centerTitle: true,
+          backgroundColor: MyColors.primaryCharcoal,
+          automaticallyImplyLeading: true,
+          iconTheme: IconThemeData(color: MyColors.whiteText),
+        ),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(9.w, 15.h, 9.w, 25.w),
+
+          child: Column(
+            children: [
+              NumField(
+                controller: bodyWeightController,
+                hintText: "Current Body Weight",
+                labelTitle: "Body Weight",
+                maxLength: 5,
+                suffix: Text("Kg"),
+              ),
+              SizedBox(height: 25.h),
+              NumField(
+                controller: pumpController,
+                hintText: "Rate Body Pump",
+                labelTitle: "Body Pump",
+                maxLength: 2,
+                suffix: Text("/10"),
+              ),
+              SizedBox(height: 25.h),
+              DateTimeWidget(showDate: false),
+              SizedBox(height: 30.h),
+            ],
           ),
         ),
-        centerTitle: true,
-        backgroundColor: MyColors.primaryCharcoal,
-        automaticallyImplyLeading: true,
-        iconTheme: IconThemeData(color: MyColors.whiteText),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(9.w, 15.h, 9.w, 25.w),
 
-        child: Column(
-          children: [
-            NumField(
-              controller: bodyWeightController,
-              hintText: "Current Body Weight",
-              labelTitle: "Body Weight",
-              maxLength: 5,
-              suffix: Text("Kg"),
-            ),
-            SizedBox(height: 25.h),
-            NumField(
-              controller: pumpController,
-              hintText: "Rate Body Pump",
-              labelTitle: "Body Pump",
-              maxLength: 2,
-              suffix: Text("/10"),
-            ),
-            SizedBox(height: 25.h),
-            DateTimeWidget(showDate: false),
-            SizedBox(height: 30.h),
-          ],
-        ),
-      ),
-
-      bottomNavigationBar: Consumer<AddProgressProvider>(
-        builder: (context, addProgressProvider, child) {
-          return addProgressProvider.isLoading
-              ? Padding(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 10.h,
-                  left: 9.w,
-                  right: 9.w,
-                ),
-                child: CircularProgressLoading(),
-              )
-              : Padding(
+        bottomNavigationBar: Consumer<AddProgressProvider>(
+          builder: (context, addProgressProvider, child) {
+            return addProgressProvider.isLoading
+                ? Padding(
                   padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 10.h,
-                  left: 9.w,
-                  right: 9.w,
-                ),
-                child: ElevatedCTA(
-                  title: widget.isUpdate ? "Update" : "Save",
-                  onPressed: () {
-                    widget.isUpdate
-                        ? addProgressProvider.updateProgress(
-                          widget.galleryModel!.id!,
-                          widget.galleryModel!.imagePath,
-                          widget.galleryModel!.date,
-                          bodyWeightController.text.toString(),
-                          pumpController.text,
-                          widget.galleryModel?.ratePump,
-                          widget.galleryModel?.bodyWeight,
-                          context,
-                          bodyWeightController,
-                          pumpController,
-                        )
-                        : addProgressProvider.createProgress(
-                          widget.imagePath!,
-                          pumpController.text.toString(),
-                          bodyWeightController.text.toString(),
-                          context,
-                          bodyWeightController,
-                          pumpController,
-                        );
-                  },
-                ),
-              );
-        },
+                    bottom: MediaQuery.of(context).viewInsets.bottom + 10.h,
+                    left: 9.w,
+                    right: 9.w,
+                  ),
+                  child: CircularProgressLoading(),
+                )
+                : Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom + 10.h,
+                    left: 9.w,
+                    right: 9.w,
+                  ),
+                  child: ElevatedCTA(
+                    title: widget.isUpdate ? "Update" : "Save",
+                    onPressed: () {
+                      widget.isUpdate
+                          ? addProgressProvider.updateProgress(
+                            widget.galleryModel!.id!,
+                            widget.galleryModel!.imagePath,
+                            widget.galleryModel!.date,
+                            bodyWeightController.text.toString(),
+                            pumpController.text,
+                            widget.galleryModel?.ratePump,
+                            widget.galleryModel?.bodyWeight,
+                            context,
+                            bodyWeightController,
+                            pumpController,
+                          )
+                          : addProgressProvider.createProgress(
+                            widget.imagePath!,
+                            pumpController.text.toString(),
+                            bodyWeightController.text.toString(),
+                            context,
+                            bodyWeightController,
+                            pumpController,
+                          );
+                    },
+                  ),
+                );
+          },
+        ),
       ),
     );
   }

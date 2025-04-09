@@ -16,6 +16,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Provider.of<SettingsProvider>(context, listen: false).getUserData();
         gotInitialData = true;
       }
+
+      Provider.of<AdsProvider>(context, listen: false).initializeSettingsAd(context);
     });
     super.didChangeDependencies();
   }
@@ -188,6 +190,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     Builder(
                       builder: (cntxt) {
+                        UserInitialDetailsProvider userInitialDetailsProvider =
+                            Provider.of<UserInitialDetailsProvider>(context);
                         ExportImportDbProvider dbProvider =
                             Provider.of<ExportImportDbProvider>(cntxt);
                         return Column(
@@ -195,16 +199,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             SettingsTile(
                               title: "Export Data",
                               onTapAction: () {
-                                dbProvider.showDialogBox(
-                                  "Export Data Info!",
-                                  """- Only workout data will be exported.\n
+                                userInitialDetailsProvider.isUserPremium
+                                    ? dbProvider.showDialogBox(
+                                      "Export Data Info!",
+                                      """- Only workout data will be exported.\n
 - Progress images will NOT be included in the export.""",
-                                  () {
-                                    context.router.pop();
-                                    dbProvider.exportDB();
-                                  },
-                                  context,
-                                );
+                                      () {
+                                        context.router.pop();
+                                        dbProvider.exportDB();
+                                      },
+                                      context,
+                                    )
+                                    : Utils.showCustomToast(
+                                      "Upgrade to Premium to export your workout data.",
+                                    );
                               },
                               trailingWidget:
                                   dbProvider.isExportingDb
@@ -226,19 +234,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             SettingsTile(
                               title: "Import Data",
                               onTapAction: () {
-                                dbProvider.showDialogBox(
-                                  "Import Data Warning!",
-                                  """- Importing data will erase all your current records, if any.\n
+                                userInitialDetailsProvider.isUserPremium
+                                    ? dbProvider.showDialogBox(
+                                      "Import Data Warning!",
+                                      """- Importing data will erase all your current records, if any.\n
 - Please note that progress images will not be imported and will be permanently lost.\n
 - Proceed only if you have backed up your data.""",
-                                  () async {
-                                    await dbProvider.importDB();
-                                    if (context.mounted) {
-                                      context.router.pop();
-                                    }
-                                  },
-                                  context,
-                                );
+                                      () async {
+                                        await dbProvider.importDB();
+                                        if (context.mounted) {
+                                          context.router.pop();
+                                        }
+                                      },
+                                      context,
+                                    )
+                                    : Utils.showCustomToast(
+                                      "Premium required to restore your saved data.",
+                                    );
                               },
                               trailingWidget:
                                   dbProvider.isImportingDb

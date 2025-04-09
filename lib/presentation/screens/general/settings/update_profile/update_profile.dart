@@ -39,128 +39,140 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyColors.primaryCharcoal,
-      appBar: AppBar(
-        title: Text(
-          "Update Profile",
-          style: TextStyle(
-            fontSize: 20.sp,
-            color: MyColors.whiteText,
-            fontWeight: FontWeight.w900,
-          ),
-        ),
-        centerTitle: true,
-        automaticallyImplyLeading: true,
-        iconTheme: IconThemeData(color: MyColors.whiteText),
-        scrolledUnderElevation: 0.0,
-        backgroundColor: MyColors.primaryCharcoal,
-      ),
-      body: Consumer<SettingsProvider>(
-        builder: (context, state, child) {
-          return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10.w),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      state.pickImage(context);
-                    },
-                    child:
-                        CircleAvatar(
-                          radius: 60.r,
-                          child: ClipOval(
-                            child:
-                                state.profileImage != null &&
-                                        state.profileImage!.isNotEmpty
-                                    ? Image.network(
-                                      state.profileImage!,
-                                      fit: BoxFit.cover,
-                                      width: 120.w,
-                                      height: 120.h,
-                                    )
-                                    : state.initialImage != null
-                                    ? Image.file(
-                                      state.initialImage!,
-                                      fit: BoxFit.cover,
-                                      width: 120.w,
-                                      height: 120.h,
-                                    )
-                                    : Icon(Icons.person, size: 60.r),
-                          ),
-                        ),
-                       
-                     
-                  ),
-                  SizedBox(height: 20.h),
-                  CredentialsField(
-                    label: "Name",
-                    focusNode: nameNode,
-                    hinttext: "Your Name",
-                    maxLength: 50,
-                    onSubmitted: (_) {
-                      FocusScope.of(context).requestFocus(weightNode);
-                    },
-                    prefixIcon: Icon(Icons.person),
-                    isPassword: false,
-                    controller: nameController,
-                  ),
-                  SizedBox(height: 20.h),
-                  CredentialsField(
-                    label: "Body Weight",
-                    focusNode: weightNode,
-                    hinttext: "Current Body Weight",
-                    maxLength: 5,
-                    onSubmitted: (_) {
-                      FocusScope.of(context).unfocus();
-                    },
-                    prefixIcon: Icon(Icons.scale),
-                    isPassword: false,
-                    controller: weightController,
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) {
+        AdsProvider adsProvider = Provider.of<AdsProvider>(
+          context,
+          listen: false,
+        );
 
-      bottomNavigationBar: Consumer<SettingsProvider>(
-        builder: (context, state, child) {
-          return state.isUpdatingProfile
-              ? Padding(
-                padding: EdgeInsets.only(
-                  left: 10.w,
-                  right: 10.w,
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 10.h,
-                  top: 10.h,
+        if (didPop) {
+          if (adsProvider.isSettingsAdLoaded) {
+            adsProvider.settingsAd!.show();
+          }
+        }
+      },
+      child: Scaffold(
+        backgroundColor: MyColors.primaryCharcoal,
+        appBar: AppBar(
+          title: Text(
+            "Update Profile",
+            style: TextStyle(
+              fontSize: 20.sp,
+              color: MyColors.whiteText,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          centerTitle: true,
+          automaticallyImplyLeading: true,
+          iconTheme: IconThemeData(color: MyColors.whiteText),
+          scrolledUnderElevation: 0.0,
+          backgroundColor: MyColors.primaryCharcoal,
+        ),
+        body: Consumer<SettingsProvider>(
+          builder: (context, state, child) {
+            return SingleChildScrollView(
+              padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10.w),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        state.pickImage(context);
+                      },
+                      child: CircleAvatar(
+                        radius: 60.r,
+                        child: ClipOval(
+                          child:
+                              state.profileImage != null &&
+                                      state.profileImage!.isNotEmpty
+                                  ? Image.network(
+                                    state.profileImage!,
+                                    fit: BoxFit.cover,
+                                    width: 120.w,
+                                    height: 120.h,
+                                  )
+                                  : state.initialImage != null
+                                  ? Image.file(
+                                    state.initialImage!,
+                                    fit: BoxFit.cover,
+                                    width: 120.w,
+                                    height: 120.h,
+                                  )
+                                  : Icon(Icons.person, size: 60.r),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20.h),
+                    CredentialsField(
+                      label: "Name",
+                      focusNode: nameNode,
+                      hinttext: "Your Name",
+                      maxLength: 50,
+                      onSubmitted: (_) {
+                        FocusScope.of(context).requestFocus(weightNode);
+                      },
+                      prefixIcon: Icon(Icons.person),
+                      isPassword: false,
+                      controller: nameController,
+                    ),
+                    SizedBox(height: 20.h),
+                    CredentialsField(
+                      label: "Body Weight",
+                      focusNode: weightNode,
+                      hinttext: "Current Body Weight",
+                      maxLength: 5,
+                      onSubmitted: (_) {
+                        FocusScope.of(context).unfocus();
+                      },
+                      prefixIcon: Icon(Icons.scale),
+                      isPassword: false,
+                      controller: weightController,
+                    ),
+                  ],
                 ),
-                child: CircularProgressLoading(),
-              )
-              : Padding(
-                padding: EdgeInsets.only(
-                  left: 10.w,
-                  right: 10.w,
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 10.h,
-                  top: 10.h,
-                ),
-                child: ElevatedCTA(
-                  onPressed: () {
-                    state.updateProfileDetails(
-                      context,
-                      nameController.text,
-                      weightController.text,
-                      nameController,
-                      weightController,
-                    );
-                  },
-                  title: "Update",
-                ),
-              );
-        },
+              ),
+            );
+          },
+        ),
+
+        bottomNavigationBar: Consumer<SettingsProvider>(
+          builder: (context, state, child) {
+            return state.isUpdatingProfile
+                ? Padding(
+                  padding: EdgeInsets.only(
+                    left: 10.w,
+                    right: 10.w,
+                    bottom: MediaQuery.of(context).viewInsets.bottom + 10.h,
+                    top: 10.h,
+                  ),
+                  child: CircularProgressLoading(),
+                )
+                : Padding(
+                  padding: EdgeInsets.only(
+                    left: 10.w,
+                    right: 10.w,
+                    bottom: MediaQuery.of(context).viewInsets.bottom + 10.h,
+                    top: 10.h,
+                  ),
+                  child: ElevatedCTA(
+                    onPressed: () {
+                      state.updateProfileDetails(
+                        context,
+                        nameController.text,
+                        weightController.text,
+                        nameController,
+                        weightController,
+                      );
+                    },
+                    title: "Update",
+                  ),
+                );
+          },
+        ),
       ),
     );
   }

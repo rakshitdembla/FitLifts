@@ -93,10 +93,11 @@ class _AuthDropDownState extends State<AuthDropDown> {
                             ),
                           )
                           .toList(),
-                  onChanged:
-                      (newValue) => setState(
-                        () => profileProvider.selectedValue = newValue,
-                      ),
+                  onChanged: (newValue) {
+                    if (context.mounted) {
+                      setState(() => profileProvider.selectedValue = newValue);
+                    }
+                  },
                 ),
               ),
             );

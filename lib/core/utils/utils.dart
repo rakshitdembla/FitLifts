@@ -238,11 +238,6 @@ class Utils {
     return pickedImage;
   }
 
-  static Future<String?> getProfileImage() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(MyStrings.savedProfile);
-  }
-
   static Future<void> firebaseAuthProfileCheck(BuildContext context) async {
     final userProfileData =
         await FirebaseFirestore.instance

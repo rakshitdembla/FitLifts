@@ -12,7 +12,6 @@ class HistoryDataProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-
   List<HistoryDataModel> _historyDataList = [];
   List<HistoryDataModel> get historyDataList => _historyDataList;
 
@@ -102,7 +101,9 @@ class HistoryDataProvider with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       _isLoading = false;
-      Utils.showCustomToast("We couldn't load your history data. Please try again later.");
+      Utils.showCustomToast(
+        "We couldn't load your history data. Please try again later.",
+      );
     }
   }
 
@@ -115,11 +116,9 @@ class HistoryDataProvider with ChangeNotifier {
   }
 
   Future<void> refresh(BuildContext context) async {
-   
-      Provider.of<ChartProvider>(context, listen: false).getWeekSteps();
-      getHistoryData();
-    
+    Provider.of<ChartProvider>(context, listen: false).getWeekSteps();
+    getHistoryData();
+
     await Future.delayed(const Duration(seconds: 1));
-    Utils.showCustomToast( "Your data has been refreshed successfully!");
   }
 }

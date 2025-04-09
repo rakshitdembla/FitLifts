@@ -5,10 +5,12 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitlifts/core/utils/utils.dart';
 import 'package:fitlifts/presentation/routes/auto_router.gr.dart';
+import 'package:fitlifts/presentation/screens/general/home/home_provider.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import '../../../../core/constants/my_strings.dart';
 
 class SettingsProvider with ChangeNotifier {
@@ -56,13 +58,13 @@ class SettingsProvider with ChangeNotifier {
               .doc(userToken.toString())
               .get();
 
-      _userEmail = userData[MyStrings.email];
       _userName = userData[MyStrings.name];
       _profileImage =
           userData.data()!.containsKey(MyStrings.profileUrl)
               ? userData[MyStrings.profileUrl]
               : null;
       _bodyWeight = userData[MyStrings.bodyWeight];
+       _userEmail = userData[MyStrings.email];
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -142,6 +144,7 @@ class SettingsProvider with ChangeNotifier {
       _isUpdatingProfile = false;
       notifyListeners();
       if (context.mounted) {
+        Provider.of<HomeProvider>(context,listen: false).getInitialData(context);
         context.router.pop();
       }
     } catch (e) {
@@ -170,6 +173,8 @@ class SettingsProvider with ChangeNotifier {
       await GoogleSignIn().signOut();
       await FirebaseAuth.instance.signOut();
       Utils.showCustomToast("Logged out successfully");
+      _isLoggingOutLoading = false;
+      notifyListeners();
       context.router.replaceAll([LoginScreenRoute()]);
     } catch (e) {
       _isLoggingOutLoading = false;

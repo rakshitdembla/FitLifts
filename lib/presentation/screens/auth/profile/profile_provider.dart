@@ -96,12 +96,13 @@ class ProfileProvider with ChangeNotifier {
       await Utils.saveLocalBodyWeight(parsedBodyWeight);
 
       Utils.showCustomToast("Profile created successfully!");
+            if (context.mounted) {
+        context.router.replaceAll([GeneralRoute()]);
+      }
       _isLoading = false;
       notifyListeners();
 
-      if (context.mounted) {
-        context.router.replaceAll([GeneralRoute()]);
-      }
+
     } catch (e) {
       Utils.showCustomToast(
         "Failed to create profile. Please check your connection",

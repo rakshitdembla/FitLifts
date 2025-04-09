@@ -1,3 +1,5 @@
+import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/screens/providers/user_initial_details_provider.dart';
 import 'package:fitlifts/presentation/screens/unlock_premium/unlock_premium_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -41,11 +43,20 @@ class BottomWidget extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(bottom: 15.h),
             child: Consumer<UnlockPremiumProvider>(
-            
-              builder: (context, state,child) {
-                return ElevatedCTA(title: "Upgrade Now",onPressed: () {
-                  state.startPayment();
-                },);
+              builder: (context, state, child) {
+                return ElevatedCTA(
+                  title: "Upgrade Now",
+                  onPressed: () {
+                    Provider.of<UserInitialDetailsProvider>(
+                          context,
+                          listen: false,
+                        ).isUserPremium
+                        ? Utils.showCustomToast(
+                          "You already have access to premium features!",
+                        )
+                        : state.startPayment(context);
+                  },
+                );
               },
             ),
           ),

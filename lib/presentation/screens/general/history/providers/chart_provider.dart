@@ -46,15 +46,18 @@ class ChartProvider with ChangeNotifier {
       getHighestSteps();
       _isLoading = false;
       notifyListeners();
+      Utils.showCustomToast("Your data has been refreshed successfully!");
     } catch (e) {
       _isLoading = false;
-      Utils.showCustomToast("Couldn't load your step history. Please try again.");
-        notifyListeners();
+      Utils.showCustomToast(
+        "Couldn't load your step history. Please try again.",
+      );
+      notifyListeners();
     }
   }
 
   String formatDate(DateTime date) {
-    return DateFormat("d MMM, yy").format(date);
+    return DateFormat("d MMM,yy").format(date);
   }
 
   void getHighestSteps() {

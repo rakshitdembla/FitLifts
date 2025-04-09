@@ -59,15 +59,13 @@ class RegisterProvider with ChangeNotifier {
       }
 
       await Utils.saveToken(_auth.currentUser!.uid);
-      _isLoading = false;
-      notifyListeners();
       if (context.mounted) {
         context.router.replaceAll([UserProfileScreenRoute()]);
       }
+      _isLoading = false;
+      notifyListeners();
     } catch (e) {
-      Utils.showCustomToast(
-        e.toString()
-      );
+      Utils.showCustomToast(e.toString());
       _isLoading = false;
       notifyListeners();
     }

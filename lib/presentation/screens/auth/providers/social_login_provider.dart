@@ -64,11 +64,11 @@ class SocialLoginProvider with ChangeNotifier {
       }
       await Utils.saveToken(user.uid);
 
-      _isLoading = false;
-      notifyListeners();
       if (context.mounted) {
         await Utils.firebaseAuthProfileCheck(context);
       }
+      _isLoading = false;
+      notifyListeners();
     } catch (e) {
       Utils.showCustomToast("Google sign-in failed. Check your connection");
       _isLoading = false;

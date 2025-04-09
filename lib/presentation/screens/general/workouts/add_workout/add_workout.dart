@@ -43,7 +43,7 @@ class _AddWorkoutState extends State<AddWorkout> {
                       String? getExerciseName = await Utils.selectExerciseNav(
                         context,
                       );
-                      if (getExerciseName != null) {
+                      if (getExerciseName != null && context.mounted) {
                         setState(() {
                           exerciseName = getExerciseName;
                         });
