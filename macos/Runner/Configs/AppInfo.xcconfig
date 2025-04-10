@@ -8,7 +8,7 @@
 PRODUCT_NAME = fitlifts
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.fitlifts
+PRODUCT_BUNDLE_IDENTIFIER = com.dropdesire.fitlifts
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2025 com.example. All rights reserved.

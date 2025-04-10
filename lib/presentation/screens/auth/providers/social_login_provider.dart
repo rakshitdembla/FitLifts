@@ -65,6 +65,7 @@ class SocialLoginProvider with ChangeNotifier {
         return;
       }
       await LocalStorageUtils.saveToken(user.uid);
+      debugPrint(await LocalStorageUtils.getToken());
 
       if (context.mounted) {
         await AuthUtils.firebaseAuthProfileCheck(context);

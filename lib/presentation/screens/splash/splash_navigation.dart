@@ -7,19 +7,18 @@ import 'package:flutter/material.dart';
 
 class SplashNavigation {
   static void splashNav(BuildContext context) async {
-    await Future.delayed(Duration(milliseconds: 1500));
+    DocumentSnapshot<Map<String, dynamic>> checkUserProfile =
+        await FirebaseFirestore.instance
+            .collection(MyStrings.firebaseCollection)
+            .doc(await LocalStorageUtils.getToken())
+            .get();
     final userToken = await LocalStorageUtils.getToken();
+    await Future.delayed(Duration(milliseconds: 1500));
     if (userToken == null || userToken.isEmpty) {
       if (context.mounted) {
         context.router.replaceAll([LoginScreenRoute()]);
       }
     } else {
-      DocumentSnapshot<Map<String, dynamic>> checkUserProfile =
-          await FirebaseFirestore.instance
-              .collection(MyStrings.firebaseCollection)
-              .doc(await LocalStorageUtils.getToken())
-              .get();
-
       if (checkUserProfile.exists) {
         if (context.mounted) {
           context.router.replaceAll([GeneralRoute()]);

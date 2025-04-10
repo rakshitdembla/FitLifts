@@ -1,4 +1,4 @@
-package com.example.fitlifts
+package com.dropdesire.fitlifts
 
 import io.flutter.embedding.android.FlutterActivity
 

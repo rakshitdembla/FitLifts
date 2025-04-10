@@ -3,7 +3,7 @@
     <application
         android:label="FitLifts"
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher_icon">
+        android:icon="@mipmap/ic_launcher">
         <service
         android:name=".StepTrackingService"
         android:foregroundServiceType="health"

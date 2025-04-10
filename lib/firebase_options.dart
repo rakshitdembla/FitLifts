@@ -41,48 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBDofT-11DvjudtBLO1mefUbb-VhY4xf_o',
-    appId: '1:333504318757:web:78cb14084cb7f45e7bdecc',
-    messagingSenderId: '333504318757',
-    projectId: 'fitlifts-b077d',
-    authDomain: 'fitlifts-b077d.firebaseapp.com',
-    storageBucket: 'fitlifts-b077d.firebasestorage.app',
-    measurementId: 'G-1ZJVSYT0Z6',
+    apiKey: 'AIzaSyAZ9IEV42ObxqHe5sD3aiNjFeASLhbKxxY',
+    appId: '1:782629770073:web:6c69fa20e56727e2b7f248',
+    messagingSenderId: '782629770073',
+    projectId: 'dropdesirefitlifts',
+    authDomain: 'dropdesirefitlifts.firebaseapp.com',
+    storageBucket: 'dropdesirefitlifts.firebasestorage.app',
+    measurementId: 'G-T432RQF0R1',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA4TF3ZZe74onjp8VwDR7Wwpqtqc4b6H1U',
-    appId: '1:333504318757:android:9886bc305462a51b7bdecc',
-    messagingSenderId: '333504318757',
-    projectId: 'fitlifts-b077d',
-    storageBucket: 'fitlifts-b077d.firebasestorage.app',
+    apiKey: 'AIzaSyCZhEy7wRKV7vaWk0p9eKReTdy4pLR4MfM',
+    appId: '1:782629770073:android:ac3f6a542a59a9e1b7f248',
+    messagingSenderId: '782629770073',
+    projectId: 'dropdesirefitlifts',
+    storageBucket: 'dropdesirefitlifts.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyB3XdbzwMqU5td18N2TG8U3mYfCuuoVzFw',
-    appId: '1:333504318757:ios:96aa4fd91d53b4997bdecc',
-    messagingSenderId: '333504318757',
-    projectId: 'fitlifts-b077d',
-    storageBucket: 'fitlifts-b077d.firebasestorage.app',
-    iosBundleId: 'com.example.fitlifts',
+    apiKey: 'AIzaSyDoMBtvpsPT5ULoU2LdzKU2CzS2sGcNzuM',
+    appId: '1:782629770073:ios:0301351a74d071c0b7f248',
+    messagingSenderId: '782629770073',
+    projectId: 'dropdesirefitlifts',
+    storageBucket: 'dropdesirefitlifts.firebasestorage.app',
+    iosBundleId: 'com.dropdesire.fitlifts',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyB3XdbzwMqU5td18N2TG8U3mYfCuuoVzFw',
-    appId: '1:333504318757:ios:96aa4fd91d53b4997bdecc',
-    messagingSenderId: '333504318757',
-    projectId: 'fitlifts-b077d',
-    storageBucket: 'fitlifts-b077d.firebasestorage.app',
-    iosBundleId: 'com.example.fitlifts',
+    apiKey: 'AIzaSyDoMBtvpsPT5ULoU2LdzKU2CzS2sGcNzuM',
+    appId: '1:782629770073:ios:0301351a74d071c0b7f248',
+    messagingSenderId: '782629770073',
+    projectId: 'dropdesirefitlifts',
+    storageBucket: 'dropdesirefitlifts.firebasestorage.app',
+    iosBundleId: 'com.dropdesire.fitlifts',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyBDofT-11DvjudtBLO1mefUbb-VhY4xf_o',
-    appId: '1:333504318757:web:dbcb9f1f9b3ab1047bdecc',
-    messagingSenderId: '333504318757',
-    projectId: 'fitlifts-b077d',
-    authDomain: 'fitlifts-b077d.firebaseapp.com',
-    storageBucket: 'fitlifts-b077d.firebasestorage.app',
-    measurementId: 'G-EZW0KDFZQZ',
+    apiKey: 'AIzaSyAZ9IEV42ObxqHe5sD3aiNjFeASLhbKxxY',
+    appId: '1:782629770073:web:5d23d0e25f6d6c74b7f248',
+    messagingSenderId: '782629770073',
+    projectId: 'dropdesirefitlifts',
+    authDomain: 'dropdesirefitlifts.firebaseapp.com',
+    storageBucket: 'dropdesirefitlifts.firebasestorage.app',
+    measurementId: 'G-8KP737QSEH',
   );
+
 }
