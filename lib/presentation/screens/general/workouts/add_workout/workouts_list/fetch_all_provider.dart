@@ -12,9 +12,9 @@ class LocalExercisesProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  List<List<Exercise>> _allExercises = [];
+  final List<List<Exercise>> _allExercises = [];
   List<List<Exercise>> get allExercises => _allExercises;
-  List<String> _exerciseTitles = [];
+  final List<String> _exerciseTitles = [];
   List<String> get exerciseTitles => _exerciseTitles;
 
   void getWorkouts() async{

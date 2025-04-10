@@ -28,4 +28,5 @@ class MyStrings {
   static const String savedToken = "token";
   static const String savedSteps = "dbSteps";
   static const String savedProfile = "profile_image";
+  static const String savedTheme = "is_dark_theme";
 }

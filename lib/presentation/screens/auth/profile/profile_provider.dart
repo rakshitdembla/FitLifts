@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fitlifts/core/constants/my_strings.dart';
-import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/utils.dart';
 import 'package:fitlifts/presentation/routes/auto_router.gr.dart';
 import 'package:flutter/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../../../services/local_storage_utils.dart';
 
 class ProfileProvider with ChangeNotifier {
   bool _isLoading = false;
@@ -75,7 +77,7 @@ class ProfileProvider with ChangeNotifier {
 
     //try uploading data on firestore
     try {
-      final userToken = await Utils.getToken();
+      final userToken = await LocalStorageUtils.getToken();
       Map<String, dynamic> userMap = {
         MyStrings.userToken: userToken,
         MyStrings.email: email,
@@ -93,7 +95,7 @@ class ProfileProvider with ChangeNotifier {
           .doc(userToken.toString())
           .set(userMap);
 
-      await Utils.saveLocalBodyWeight(parsedBodyWeight);
+      await LocalStorageUtils.saveLocalBodyWeight(parsedBodyWeight);
 
       Utils.showCustomToast("Profile created successfully!");
             if (context.mounted) {

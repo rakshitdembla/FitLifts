@@ -105,6 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       : ElevatedCTA(
                         title: "Sign Up",
                         onPressed: () {
+                          FocusScope.of(context).unfocus();
                           registerProvider.registerWithEmailPassword(
                             emailController.text.toLowerCase().trim(),
                             passController.text,
@@ -130,6 +131,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         title: "Continue with Google",
                         iconImage: AssetImage(Assets.assetsGoogle),
                         onTap: () {
+                          FocusScope.of(context).unfocus();
                           socialLoginProvider.continueWithGoogle(context);
                         },
                       );
@@ -157,6 +159,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               AuthBottomBar(
                 onPressed: () {
+                  FocusScope.of(context).unfocus();
                   context.router.pop();
                 },
                 text1: "Already have an account?",

@@ -52,27 +52,3 @@ class WorkoutConstants {
   static const String caloriesBurned = "calories_burned";
   static const String caloriesBurnedType = "REAL";
 }
-
-class GalleryConstants {
-  GalleryConstants._();
-
-  // Table Name
-  static const String tableName = "gallery";
-
-  // Columns
-  static const String id = "id";
-  static const String idType = "INTEGER PRIMARY KEY AUTOINCREMENT";
-
-  static const String imagePath = "image_path";
-  static const String imagePathType = "TEXT UNIQUE";
-
-  static const String date = "date";
-  static const String dateType = "TEXT";
-
-  static const String bodyWeight = "body_weight";
-  static const String bodyWeightType = "REAL";
-
-  static const String ratePump = "rate_pump";
-  static const String ratePumpType = "INTEGER";
-}
-

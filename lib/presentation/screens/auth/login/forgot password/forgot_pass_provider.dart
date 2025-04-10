@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/utils.dart';
+import 'package:fitlifts/services/auth_utils.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPassProvider with ChangeNotifier {
@@ -13,7 +14,7 @@ class ForgotPassProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    if (!Utils.isValidEmail(email)) {
+    if (!AuthUtils.isValidEmail(email)) {
       Utils.showCustomToast("Please enter a valid email address.");
       _isLoading = false;
       notifyListeners();

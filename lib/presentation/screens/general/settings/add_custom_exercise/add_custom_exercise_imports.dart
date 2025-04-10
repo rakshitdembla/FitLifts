@@ -1,5 +1,5 @@
 import 'package:auto_route/annotations.dart';
-import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/utils.dart';
 import 'package:fitlifts/data/models/exercise.dart';
 import 'package:fitlifts/presentation/common_widgets/custom_drop_down.dart';
 import 'package:fitlifts/presentation/common_widgets/elevated_cta.dart';
@@ -12,6 +12,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/constants/my_colors.dart';
-import '../../../providers/ads_provider.dart';
+import '../../../../../services/providers/ads_provider.dart';
 
 part "add_custom_exercise.dart";

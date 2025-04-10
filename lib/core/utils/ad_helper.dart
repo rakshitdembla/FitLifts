@@ -27,12 +27,4 @@ class AdHelper with ChangeNotifier {
       return "";
     }
   }
-
-  static String updateProgressInterstitialId() {
-    if (Platform.isAndroid) {
-      return dotenv.env["PROGRESSAD"].toString();
-    } else {
-      return "";
-    }
-  }
 }

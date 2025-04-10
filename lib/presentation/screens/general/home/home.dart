@@ -22,18 +22,15 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       listen: false,
     );
-    final screenWidth = MediaQuery.of(context).size.width;
-    final itemWidth = (screenWidth) / 2;
-    final itemHeight = itemWidth * (86 / 113);
+
     return Scaffold(
       backgroundColor: MyColors.primaryCharcoal,
       body: RefreshBar(
         onRefresh: () async {
-          await providerListener.getInitialData(context);
           if (providerListener.gotInitialData &&
               providerListener.stopTrackingSuccess &&
               !providerListener.isTracking) {
-            return providerListener.refreshData();
+            return providerListener.refreshData(context);
           } else {
             return await Future.delayed(const Duration(seconds: 1));
           }
@@ -55,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             InkWell(
                               onTap: () {
                                 TabControllerService.persistentTabController
-                                    .jumpToTab(4);
+                                    .jumpToTab(3);
                               },
                               child: CircleAvatar(
                                 radius: 21.r,
@@ -120,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Icons.diamond_outlined,
                                 color:
                                     userInitialDetailsProvider.isUserPremium
-                                        ? MyColors.graphBarCyan
+                                        ? MyColors.cyan
                                         : MyColors.whiteText,
                                 size: 28.r,
                               ),
@@ -129,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             IconButton(
                               onPressed: () {
                                 TabControllerService.persistentTabController
-                                    .jumpToTab(4);
+                                    .jumpToTab(3);
                               },
                               icon: Icon(
                                 Icons.settings,
@@ -165,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   homeProvider.startTracking();
                                 } else {
                                   Utils.showCustomToast(
-                                    "One moment, your session is being saved...",
+                                    "Hold on a sec, getting your session ready...",
                                   );
                                 }
                               }
@@ -200,76 +197,87 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         SizedBox(height: 8.h),
 
-                        GridView.count(
-                          padding: EdgeInsets.zero,
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          crossAxisCount: 2,
-                          childAspectRatio: itemWidth / itemHeight,
-                          mainAxisSpacing: 10.h,
-                          crossAxisSpacing: 10.w,
-                          children: [
-                            StatsCard(
-                              containerColor: MyColors.tealGreen,
-                              icon: Icon(
-                                Icons.directions_walk,
-                                color: MyColors.tealGreen,
-                              ),
-                              title: "Steps",
-                              unit: "steps",
-                              value:
-                                  homeProvider.steps.toString().length > 5
-                                      ? '${homeProvider.steps.toString().substring(0, 5)}+'
-                                      : homeProvider.steps.toString(),
-                            ),
-                            StatsCard(
-                              containerColor: MyColors.gold,
-                              icon: Icon(Icons.route, color: MyColors.darkGold),
-                              title: "Distance",
-                              unit: "km",
-                              value:
-                                  (homeProvider.distance / 1000)
-                                              .toStringAsFixed(2)
-                                              .length >
-                                          5
-                                      ? '${(homeProvider.distance / 1000).toStringAsFixed(2).substring(0, 5)}+'
-                                      : (homeProvider.distance / 1000)
-                                          .toStringAsFixed(2),
-                            ),
-                            StatsCard(
-                              containerColor: MyColors.fieryRed,
-                              icon: Icon(
-                                Icons.local_fire_department,
-                                color: MyColors.fieryRed,
-                              ),
-                              title: "Calories",
-                              unit: "kcal",
-                              value:
-                                  homeProvider.calories
-                                              .toStringAsFixed(0)
-                                              .length >
-                                          4
-                                      ? '${homeProvider.calories.toStringAsFixed(0).substring(0, 4)}+'
-                                      : homeProvider.calories.toStringAsFixed(
-                                        0,
-                                      ),
-                            ),
-                            StatsCard(
-                              containerColor: MyColors.electricBlue,
-                              icon: Icon(
-                                Icons.fitness_center,
-                                color: MyColors.electricBlue,
-                              ),
-                              title: "Workout",
-                              unit: "kg",
-                              value:
-                                  homeProvider.workoutVolume.toString().length >
-                                          8
-                                      ? "${homeProvider.workoutVolume.toStringAsFixed(1).substring(0, 8)}+"
-                                      : homeProvider.workoutVolume
-                                          .toStringAsFixed(1),
-                            ),
-                          ],
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            final screenwidth = constraints.maxWidth;
+                            final itemWidth = (screenwidth) / 2;
+                            final itemHeight = itemWidth * (78 / 100);
+                            return GridView.count(
+                              padding: EdgeInsets.zero,
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              crossAxisCount: 2,
+                              childAspectRatio: itemWidth / itemHeight,
+                              mainAxisSpacing: 10.h,
+                              crossAxisSpacing: 10.w,
+                              children: [
+                                StatsCard(
+                                  containerColor: MyColors.tealGreen,
+                                  icon: Icon(
+                                    Icons.directions_walk,
+                                    color: MyColors.tealGreen,
+                                  ),
+                                  title: "Steps",
+                                  unit: "steps",
+                                  value:
+                                      homeProvider.steps.toString().length > 5
+                                          ? '${homeProvider.steps.toString().substring(0, 5)}+'
+                                          : homeProvider.steps.toString(),
+                                ),
+                                StatsCard(
+                                  containerColor: MyColors.gold,
+                                  icon: Icon(
+                                    Icons.route,
+                                    color: MyColors.darkGold,
+                                  ),
+                                  title: "Distance",
+                                  unit: "km",
+                                  value:
+                                      (homeProvider.distance / 1000)
+                                                  .toStringAsFixed(2)
+                                                  .length >
+                                              5
+                                          ? '${(homeProvider.distance / 1000).toStringAsFixed(2).substring(0, 5)}+'
+                                          : (homeProvider.distance / 1000)
+                                              .toStringAsFixed(2),
+                                ),
+                                StatsCard(
+                                  containerColor: MyColors.fieryRed,
+                                  icon: Icon(
+                                    Icons.local_fire_department,
+                                    color: MyColors.fieryRed,
+                                  ),
+                                  title: "Calories",
+                                  unit: "kcal",
+                                  value:
+                                      homeProvider.calories
+                                                  .toStringAsFixed(0)
+                                                  .length >
+                                              4
+                                          ? '${homeProvider.calories.toStringAsFixed(0).substring(0, 4)}+'
+                                          : homeProvider.calories
+                                              .toStringAsFixed(0),
+                                ),
+                                StatsCard(
+                                  containerColor: MyColors.electricBlue,
+                                  icon: Icon(
+                                    Icons.fitness_center,
+                                    color: MyColors.electricBlue,
+                                  ),
+                                  title: "Workout",
+                                  unit: "kg",
+                                  value:
+                                      homeProvider.workoutVolume
+                                                  .toString()
+                                                  .length >
+                                              8
+                                          ? "${homeProvider.workoutVolume.toStringAsFixed(1).substring(0, 8)}+"
+                                          : homeProvider.workoutVolume
+                                              .toStringAsFixed(1),
+                                ),
+                              ],
+                            );
+                          },
                         ),
 
                         SizedBox(height: 10.h),
@@ -279,14 +287,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           onPressed: () {
                             TabControllerService.persistentTabController
                                 .jumpToTab(2);
-                          },
-                          imageAsset: Assets.assetsTrackProgress,
-                          title: "Track your fitness journey",
-                        ),
-                        ExploreCard(
-                          onPressed: () {
-                            TabControllerService.persistentTabController
-                                .jumpToTab(3);
                           },
                           imageAsset: Assets.assetsProgressOverload,
                           title: "Your past performances",

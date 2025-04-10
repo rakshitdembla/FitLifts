@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../../../../core/utils/utils.dart';
+import '../../../../services/auth_utils.dart';
+import '../../../../services/local_storage_utils.dart';
+import '../../../utils.dart';
 
 class SocialLoginProvider with ChangeNotifier {
   bool _isLoading = false;
@@ -62,10 +64,10 @@ class SocialLoginProvider with ChangeNotifier {
         notifyListeners();
         return;
       }
-      await Utils.saveToken(user.uid);
+      await LocalStorageUtils.saveToken(user.uid);
 
       if (context.mounted) {
-        await Utils.firebaseAuthProfileCheck(context);
+        await AuthUtils.firebaseAuthProfileCheck(context);
       }
       _isLoading = false;
       notifyListeners();

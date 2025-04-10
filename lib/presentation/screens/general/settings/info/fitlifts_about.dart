@@ -1,6 +1,6 @@
 import 'package:auto_route/annotations.dart';
 import 'package:fitlifts/presentation/screens/general/settings/info/info_text_widget.dart';
-import 'package:fitlifts/presentation/screens/providers/ads_provider.dart';
+import 'package:fitlifts/services/providers/ads_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';

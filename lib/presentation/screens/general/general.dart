@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fitlifts/core/constants/my_colors.dart';
 import 'package:fitlifts/presentation/screens/general/controller_service.dart';
-import 'package:fitlifts/presentation/screens/general/gallery/gallery_imports.dart';
 import 'package:fitlifts/presentation/screens/general/history/history_imports.dart';
 import 'package:fitlifts/presentation/screens/general/home/home_imports.dart';
 import 'package:fitlifts/presentation/screens/general/settings/settings_imports.dart';
@@ -23,7 +22,6 @@ class _GeneralState extends State<General> {
     return [
       HomeScreen(),
       WorkoutsScreen(),
-      GalleryScreen(),
       HistoryScreen(),
       SettingsScreen(),
     ];
@@ -42,12 +40,6 @@ class _GeneralState extends State<General> {
         title: "Track",
         inactiveColorPrimary: MyColors.greyText,
         activeColorPrimary: MyColors.electricBlue,
-      ),
-      PersistentBottomNavBarItem(
-        icon: Icon(Icons.camera_alt),
-        title: "Progress",
-        inactiveColorPrimary: MyColors.greyText,
-        activeColorPrimary: const Color.fromARGB(255, 165, 124, 237),
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.bar_chart),

@@ -1,7 +1,6 @@
 import "package:fitlifts/core/constants/my_strings.dart";
 import "package:fitlifts/data/data_source/local/sqf%20database/sqf_constants.dart";
 import "package:fitlifts/data/models/workout_model.dart";
-import "package:fitlifts/data/models/gallery_model.dart";
 import "package:fitlifts/data/models/step_model.dart";
 import "package:intl/intl.dart";
 import 'package:path/path.dart';
@@ -46,16 +45,6 @@ class DBHelper {
           ${WorkoutConstants.weight} ${WorkoutConstants.weightType},
           ${WorkoutConstants.volume} ${WorkoutConstants.volumeType},
           ${WorkoutConstants.caloriesBurned} ${WorkoutConstants.caloriesBurnedType}
-        )
-      ''');
-
-        await db.execute('''
-        CREATE TABLE ${GalleryConstants.tableName} (
-          ${GalleryConstants.id} ${GalleryConstants.idType},
-          ${GalleryConstants.imagePath} ${GalleryConstants.imagePathType},
-          ${GalleryConstants.date} ${GalleryConstants.dateType},
-          ${GalleryConstants.bodyWeight} ${GalleryConstants.bodyWeightType},
-          ${GalleryConstants.ratePump} ${GalleryConstants.ratePumpType}
         )
       ''');
       },
@@ -163,74 +152,6 @@ class DBHelper {
     return result.map((x) => WorkoutModel.fromMap(x)).toList();
   }
 
-  // ***@GALLERY DB HELPERS***
-
-  // INSERT GALLERY DATA
-  Future<int> insertGallery(GalleryModel gallery) async {
-    final dbClient = await fetchDB();
-    return await dbClient!.insert(GalleryConstants.tableName, gallery.toMap());
-  }
-
-  //GET ALL GALLERY ASC OR DESC
-  Future<List<GalleryModel>> getAllGallery(bool isASC) async {
-    final dbClient = await fetchDB();
-    String orderBy =
-        isASC
-            ? "${GalleryConstants.date} ASC"
-            : "${GalleryConstants.date} DESC";
-    final result = await dbClient!.query(
-      GalleryConstants.tableName,
-      orderBy: orderBy,
-    );
-    return result.map((x) => GalleryModel.fromMap(x)).toList();
-  }
-
-  //GET ALL GALLERY BY PUMP
-  Future<List<GalleryModel>> getGalleryByPump() async {
-    final dbClient = await fetchDB();
-    String orderBy = "${GalleryConstants.ratePump} DESC";
-    final result = await dbClient!.query(
-      GalleryConstants.tableName,
-      orderBy: orderBy,
-    );
-    return result.map((x) => GalleryModel.fromMap(x)).toList();
-  }
-
-  //GET ALL GALLERY BY BODYWEIGHT
-  Future<List<GalleryModel>> getGalleryByWeight(bool isASC) async {
-    final dbClient = await fetchDB();
-    String orderBy =
-        isASC
-            ? "CAST(${GalleryConstants.bodyWeight} AS REAL) ASC"
-            : "CAST(${GalleryConstants.bodyWeight} AS REAL) DESC";
-    final result = await dbClient!.query(
-      GalleryConstants.tableName,
-      orderBy: orderBy,
-    );
-    return result.map((x) => GalleryModel.fromMap(x)).toList();
-  }
-
-  //UPDATE GALLERY ENTRY
-  Future<int> updateGallery(GalleryModel gallery) async {
-    final dbClient = await fetchDB();
-    return await dbClient!.update(
-      GalleryConstants.tableName,
-      gallery.toMap(),
-      where: "${GalleryConstants.id} = ?",
-      whereArgs: [gallery.id],
-    );
-  }
-
-  //DELETE GALLERY ENTRY
-  Future<int> deleteGallery(int id) async {
-    final dbClient = await fetchDB();
-    return await dbClient!.delete(
-      GalleryConstants.tableName,
-      where: "${GalleryConstants.id} = ?",
-      whereArgs: [id],
-    );
-  }
-
   //! CLOSE DB
   Future<void> closeDB() async {
     final dbClient = await fetchDB();
@@ -242,6 +163,5 @@ class DBHelper {
     final dbClient = await fetchDB();
     await dbClient!.delete(StepsConstants.tableName);
     await dbClient.delete(WorkoutConstants.tableName);
-    await dbClient.delete(GalleryConstants.tableName);
   }
 }

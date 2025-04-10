@@ -3,9 +3,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/utils.dart';
 import 'package:fitlifts/presentation/routes/auto_router.gr.dart';
 import 'package:fitlifts/presentation/screens/general/home/home_provider.dart';
+import 'package:fitlifts/services/local_storage_utils.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -31,6 +32,8 @@ class SettingsProvider with ChangeNotifier {
   double? _bodyWeight;
   double? get bodyWeight => _bodyWeight;
 
+  bool showPickedImage = false;
+
   String? _profileImage;
   String? get profileImage => _profileImage;
 
@@ -49,7 +52,7 @@ class SettingsProvider with ChangeNotifier {
   Future<void> getUserData() async {
     _isLoading = true;
     notifyListeners();
-    _userToken = await Utils.getToken();
+    _userToken = await LocalStorageUtils.getToken();
 
     try {
       DocumentSnapshot<Map<String, dynamic>> userData =
@@ -63,8 +66,9 @@ class SettingsProvider with ChangeNotifier {
           userData.data()!.containsKey(MyStrings.profileUrl)
               ? userData[MyStrings.profileUrl]
               : null;
-      _bodyWeight = userData[MyStrings.bodyWeight];
-       _userEmail = userData[MyStrings.email];
+      _bodyWeight =
+          userData[MyStrings.bodyWeight] ?? await LocalStorageUtils.getLocalBodyWeight();
+      _userEmail = userData[MyStrings.email];
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -141,10 +145,14 @@ class SettingsProvider with ChangeNotifier {
       getUserData();
       nameController.clear();
       weightController.clear();
+
       _isUpdatingProfile = false;
       notifyListeners();
       if (context.mounted) {
-        Provider.of<HomeProvider>(context,listen: false).getInitialData(context);
+        Provider.of<HomeProvider>(
+          context,
+          listen: false,
+        ).getInitialData(context);
         context.router.pop();
       }
     } catch (e) {
@@ -160,8 +168,14 @@ class SettingsProvider with ChangeNotifier {
       "Choose a image source",
     );
     if (_pickedImage != null) {
+      showPickedImage = true;
       _initialImage = File(_pickedImage!.path);
     }
+    notifyListeners();
+  }
+
+  void dontShowPickedImage() {
+    showPickedImage = false;
     notifyListeners();
   }
 
@@ -169,7 +183,8 @@ class SettingsProvider with ChangeNotifier {
     _isLoggingOutLoading = true;
     notifyListeners();
     try {
-      Utils.deleteToken();
+      LocalStorageUtils.deleteToken();
+      LocalStorageUtils.saveLocalBodyWeight(0.0);
       await GoogleSignIn().signOut();
       await FirebaseAuth.instance.signOut();
       Utils.showCustomToast("Logged out successfully");

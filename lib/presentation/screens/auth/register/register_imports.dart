@@ -9,7 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/constants/my_assets.dart';
 import '../../../../core/constants/my_colors.dart';
-import '../../../../core/utils/utils.dart';
+import '../../../utils.dart';
 import '../../../common_widgets/divider_text.dart';
 import '../../../common_widgets/elevated_cta.dart';
 import '../common_widgets/auth_bottom_bar.dart';

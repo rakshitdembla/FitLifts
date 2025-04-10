@@ -38,7 +38,7 @@ class PerformanceCard extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.directions_walk_outlined,
-                        color: MyColors.graphBarCyan,
+                        color: MyColors.cyan,
                       ),
                       SizedBox(width: 8.w),
                       Text(

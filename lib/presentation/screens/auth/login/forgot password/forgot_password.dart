@@ -81,6 +81,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       : ElevatedCTA(
                         title: "Send Reset Link",
                         onPressed: () {
+                           FocusScope.of(context).unfocus();
                           forgotPassProvider.forgotPassword(
                             emailController.text.toLowerCase().trim(),
                             context,

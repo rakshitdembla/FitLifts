@@ -1,8 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/utils.dart';
 import 'package:fitlifts/presentation/routes/auto_router.gr.dart';
+import 'package:fitlifts/services/auth_utils.dart';
 import 'package:flutter/cupertino.dart';
+
+import '../../../../services/local_storage_utils.dart';
 
 class RegisterProvider with ChangeNotifier {
   bool _isLoading = false;
@@ -19,7 +22,7 @@ class RegisterProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      if (!Utils.isValidEmail(email)) {
+      if (!AuthUtils.isValidEmail(email)) {
         Utils.showCustomToast(
           "Please enter a valid email (e.g., name@example.com)",
         );
@@ -28,7 +31,7 @@ class RegisterProvider with ChangeNotifier {
         return;
       }
 
-      if (!Utils.isValidPassword(password)) {
+      if (!AuthUtils.isValidPassword(password)) {
         Utils.showCustomToast(
           "Use 8+ characters with at least 1 number for your password",
         );
@@ -58,7 +61,7 @@ class RegisterProvider with ChangeNotifier {
         return;
       }
 
-      await Utils.saveToken(_auth.currentUser!.uid);
+      await LocalStorageUtils.saveToken(_auth.currentUser!.uid);
       if (context.mounted) {
         context.router.replaceAll([UserProfileScreenRoute()]);
       }

@@ -2,9 +2,8 @@ import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fitlifts/core/constants/my_colors.dart';
-import 'package:fitlifts/core/utils/utils.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'package:fitlifts/presentation/utils.dart';
+import 'package:fitlifts/data/data_source/local/sqf%20database/db_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path/path.dart';
@@ -17,6 +16,9 @@ class ExportImportDbProvider with ChangeNotifier {
 
   bool _isImportingDb = false;
   bool get isImportingDb => _isImportingDb;
+
+  bool _isDeleteingData = false;
+  bool get isDeleteingData => _isDeleteingData;
 
   Future<void> exportDB() async {
     _isExportingDb = true;
@@ -80,6 +82,21 @@ class ExportImportDbProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> removeAllData() async {
+    _isDeleteingData = true;
+    notifyListeners();
+
+    try {
+      await DBHelper().deleteAllData();
+      Utils.showCustomToast("All records have been successfully deleted.");
+    } catch (e) {
+      Utils.showCustomToast("Oops! Something went wrong while deleting data.");
+    }
+
+    _isDeleteingData = false;
+    notifyListeners();
+  }
+
   void showDialogBox(
     String title,
     String warnings,
@@ -96,65 +113,64 @@ class ExportImportDbProvider with ChangeNotifier {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.r),
             ),
-          
+
             insetAnimationCurve: Easing.linear,
-            child: IntrinsicHeight(    
+            child: IntrinsicHeight(
               child: Padding(
                 padding: EdgeInsets.fromLTRB(10.w, 10.h, 10.w, 3.h),
                 child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          color: MyColors.whiteText,
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        color: MyColors.whiteText,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w600,
                       ),
-                      SizedBox(height: 15.h),
-                      Text(
-                        warnings,
-                        style: TextStyle(
-                          color: MyColors.whiteText,
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w200,
-                        ),
+                    ),
+                    SizedBox(height: 15.h),
+                    Text(
+                      warnings,
+                      style: TextStyle(
+                        color: MyColors.whiteText,
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w200,
                       ),
-                     SizedBox(height: 15.h,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: context.router.pop,
-                            child: Text(
-                              "Cancel",
-                              style: TextStyle(
-                                color: MyColors.electricBlue,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w700,
-                              ),
+                    ),
+                    SizedBox(height: 15.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: context.router.pop,
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(
+                              color: MyColors.electricBlue,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
-                
-                          TextButton(
-                            onPressed: onOK,
-                            child: Text(
-                              "Proceed",
-                              style: TextStyle(
-                                color: MyColors.electricBlue,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w700,
-                              ),
+                        ),
+
+                        TextButton(
+                          onPressed: onOK,
+                          child: Text(
+                            "Proceed",
+                            style: TextStyle(
+                              color: MyColors.electricBlue,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              
             ),
           ),
     );

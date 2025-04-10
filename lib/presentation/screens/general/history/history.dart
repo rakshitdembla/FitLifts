@@ -42,7 +42,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
         ),
         actions: [
           CustomDropDown(
-            style: GoogleFonts.poppins(color: MyColors.greyText, fontSize: 13.sp),
+            style: GoogleFonts.poppins(
+              color: MyColors.greyText,
+              fontSize: 13.sp,
+            ),
             hintText: "Sort by",
             items: [
               DropdownMenuItem<String>(value: "latest", child: Text("Latest")),
@@ -73,6 +76,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           ).refresh(context);
         },
         child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
           child: Padding(
             padding: EdgeInsets.fromLTRB(8.w, 2.h, 8.w, 5.h),
             child: SafeArea(

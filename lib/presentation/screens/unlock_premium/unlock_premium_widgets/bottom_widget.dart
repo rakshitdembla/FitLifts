@@ -1,5 +1,5 @@
-import 'package:fitlifts/core/utils/utils.dart';
-import 'package:fitlifts/presentation/screens/providers/user_initial_details_provider.dart';
+import 'package:fitlifts/presentation/utils.dart';
+import 'package:fitlifts/services/providers/user_initial_details_provider.dart';
 import 'package:fitlifts/presentation/screens/unlock_premium/unlock_premium_provider.dart';
 import 'package:flutter/material.dart';
 

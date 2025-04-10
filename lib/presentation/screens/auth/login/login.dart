@@ -85,6 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 alignment: Alignment.centerRight,
                 child: InkWell(
                   onTap: () {
+                    FocusScope.of(context).unfocus();
                     context.router.push(
                       ForgotPasswordScreenRoute(
                         email: emailController.text.trim().toLowerCase(),
@@ -109,6 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       : ElevatedCTA(
                         title: "Log In",
                         onPressed: () {
+                          FocusScope.of(context).unfocus();
                           loginProvider.loginWithEmailPassword(
                             emailController.text.toLowerCase().trim(),
                             passController.text,
@@ -133,6 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         title: "Continue with Google",
                         iconImage: AssetImage(Assets.assetsGoogle),
                         onTap: () {
+                          FocusScope.of(context).unfocus();
                           socialLoginProvider.continueWithGoogle(context);
                         },
                       );
@@ -160,6 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               AuthBottomBar(
                 onPressed: () {
+                  FocusScope.of(context).unfocus();
                   context.router.push(RegisterScreenRoute());
                 },
                 text1: "Don't have an account?",

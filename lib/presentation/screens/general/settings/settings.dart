@@ -17,7 +17,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         gotInitialData = true;
       }
 
-      Provider.of<AdsProvider>(context, listen: false).initializeSettingsAd(context);
+      Provider.of<AdsProvider>(
+        context,
+        listen: false,
+      ).initializeSettingsAd(context);
     });
     super.didChangeDependencies();
   }
@@ -148,24 +151,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                     ),
                     SizedBox(height: 10.h),
-                    ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: Text(
-                        "Dark Theme",
-                        style: TextStyle(
-                          color: MyColors.whiteText,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 17.sp,
-                        ),
-                      ),
-                      trailing: Switch.adaptive(
-                        activeColor: MyColors.whiteText,
-                        activeTrackColor: MyColors.electricBlue,
-                        value: true,
-                        onChanged: (value) {},
-                      ),
-                    ),
 
+                    // Consumer<ThemeProvider>(
+
+                    //   builder: (context, state,child) {
+                    //     return ListTile(
+                    //       contentPadding: EdgeInsets.zero,
+                    //       leading: Text(
+                    //         "Dark Theme",
+                    //         style: TextStyle(
+                    //           color: MyColors.whiteText,
+                    //           fontWeight: FontWeight.w700,
+                    //           fontSize: 17.sp,
+                    //         ),
+                    //       ),
+                    //       trailing: Switch.adaptive(
+                    //         activeColor: MyColors.whiteText,
+                    //         activeTrackColor: MyColors.electricBlue,
+                    //         value: state.isDarkTheme,
+                    //         onChanged: (value) {
+                    //           state.toogleTheme(value);
+                    //         },
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
                     SettingsTile(
                       onTapAction: () {
                         context.router.push(UnlockPremiumRoute());
@@ -173,7 +183,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       title: "Go Ads Free",
                       trailingWidget: Icon(
                         Icons.diamond_outlined,
-                        color: MyColors.graphBarCyan,
+                        color: MyColors.cyan,
                         size: 30.r,
                       ),
                     ),
@@ -202,8 +212,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 userInitialDetailsProvider.isUserPremium
                                     ? dbProvider.showDialogBox(
                                       "Export Data Info!",
-                                      """- Only workout data will be exported.\n
-- Progress images will NOT be included in the export.""",
+                                      """- Do not change anything in the exported file manually. Doing so may cause errors or data loss if you try to import it again.""",
                                       () {
                                         context.router.pop();
                                         dbProvider.exportDB();
@@ -216,15 +225,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               },
                               trailingWidget:
                                   dbProvider.isExportingDb
-                                      ? SizedBox(
-                                        height: 24.h,
-                                        width: 24.w,
-                                        child:
-                                            CircularProgressIndicator.adaptive(
-                                              backgroundColor:
-                                                  MyColors.whiteText,
-                                            ),
-                                      )
+                                      ? SettingsLoading()
                                       : Icon(
                                         Icons.outbox_outlined,
                                         color: MyColors.primaryWhite,
@@ -238,7 +239,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     ? dbProvider.showDialogBox(
                                       "Import Data Warning!",
                                       """- Importing data will erase all your current records, if any.\n
-- Please note that progress images will not be imported and will be permanently lost.\n
 - Proceed only if you have backed up your data.""",
                                       () async {
                                         await dbProvider.importDB();
@@ -254,20 +254,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               },
                               trailingWidget:
                                   dbProvider.isImportingDb
-                                      ? SizedBox(
-                                        height: 24.h,
-                                        width: 24.w,
-                                        child:
-                                            CircularProgressIndicator.adaptive(
-                                              backgroundColor:
-                                                  MyColors.whiteText,
-                                            ),
-                                      )
+                                      ? SettingsLoading()
                                       : Icon(
                                         Icons.move_to_inbox_outlined,
                                         color: MyColors.primaryWhite,
                                         size: 29.r,
                                       ),
+                            ),
+
+                            SettingsTile(
+                              title: "Delete Everything",
+                              trailingWidget:
+                                  dbProvider.isDeleteingData
+                                      ? SettingsLoading()
+                                      : Icon(
+                                        Icons.delete_forever,
+                                        color: MyColors.primaryWhite,
+                                        size: 28.r,
+                                      ),
+                              onTapAction: () {
+                                dbProvider.showDialogBox(
+                                  "Delete Data Warning!",
+                                  """- This action will permanently delete all your records.\n
+- This cannot be undone. Proceed with caution.""",
+                                  dbProvider.removeAllData,
+                                  context,
+                                );
+                              },
                             ),
                           ],
                         );
@@ -311,14 +324,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       title: "Logout",
                       trailingWidget:
                           state.isLoggingOutLoading
-                              ? SizedBox(
-                                height: 24.h,
-                                width: 24.w,
-
-                                child: CircularProgressIndicator.adaptive(
-                                  backgroundColor: MyColors.whiteText,
-                                ),
-                              )
+                              ? SettingsLoading()
                               : Icon(
                                 Icons.logout,
                                 color: MyColors.primaryWhite,

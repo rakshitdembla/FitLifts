@@ -1,6 +1,7 @@
 import 'package:fitlifts/presentation/screens/general/workouts/exercises_view/exercises_view_provider.dart';
-import 'package:fitlifts/presentation/screens/providers/ads_provider.dart';
-import 'package:fitlifts/presentation/screens/providers/user_initial_details_provider.dart';
+import 'package:fitlifts/services/providers/ads_provider.dart';
+import 'package:fitlifts/services/providers/theme_provider.dart';
+import 'package:fitlifts/services/providers/user_initial_details_provider.dart';
 import 'package:fitlifts/core/constants/my_colors.dart';
 import 'package:fitlifts/core/constants/my_fonts.dart';
 import 'package:fitlifts/presentation/routes/auto_router.dart';
@@ -15,11 +16,8 @@ import 'package:fitlifts/presentation/screens/auth/login/login_provider.dart';
 import 'package:fitlifts/presentation/screens/auth/profile/profile_provider.dart';
 import 'package:fitlifts/presentation/screens/auth/providers/social_login_provider.dart';
 import 'package:fitlifts/presentation/screens/auth/register/register_provider.dart';
-import 'package:fitlifts/presentation/screens/general/gallery/add_progress_image/add_progress_provider.dart';
-import 'package:fitlifts/presentation/screens/general/gallery/gallery_view/gallery_view_provider.dart';
-import 'package:fitlifts/presentation/screens/general/gallery/gallery_provider.dart';
 import 'package:fitlifts/presentation/screens/general/history/providers/history_data_provider.dart';
-import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/utils.dart';
 import 'package:fitlifts/presentation/screens/general/home/home_provider.dart';
 import 'package:fitlifts/presentation/screens/general/workouts/workout_provider.dart';
 import 'package:fitlifts/presentation/screens/unlock_premium/unlock_premium_provider.dart';
@@ -37,7 +35,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await dotenv.load(fileName: "assets/.env");
-  await Utils.requestPermissions();
   BackgroundIsolateBinaryMessenger.ensureInitialized(
     RootIsolateToken.instance!,
   );
@@ -47,7 +44,72 @@ void main() async {
   ]);
   BackgroundIsolateBinaryMessenger.instance;
   MobileAds.instance.initialize();
-  runApp(MyApp());
+  Utils.requestPermissions;
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<SearchProvider>(
+          create: (context) => SearchProvider(),
+        ),
+        ChangeNotifierProvider<AddWorkoutProvider>(
+          create: (context) => AddWorkoutProvider(),
+        ),
+        ChangeNotifierProvider<ChartProvider>(
+          create: (context) => ChartProvider(),
+        ),
+        ChangeNotifierProvider<HistoryDataProvider>(
+          create: (context) => HistoryDataProvider(),
+        ),
+        ChangeNotifierProvider<LoginProvider>(
+          create: (context) => LoginProvider(),
+        ),
+        ChangeNotifierProvider<SocialLoginProvider>(
+          create: (context) => SocialLoginProvider(),
+        ),
+        ChangeNotifierProvider<ForgotPassProvider>(
+          create: (context) => ForgotPassProvider(),
+        ),
+        ChangeNotifierProvider<RegisterProvider>(
+          create: (context) => RegisterProvider(),
+        ),
+        ChangeNotifierProvider<HomeProvider>(
+          create: (context) => HomeProvider(),
+        ),
+        ChangeNotifierProvider<ProfileProvider>(
+          create: (context) => ProfileProvider(),
+        ),
+        ChangeNotifierProvider<FetchWorkoutsProvider>(
+          create: (context) => FetchWorkoutsProvider(),
+        ),
+        ChangeNotifierProvider<LocalExercisesProvider>(
+          create: (context) => LocalExercisesProvider(),
+        ),
+        ChangeNotifierProvider<SettingsProvider>(
+          create: (context) => SettingsProvider(),
+        ),
+        ChangeNotifierProvider<AddCustomExerciseProvider>(
+          create: (context) => AddCustomExerciseProvider(),
+        ),
+        ChangeNotifierProvider<UnlockPremiumProvider>(
+          create: (context) => UnlockPremiumProvider(),
+        ),
+        ChangeNotifierProvider<UserInitialDetailsProvider>(
+          create: (context) => UserInitialDetailsProvider(),
+        ),
+        ChangeNotifierProvider<ExportImportDbProvider>(
+          create: (context) => ExportImportDbProvider(),
+        ),
+        ChangeNotifierProvider<AdsProvider>(create: (context) => AdsProvider()),
+        ChangeNotifierProvider<ExercisesViewProvider>(
+          create: (context) => ExercisesViewProvider(),
+        ),
+        ChangeNotifierProvider<ThemeProvider>(
+          create: (context) => ThemeProvider(),
+        ),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -57,93 +119,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      splitScreenMode: true,
-
-      designSize: const Size(360, 690),
-      minTextAdapt: true,
-      builder: (context, child) {
-        return MultiProvider(
-          providers: [
-            ChangeNotifierProvider<SearchProvider>(
-              create: (context) => SearchProvider(),
-            ),
-            ChangeNotifierProvider<AddWorkoutProvider>(
-              create: (context) => AddWorkoutProvider(),
-            ),
-            ChangeNotifierProvider<AddProgressProvider>(
-              create: (context) => AddProgressProvider(),
-            ),
-            ChangeNotifierProvider<GalleryProvider>(
-              create: (context) => GalleryProvider(),
-            ),
-            ChangeNotifierProvider<ChartProvider>(
-              create: (context) => ChartProvider(),
-            ),
-            ChangeNotifierProvider<HistoryDataProvider>(
-              create: (context) => HistoryDataProvider(),
-            ),
-            ChangeNotifierProvider<GalleryViewProvider>(
-              create: (context) => GalleryViewProvider(),
-            ),
-            ChangeNotifierProvider<LoginProvider>(
-              create: (context) => LoginProvider(),
-            ),
-            ChangeNotifierProvider<SocialLoginProvider>(
-              create: (context) => SocialLoginProvider(),
-            ),
-            ChangeNotifierProvider<ForgotPassProvider>(
-              create: (context) => ForgotPassProvider(),
-            ),
-            ChangeNotifierProvider<RegisterProvider>(
-              create: (context) => RegisterProvider(),
-            ),
-            ChangeNotifierProvider<HomeProvider>(
-              create: (context) => HomeProvider(),
-            ),
-            ChangeNotifierProvider<ProfileProvider>(
-              create: (context) => ProfileProvider(),
-            ),
-            ChangeNotifierProvider<FetchWorkoutsProvider>(
-              create: (context) => FetchWorkoutsProvider(),
-            ),
-            ChangeNotifierProvider<LocalExercisesProvider>(
-              create: (context) => LocalExercisesProvider(),
-            ),
-            ChangeNotifierProvider<SettingsProvider>(
-              create: (context) => SettingsProvider(),
-            ),
-            ChangeNotifierProvider<AddCustomExerciseProvider>(
-              create: (context) => AddCustomExerciseProvider(),
-            ),
-            ChangeNotifierProvider<UnlockPremiumProvider>(
-              create: (context) => UnlockPremiumProvider(),
-            ),
-            ChangeNotifierProvider<UserInitialDetailsProvider>(
-              create: (context) => UserInitialDetailsProvider(),
-            ),
-            ChangeNotifierProvider<ExportImportDbProvider>(
-              create: (context) => ExportImportDbProvider(),
-            ),
-            ChangeNotifierProvider<AdsProvider>(
-              create: (context) => AdsProvider(),
-            ),
-            ChangeNotifierProvider<ExercisesViewProvider>(
-              create: (context) => ExercisesViewProvider(),
-            ),
-          ],
-          child: MaterialApp.router(
-            routerConfig: _appRouter.config(),
-            debugShowCheckedModeBanner: false,
-            title: 'FitLifts',
-            theme: ThemeData(
-              textTheme: MyFonts.fontTheme,
-              fontFamily: MyFonts.interFont,
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: MyColors.electricBlue,
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return ScreenUtilInit(
+          splitScreenMode: true,
+          designSize: const Size(360, 690),
+          minTextAdapt: true,
+          builder: (context, child) {
+            return MaterialApp.router(
+              routerConfig: _appRouter.config(),
+              debugShowCheckedModeBanner: false,
+              title: 'FitLifts',
+              themeMode: themeProvider.themeMode,
+              theme: ThemeData(
+                textTheme: MyFonts.fontTheme,
+                fontFamily: MyFonts.interFont,
+                colorScheme: ColorScheme.fromSeed(
+                  seedColor: MyColors.electricBlue,
+                ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );

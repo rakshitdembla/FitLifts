@@ -1,7 +1,7 @@
-import 'package:fitlifts/core/utils/utils.dart';
 import 'package:fitlifts/presentation/common_widgets/circular_progress.dart';
 import 'package:fitlifts/presentation/screens/auth/common_widgets/auth_dropdown.dart';
 import 'package:fitlifts/presentation/screens/auth/profile/profile_provider.dart';
+import 'package:fitlifts/services/auth_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -120,9 +120,10 @@ class _ProfileFormState extends State<ProfileForm> {
                 : ElevatedCTA(
                   title: "Complete",
                   onPressed: () {
+                    FocusScope.of(context).unfocus();
                     profileProvider.createUserProfile(
                       context,
-                       Utils.getUserEmail()!,
+                       AuthUtils.getUserEmail()!,
                       nameController.text.trim(),
                       ageController.text.trim(),
                       heightController.text.trim(),

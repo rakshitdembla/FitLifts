@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/utils.dart';
+import 'package:fitlifts/services/auth_utils.dart';
+import 'package:fitlifts/services/local_storage_utils.dart';
 import 'package:flutter/cupertino.dart';
 
 class LoginProvider with ChangeNotifier {
@@ -16,14 +18,14 @@ class LoginProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      if (!Utils.isValidEmail(email)) {
+      if (!AuthUtils.isValidEmail(email)) {
         Utils.showCustomToast("Enter a valid email (e.g., you@example.com)");
         _isLoading = false;
         notifyListeners();
         return;
       }
 
-      if (!Utils.isValidPassword(password)) {
+      if (!AuthUtils.isValidPassword(password)) {
         Utils.showCustomToast(
           "Password needs 8+ characters with at least 1 number",
         );
@@ -44,9 +46,9 @@ class LoginProvider with ChangeNotifier {
         );
         return;
       }
-      await Utils.saveToken(_auth.currentUser!.uid);
+      await LocalStorageUtils.saveToken(_auth.currentUser!.uid);
       if (context.mounted) {
-        await Utils.firebaseAuthProfileCheck(context);
+        await AuthUtils.firebaseAuthProfileCheck(context);
       }
       _isLoading = false;
       notifyListeners();

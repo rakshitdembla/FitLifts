@@ -1,16 +1,17 @@
 import 'dart:async';
-import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/utils.dart';
 import 'package:fitlifts/data/models/step_model.dart';
 import 'package:fitlifts/presentation/screens/general/home/isolates/check_permission.dart';
 import 'package:fitlifts/presentation/screens/general/home/isolates/fetch_toady_stepsdata.dart';
 import 'package:fitlifts/presentation/screens/general/home/isolates/fetch_today_workout.dart';
 import 'package:fitlifts/presentation/screens/general/home/isolates/save_steps.dart';
-import 'package:fitlifts/presentation/screens/providers/user_initial_details_provider.dart';
+import 'package:fitlifts/services/providers/user_initial_details_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/constants/my_strings.dart';
+import '../../../../services/local_storage_utils.dart';
 
 class HomeProvider with ChangeNotifier {
   // Tracking and error state
@@ -57,13 +58,14 @@ class HomeProvider with ChangeNotifier {
   StreamSubscription<StepCount>? get stepsSubscription => _stepsSubscription;
 
   // Body weight
-  double _getBodyWeight = 70.00;
+  double? _getBodyWeight;
 
   /// Loads today's step, workout, and profile
   Future<void> getInitialData(BuildContext context) async {
     _gotInitialData = false;
     _isError = false;
     _isTracking = false;
+    notifyListeners();
 
     UserInitialDetailsProvider userInitialDetailsProvider =
         Provider.of<UserInitialDetailsProvider>(context, listen: false);
@@ -72,10 +74,10 @@ class HomeProvider with ChangeNotifier {
     await userInitialDetailsProvider.getUserDetails();
 
     // Get user data
-    _getBodyWeight =
-        userInitialDetailsProvider.bodyWeight ?? await Utils.getBodyWeight();
+    _getBodyWeight = userInitialDetailsProvider.bodyWeight ?? 70.00;
     _profileImage = userInitialDetailsProvider.profileUrl;
     _userName = userInitialDetailsProvider.userName;
+    notifyListeners();
 
     await getTodayData();
 
@@ -110,6 +112,7 @@ class HomeProvider with ChangeNotifier {
     }
 
     _workoutVolume = getWorkoutData as double;
+    notifyListeners();
   }
 
   /// Starts tracking steps using device sensors
@@ -124,16 +127,17 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
 
     // Fetch db steps
-    _dbSteps = await Utils.getLastSteps();
+    _dbSteps = await LocalStorageUtils.getLastSteps();
     // Check permissions first
     final checkPermission = await CheckPermissionIsolate.check();
+    debugPrint("checking permission -1");
     if (checkPermission == false) {
       Utils.showCustomToast(
-        "Please allow activity tracking in settings to count your steps.",
+        "Please allow activity tracking permission from settings to count your steps.",
       );
+      await Future.delayed(const Duration(milliseconds: 300));
       await Permission.activityRecognition.request();
       _isTracking = false;
-      _isError = true;
       notifyListeners();
       return;
     } else if (checkPermission == null) {
@@ -148,13 +152,19 @@ class HomeProvider with ChangeNotifier {
     try {
       // Subscribe to step count stream
       _stepsSubscription = Pedometer.stepCountStream.distinct().listen(
-        (StepCount event) {
+        (StepCount event) async {
+          _isTracking = true;
           final newSteps = event.steps;
           _totalSteps = event.steps;
 
-          if (newSteps < dbSteps) {
+          if (newSteps < _dbSteps) {
             // Handle case where step count resets (device restart)
             _steps = newSteps;
+          } else if (_dbSteps == 0 && newSteps > 15) {
+            // Handle app reinstall
+            await LocalStorageUtils.saveLastSteps(newSteps);
+            _dbSteps = await LocalStorageUtils.getLastSteps();
+            _steps = 0;
           } else {
             // Normal case - subtract previously stored steps
             _steps = newSteps - dbSteps;
@@ -162,7 +172,7 @@ class HomeProvider with ChangeNotifier {
 
           // Update derived metrics
           _distance = _steps * 0.762;
-          _calories = (_steps * _getBodyWeight * 0.57) / 1000;
+          _calories = (_steps * _getBodyWeight! * 0.57) / 1000;
           notifyListeners();
         },
         onError: (error) {
@@ -191,10 +201,11 @@ class HomeProvider with ChangeNotifier {
     _isError = false;
     _isTracking = false;
     notifyListeners();
+    Utils.showCustomToast("Saving your session and stopping tracking…");
 
     // Save steps if we have valid data
-    if (dbSteps > 0) {
-      await Utils.saveLastSteps(_dbSteps);
+    if (_dbSteps > 0) {
+      await LocalStorageUtils.saveLastSteps(_dbSteps);
     }
 
     // Save step data through isolate
@@ -206,6 +217,7 @@ class HomeProvider with ChangeNotifier {
         calories: _calories,
       ),
     );
+    await getTodayData();
 
     if (stepsResult == false) {
       Utils.showCustomToast("Step data wasn't saved. We'll try again shortly.");
@@ -216,13 +228,12 @@ class HomeProvider with ChangeNotifier {
     _stepsSubscription = null;
 
     // Refresh data
-    getTodayData();
     _stopTrackingSuccess = true;
   }
 
   /// Refreshes all data manually
-  Future<void> refreshData() async {
-    getTodayData();
+  Future<void> refreshData(BuildContext context) async {
+    getInitialData(context);
     await Future.delayed(const Duration(seconds: 1));
     Utils.showCustomToast("All set! Your data has been refreshed.");
   }

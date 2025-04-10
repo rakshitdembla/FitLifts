@@ -1,4 +1,4 @@
-import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/utils.dart';
 import 'package:fitlifts/presentation/screens/general/workouts/isolates/fetch_workouts.dart';
 import 'package:fitlifts/presentation/screens/general/workouts/isolates/workouts_group.dart';
 import 'package:flutter/widgets.dart';

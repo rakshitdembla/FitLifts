@@ -114,7 +114,7 @@ class _UnlockPremiumState extends State<UnlockPremium> {
                   h2: "Access future updates and special features.",
                   icon: Icon(
                     Icons.diamond,
-                    color: MyColors.graphBarCyan,
+                    color: MyColors.cyan,
                     size: 35.r,
                   ),
                 ).animate().slideX(

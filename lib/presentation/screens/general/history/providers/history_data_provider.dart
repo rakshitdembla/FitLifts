@@ -2,7 +2,7 @@ import 'package:fitlifts/data/data_source/local/sqf%20database/db_helper.dart';
 import 'package:fitlifts/data/models/workout_model.dart';
 import 'package:fitlifts/data/models/history_data_model.dart';
 import 'package:fitlifts/data/models/step_model.dart';
-import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/utils.dart';
 import 'package:fitlifts/presentation/screens/general/history/providers/chart_provider.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
@@ -101,9 +101,6 @@ class HistoryDataProvider with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       _isLoading = false;
-      Utils.showCustomToast(
-        "We couldn't load your history data. Please try again later.",
-      );
     }
   }
 
@@ -120,5 +117,6 @@ class HistoryDataProvider with ChangeNotifier {
     getHistoryData();
 
     await Future.delayed(const Duration(seconds: 1));
+          Utils.showCustomToast("Your data has been refreshed successfully!");
   }
 }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitlifts/core/constants/my_strings.dart';
-import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/utils.dart';
+import 'package:fitlifts/services/local_storage_utils.dart';
 import 'package:flutter/foundation.dart';
 
 class UserInitialDetailsProvider with ChangeNotifier {
@@ -14,11 +15,11 @@ class UserInitialDetailsProvider with ChangeNotifier {
   String? _profileUrl;
   String? get profileUrl => _profileUrl;
 
-   String? _userName;
+  String? _userName;
   String? get userName => _userName;
 
   Future<void> getUserDetails() async {
-    _userToken = await Utils.getToken();
+    _userToken = await LocalStorageUtils.getToken();
     if (_userToken != null) {
       try {
         DocumentSnapshot<Map<String, dynamic>> userMap =
@@ -33,6 +34,7 @@ class UserInitialDetailsProvider with ChangeNotifier {
         _isUserPremium = userMap[MyStrings.isPremiumUser];
 
         _bodyWeight = userMap[MyStrings.bodyWeight];
+        await LocalStorageUtils.saveLocalBodyWeight(_bodyWeight ?? 0.0);
 
         _userName = userMap[MyStrings.name];
 
@@ -41,7 +43,7 @@ class UserInitialDetailsProvider with ChangeNotifier {
         }
 
         notifyListeners();
-      } catch (e) {}
+      } catch (e) {  Utils.showCustomToast(e.toString());}
     }
   }
 }

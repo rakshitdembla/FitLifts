@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fitlifts/presentation/screens/providers/user_initial_details_provider.dart';
+import 'package:fitlifts/services/auth_utils.dart';
+import 'package:fitlifts/services/providers/user_initial_details_provider.dart';
 import 'package:fitlifts/core/constants/my_strings.dart';
-import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+
+import '../../../services/local_storage_utils.dart';
 
 class UnlockPremiumProvider with ChangeNotifier {
   late Razorpay _razorpay;
@@ -30,8 +33,8 @@ class UnlockPremiumProvider with ChangeNotifier {
   }
 
   Future<void> getUserData() async {
-    _userEmail = Utils.getUserEmail();
-    _userToken = await Utils.getToken();
+    _userEmail = AuthUtils.getUserEmail();
+    _userToken = await LocalStorageUtils.getToken();
   }
 
   //___________________________________________________________________

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 class MyColors {
   MyColors._();
 
@@ -23,14 +24,7 @@ class MyColors {
   static const darkGrey = Color(0xFF2E2E2E);
   static const vibrantGreen = Color(0xFF00C853);
   static const deepPurple = Color(0xFF673AB7);
-  // Bar Graph Colors
-  static const graphBackground = Color(0xFF001F3F); // Deep Navy for dark mode
-  static const graphBarGold = Color(0xFFE5C100); // Soft Gold for contrast
-  static const graphBarCyan = Color(
-    0xFF00E5FF,
-  ); // Vibrant Cyan for a modern look
-  static const graphBarOrange = Color(0xFFFF7043); // Muted Orange for warmth
-  static const graphBarGreen = Color(
-    0xFF00C853,
-  ); // Vibrant Green for fresh look
+  static const cyan = Color(0xFF00E5FF);
 }
+
+//Themes Coming Soon :D

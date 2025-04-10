@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../../../../../core/constants/my_colors.dart';
-import '../../../providers/ads_provider.dart';
+import '../../../../../services/providers/ads_provider.dart';
 
 @RoutePage()
 class PrivacyPolicyPage extends StatelessWidget {

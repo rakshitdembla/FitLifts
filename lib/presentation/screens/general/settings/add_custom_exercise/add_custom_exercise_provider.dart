@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/utils.dart';
 import 'package:fitlifts/data/data_source/local/exercises%20database/arms_exercises.dart';
 import 'package:fitlifts/data/data_source/local/exercises%20database/back_exercises.dart';
 import 'package:fitlifts/data/data_source/local/exercises%20database/cardio_exercises.dart';

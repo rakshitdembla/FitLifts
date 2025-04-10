@@ -1,10 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fitlifts/data/data_source/local/sqf%20database/db_helper.dart';
 import 'package:fitlifts/data/models/workout_model.dart';
-import 'package:fitlifts/core/utils/utils.dart';
+import 'package:fitlifts/presentation/utils.dart';
 import 'package:fitlifts/presentation/screens/general/workouts/workout_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../../services/local_storage_utils.dart';
 
 class AddWorkoutProvider with ChangeNotifier {
   bool _isLoading = false;
@@ -19,7 +21,7 @@ class AddWorkoutProvider with ChangeNotifier {
     TextEditingController weightController,
   ) async {
     _isLoading = true;
-    double bodyWeight = await Utils.getBodyWeight();
+    double bodyWeight = await LocalStorageUtils.getLocalBodyWeight();
     notifyListeners();
 
     if (exerciseName == null) {
@@ -37,7 +39,7 @@ class AddWorkoutProvider with ChangeNotifier {
       Utils.showCustomToast("Double-check those reps!");
       notifyListeners();
       return;
-    }
+    }  
 
     if (parsedLiftedWeight > 1000.00) {
       _isLoading = false;
