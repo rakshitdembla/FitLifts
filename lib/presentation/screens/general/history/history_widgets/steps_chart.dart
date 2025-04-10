@@ -61,8 +61,8 @@ class _StepBarChartState extends State<StepBarChart> {
                   majorGridLines: const MajorGridLines(width: 0),
                   axisLine: const AxisLine(width: 0), // Remove X-axis line
                   minimum: 0,
-                  interval: chartProvider.interval,
-                  maximum: chartProvider.maximum,
+                  interval: 2000,
+                  maximum: 20000,
                   labelStyle:  TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w900,

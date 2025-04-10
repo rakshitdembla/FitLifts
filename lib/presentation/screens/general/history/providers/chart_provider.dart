@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:fitlifts/data/data_source/local/sqf%20database/db_helper.dart';
 import 'package:fitlifts/data/models/graph_model.dart';
 import 'package:fitlifts/presentation/utils.dart';
@@ -12,11 +11,6 @@ class ChartProvider with ChangeNotifier {
 
   List<GraphDataModel> _filteredList = [];
   List<GraphDataModel> get filteredList => _filteredList;
-
-  double _maximum = 10000;
-  double get maximum => _maximum;
-  double _interval = 1000;
-  double get interval => _interval;
 
   Future<void> getWeekSteps() async {
     _isLoading = true;
@@ -42,8 +36,6 @@ class ChartProvider with ChangeNotifier {
               "d MMM",
             ).parse(a.date).compareTo(DateFormat("d MMM").parse(b.date)),
           );
-
-      getHighestSteps();
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -59,20 +51,5 @@ class ChartProvider with ChangeNotifier {
     return DateFormat("d MMM").format(date);
   }
 
-  void getHighestSteps() {
-    if (_filteredList.isEmpty) return;
 
-    final validSteps = _filteredList.map((e) => e.steps).reduce(max);
-
-    double paddedMax = validSteps * 1.10;
-
-    if (paddedMax > 1000) {
-      _maximum = (paddedMax / 1000).ceil() * 1000;
-    } else {
-      _maximum = (paddedMax / 100).ceil() * 100;
-    }
-    _maximum = _maximum.toDouble();
-
-    _interval = (_maximum / 10).toDouble();
-  }
 }

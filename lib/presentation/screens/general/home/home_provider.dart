@@ -130,7 +130,6 @@ class HomeProvider with ChangeNotifier {
     _dbSteps = await LocalStorageUtils.getLastSteps();
     // Check permissions first
     final checkPermission = await CheckPermissionIsolate.check();
-    debugPrint("checking permission -1");
     if (checkPermission == false) {
       Utils.showCustomToast(
         "Please allow activity tracking permission from settings to count your steps.",

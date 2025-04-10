@@ -43,7 +43,7 @@ class UserInitialDetailsProvider with ChangeNotifier {
         }
 
         notifyListeners();
-      } catch (e) {  Utils.showCustomToast(e.toString());}
+      } catch (e) {Utils.showCustomToast("Something went wrong.");}
     }
   }
 }

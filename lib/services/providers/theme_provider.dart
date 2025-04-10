@@ -18,7 +18,6 @@ class ThemeProvider with ChangeNotifier {
   }
 
   void checkTheme() async {
-    debugPrint('chcecking theme');
     final savedTheme = await LocalStorageUtils.getTheme();
 
     if (savedTheme != null) {
@@ -33,7 +32,6 @@ class ThemeProvider with ChangeNotifier {
     _isDarkTheme = value;
     _themeMode = _isDarkTheme ? ThemeMode.dark : ThemeMode.light;
     await LocalStorageUtils.saveTheme(_isDarkTheme);
-    debugPrint("$_isDarkTheme $_themeMode");
     notifyListeners();
   }
 }

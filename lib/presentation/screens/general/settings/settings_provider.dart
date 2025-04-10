@@ -184,13 +184,13 @@ class SettingsProvider with ChangeNotifier {
     notifyListeners();
     try {
       LocalStorageUtils.deleteToken();
-      LocalStorageUtils.saveLocalBodyWeight(0.0);
-      await GoogleSignIn().signOut();
+      context.router.replaceAll([LoginScreenRoute()]);
       await FirebaseAuth.instance.signOut();
+      await GoogleSignIn().signOut();
+      LocalStorageUtils.saveLocalBodyWeight(0.0);
       Utils.showCustomToast("Logged out successfully");
       _isLoggingOutLoading = false;
       notifyListeners();
-      context.router.replaceAll([LoginScreenRoute()]);
     } catch (e) {
       _isLoggingOutLoading = false;
       notifyListeners();

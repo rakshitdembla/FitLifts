@@ -151,31 +151,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                     ),
                     SizedBox(height: 10.h),
-
-                    // Consumer<ThemeProvider>(
-
-                    //   builder: (context, state,child) {
-                    //     return ListTile(
-                    //       contentPadding: EdgeInsets.zero,
-                    //       leading: Text(
-                    //         "Dark Theme",
-                    //         style: TextStyle(
-                    //           color: MyColors.whiteText,
-                    //           fontWeight: FontWeight.w700,
-                    //           fontSize: 17.sp,
-                    //         ),
-                    //       ),
-                    //       trailing: Switch.adaptive(
-                    //         activeColor: MyColors.whiteText,
-                    //         activeTrackColor: MyColors.electricBlue,
-                    //         value: state.isDarkTheme,
-                    //         onChanged: (value) {
-                    //           state.toogleTheme(value);
-                    //         },
-                    //       ),
-                    //     );
-                    //   },
-                    // ),
                     SettingsTile(
                       onTapAction: () {
                         context.router.push(UnlockPremiumRoute());
@@ -214,7 +189,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       "Export Data Info!",
                                       """- Do not change anything in the exported file manually. Doing so may cause errors or data loss if you try to import it again.""",
                                       () {
-                                        context.router.pop();
+                                        if (context.mounted) {
+                                          context.router.pop();
+                                        }
                                         dbProvider.exportDB();
                                       },
                                       context,
@@ -277,8 +254,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   "Delete Data Warning!",
                                   """- This action will permanently delete all your records.\n
 - This cannot be undone. Proceed with caution.""",
-                                  dbProvider.removeAllData,
-                                  context,
+                                  () {
+                                        if (context.mounted) {
+                                          context.router.pop();
+                                        }
+                                        dbProvider.removeAllData();
+                                      },
+                                      context,
+
+                                 
                                 );
                               },
                             ),
