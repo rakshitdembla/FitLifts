@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fitlifts/core/constants/my_colors.dart';
+import 'package:fitlifts/presentation/common_widgets/my_switch.dart';
+import 'package:fitlifts/presentation/screens/general/settings/settings_widgets/profile_container.dart';
 import 'package:fitlifts/presentation/utils.dart';
 import 'package:fitlifts/presentation/common_widgets/refreshbar.dart';
 import 'package:fitlifts/presentation/routes/auto_router.gr.dart';
@@ -8,6 +10,7 @@ import 'package:fitlifts/presentation/screens/general/settings/export_import_db/
 import 'package:fitlifts/presentation/screens/general/settings/settings_provider.dart';
 import 'package:fitlifts/presentation/screens/general/settings/settings_widgets/settings_loading.dart';
 import 'package:fitlifts/services/providers/ads_provider.dart';
+import 'package:fitlifts/services/providers/theme_provider.dart';
 import 'package:fitlifts/services/providers/user_initial_details_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

@@ -27,6 +27,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       backgroundColor: MyColors.primaryCharcoal,
       body: Consumer<SettingsProvider>(
@@ -57,97 +58,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 height: 100.h,
                                 child: CircularProgressLoading(),
                               )
-                              : Container(
-                                decoration: BoxDecoration(
-                                  color: MyColors.darkGrey,
-                                  borderRadius: BorderRadius.circular(10.r),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 5.w,
-                                        vertical: 4.h,
-                                      ),
-                                      child: Align(
-                                        alignment: Alignment.topRight,
-                                        child: Icon(
-                                          Icons.edit_note,
-                                          color: MyColors.whiteText,
-                                          size: 18.r,
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 25.w,
-                                        vertical: 15.h,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          CircleAvatar(
-                                            radius: 35.r,
-                                            child: ClipOval(
-                                              child:
-                                                  state.profileImage != null &&
-                                                          state
-                                                              .profileImage!
-                                                              .isNotEmpty
-                                                      ? Image.network(
-                                                        state.profileImage!,
-                                                        fit: BoxFit.cover,
-                                                        width: 70.w,
-                                                        height: 70.h,
-                                                      )
-                                                      : Icon(
-                                                        Icons.person,
-                                                        size: 32.5.r,
-                                                      ),
-                                            ),
-                                          ),
-                                          SizedBox(width: 30.w),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  state.userName ?? "User",
-                                                  style: TextStyle(
-                                                    color: MyColors.whiteText,
-                                                    fontWeight: FontWeight.w900,
-                                                    fontSize: 18.sp,
-                                                  ),
-                                                ),
-                                                SizedBox(height: 3.h),
-                                                Text(
-                                                  state.userEmail ??
-                                                      "user@example.com",
-                                                  style: TextStyle(
-                                                    color: MyColors.greyText,
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: 13.sp,
-                                                  ),
-                                                ),
-                                                SizedBox(height: 1.h),
-                                                Text(
-                                                  "Body Weight - ${state.bodyWeight} kg",
-                                                  style: TextStyle(
-                                                    color: MyColors.greyText,
-                                                    fontWeight: FontWeight.w900,
-                                                    fontSize: 13.sp,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                              : ProfileContainer(
+                                bodyWeight: state.bodyWeight,
+                                email: state.userEmail,
+                                gender: "@Gender Pending",
+                                profilePicture: state.profileImage,
+                                username: state.userName,
+                                isPremiumUser: false,
                               ),
                     ),
                     SizedBox(height: 10.h),
@@ -162,6 +79,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         size: 30.r,
                       ),
                     ),
+                    // SettingsTile(
+                    //   title: "Dark Theme",
+                    //   trailingWidget: MySwitch(
+                    //     onChanged: themeProvider.toogleTheme,
+                    //     value: themeProvider.isDarkTheme,
+                    //   ),
+                    // ),
                     SettingsTile(
                       onTapAction: () {
                         context.router.push(AddCustomExerciseRoute());
@@ -169,7 +93,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       title: "Add an exercise",
                       trailingWidget: Icon(
                         Icons.fitness_center,
-                        color: MyColors.primaryWhite,
+                        color: MyColors.whiteText,
                         size: 28.r,
                       ),
                     ),
@@ -205,7 +129,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       ? SettingsLoading()
                                       : Icon(
                                         Icons.outbox_outlined,
-                                        color: MyColors.primaryWhite,
+                                        color: MyColors.whiteText,
                                         size: 29.r,
                                       ),
                             ),
@@ -234,7 +158,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       ? SettingsLoading()
                                       : Icon(
                                         Icons.move_to_inbox_outlined,
-                                        color: MyColors.primaryWhite,
+                                        color: MyColors.whiteText,
                                         size: 29.r,
                                       ),
                             ),
@@ -246,7 +170,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       ? SettingsLoading()
                                       : Icon(
                                         Icons.delete_forever,
-                                        color: MyColors.primaryWhite,
+                                        color: MyColors.whiteText,
                                         size: 28.r,
                                       ),
                               onTapAction: () {
@@ -255,14 +179,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   """- This action will permanently delete all your records.\n
 - This cannot be undone. Proceed with caution.""",
                                   () {
-                                        if (context.mounted) {
-                                          context.router.pop();
-                                        }
-                                        dbProvider.removeAllData();
-                                      },
-                                      context,
-
-                                 
+                                    if (context.mounted) {
+                                      context.router.pop();
+                                    }
+                                    dbProvider.removeAllData();
+                                  },
+                                  context,
                                 );
                               },
                             ),
@@ -277,7 +199,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       title: "Tracking Accuracy",
                       trailingWidget: Icon(
                         Icons.android,
-                        color: MyColors.primaryWhite,
+                        color: MyColors.whiteText,
                         size: 30.r,
                       ),
                     ),
@@ -289,7 +211,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       },
                       trailingWidget: Icon(
                         Icons.privacy_tip_outlined,
-                        color: MyColors.primaryWhite,
+                        color: MyColors.whiteText,
+                        size: 30.r,
+                      ),
+                    ),
+                    SettingsTile(
+                      title: "Terms & Conditions",
+                      onTapAction: () {
+                        context.router.push(TermsConditionsWebRoute());
+                      },
+                      trailingWidget: Icon(
+                        Icons.description_outlined,
+                        color: MyColors.whiteText,
                         size: 30.r,
                       ),
                     ),
@@ -300,7 +233,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       title: "About FitLifts",
                       trailingWidget: Icon(
                         Icons.info_outline,
-                        color: MyColors.primaryWhite,
+                        color: MyColors.whiteText,
                         size: 30.r,
                       ),
                     ),
@@ -311,7 +244,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ? SettingsLoading()
                               : Icon(
                                 Icons.logout,
-                                color: MyColors.primaryWhite,
+                                color: MyColors.whiteText,
                                 size: 28.r,
                               ),
                       onTapAction: () {

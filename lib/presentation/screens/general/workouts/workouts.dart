@@ -53,7 +53,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
           onPressed: () {
             context.router.push(AddWorkoutRoute());
           },
-          child: Icon(Icons.add, color: MyColors.primaryWhite, size: 25.sp),
+          child: Icon(Icons.add, color: MyColors.whiteText, size: 25.sp),
         ),
       ),
       backgroundColor: MyColors.primaryCharcoal,
@@ -149,13 +149,13 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                           title: Text(
                             date,
                             style: TextStyle(
-                              color: MyColors.primaryWhite,
+                              color: MyColors.whiteText,
                               fontWeight: FontWeight.w900,
                               fontSize: 15.sp,
                             ),
                           ),
-                          iconColor: MyColors.primaryWhite,
-                          collapsedIconColor: MyColors.primaryWhite,
+                          iconColor: MyColors.whiteText,
+                          collapsedIconColor: MyColors.whiteText,
                           children: [
                             ListView.builder(
                               shrinkWrap: true,
@@ -174,7 +174,7 @@ class _WorkoutsScreenState extends State<WorkoutsScreen>
                                   title: Text(
                                     workout.exerciseName,
                                     style: TextStyle(
-                                      color: MyColors.primaryWhite,
+                                      color: MyColors.whiteText,
                                     ),
                                   ),
                                   subtitle: Text(

@@ -28,6 +28,8 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: AddCustomExerciseRoute.page),
     AutoRoute(page: TrackingAccuracyPageRoute.page),
     AutoRoute(page: UpdateProfilePageRoute.page),
+    AutoRoute(page: TermsConditionsWebRoute.page),
+    AutoRoute(page: PrivacyWebRoute.page),
   ];
 
   @override

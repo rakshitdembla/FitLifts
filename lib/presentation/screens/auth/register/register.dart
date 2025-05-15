@@ -149,6 +149,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   )
                   : SizedBox.shrink(),
+                  AgreeToConditions()
             ],
           ),
         ),

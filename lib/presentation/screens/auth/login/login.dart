@@ -153,6 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   )
                   : SizedBox.shrink(),
+                  AgreeToConditions()
             ],
           ),
         ),
