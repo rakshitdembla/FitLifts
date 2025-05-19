@@ -12,7 +12,36 @@
           "package_name": "com.dropdesire.fitlifts"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "782629770073-a8au55q46vtkqbaih0ef7oi9umrtjrpf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dropdesire.fitlifts",
+            "certificate_hash": "b0ef38559ad0baf25c5fa01ea7949a8e02cbb9ce"
+          }
+        },
+        {
+          "client_id": "782629770073-acjirs3ecvj8dpvtiq10f9jsecfes04r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dropdesire.fitlifts",
+            "certificate_hash": "85d69050ed266843bf5ca6571413014286f551b9"
+          }
+        },
+        {
+          "client_id": "782629770073-ufha22km20kuds2qg3iqqmot5rq8ddbm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dropdesire.fitlifts",
+            "certificate_hash": "1864c1fdb2b225bbf9cd0fcc05a8b7cb3e1a5143"
+          }
+        },
+        {
+          "client_id": "782629770073-nkuif7i0sv6cgo821sm79amfgevijokt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCZhEy7wRKV7vaWk0p9eKReTdy4pLR4MfM"
@@ -20,7 +49,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "782629770073-nkuif7i0sv6cgo821sm79amfgevijokt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "782629770073-pgavhhd2adkl7m42kflk5b39edu1eoib.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dropdesire.fitlifts"
+              }
+            }
+          ]
         }
       }
     }
