@@ -2,6 +2,9 @@
 
 **FitLifts** is your complete fitness tracking app — monitor steps, calories, workout volume, and performance with a minimal, intuitive UI. Ideal for fitness enthusiasts and beginners alike.
 
+> 🔧 Built on **Firebase** for backend services and authentication.
+> 🚀 Uses **Isolates** to offload heavy SQLite operations for smoother performance.
+
 ---
 
 ## 🚀 Features Overview
@@ -156,3 +159,4 @@ You can find **FitLifts** on the Play Store here:
 [<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/2560px-Google_Play_Store_badge_EN.svg.png" height="20"/>](https://play.google.com/store/apps/details?id=com.dropdesire.fitlifts&hl=en_IN)
 
 ---
+
