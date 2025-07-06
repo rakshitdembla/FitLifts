@@ -4,6 +4,7 @@
 
 > 🔧 Built on **Firebase** for backend services and authentication.
 > 🚀 Uses **Isolates** to offload heavy SQLite operations for smoother performance.
+> > 💰 Integrated with **AdMob** to support monetization through in-app ads.
 
 ---
 
